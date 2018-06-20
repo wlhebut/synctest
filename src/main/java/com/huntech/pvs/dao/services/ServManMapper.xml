@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huntech.pvs.dao.services.ServManMapper" >
+  <resultMap id="BaseResultMap" type="com.huntech.pvs.model.services.ServMan" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="SNAME" property="sname" jdbcType="VARCHAR" />
+    <result column="SAGE" property="sage" jdbcType="INTEGER" />
+    <result column="SSEX" property="ssex" jdbcType="CHAR" />
+    <result column="STEL" property="stel" jdbcType="VARCHAR" />
+    <result column="IDENTITY_CARD" property="identityCard" jdbcType="VARCHAR" />
+    <result column="SPIC" property="spic" jdbcType="VARCHAR" />
+    <result column="S_LEVEL" property="sLevel" jdbcType="VARCHAR" />
+    <result column="PROVINCE_CODE" property="provinceCode" jdbcType="VARCHAR" />
+    <result column="CITY_CODE" property="cityCode" jdbcType="VARCHAR" />
+    <result column="TOWN_CODE" property="townCode" jdbcType="VARCHAR" />
+    <result column="SERV_MAN_GPSID" property="servManGpsid" jdbcType="BIGINT" />
+    <result column="BASESERV_TYPEID" property="baseservTypeid" jdbcType="BIGINT" />
+    <result column="SELFSERV_TYPEID" property="selfservTypeid" jdbcType="BIGINT" />
+    <result column="ENABLE" property="enable" jdbcType="CHAR" />
+  </resultMap>
+
+  <resultMap id="BaseResultMap2" type="com.huntech.pvs.view.services.BaseServTypeView" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="BASESERV_TYPEID" property="typeid" jdbcType="BIGINT" />
+    <result column="SUMNUM" property="sumType" jdbcType="INTEGER" />
+  </resultMap>
+
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, SNAME, SAGE, SSEX, STEL, IDENTITY_CARD, SPIC, S_LEVEL, PROVINCE_CODE, CITY_CODE, 
+    TOWN_CODE, SERV_MAN_GPSID, BASESERV_TYPEID, SELFSERV_TYPEID, ENABLE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.huntech.pvs.model.services.ServManExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from TBL_SERV_MAN
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectCountByServType"   resultMap="BaseResultMap2">
+    SELECT t1.ID,t.BASESERV_TYPEID,t1.TNAME ,count(1) AS SUMNUM FROM TBL_SERV_MAN t
+    LEFT JOIN TBL_BASESERV_TYPE t1 ON t.BASESERV_TYPEID=t1.ID
+    <where>
+      <if test="townCode!=null">
+        and CITYID=#{townCode}
+      </if>
+      <if test="cityCode!=null">
+        and TOWNID=#{cityCode}
+      </if>
+    </where>
+    GROUP BY t.BASESERV_TYPEID
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from TBL_SERV_MAN
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from TBL_SERV_MAN
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huntech.pvs.model.services.ServManExample" >
+    delete from TBL_SERV_MAN
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huntech.pvs.model.services.ServMan" >
+    insert into TBL_SERV_MAN (ID, SNAME, SAGE, 
+      SSEX, STEL, IDENTITY_CARD, 
+      SPIC, S_LEVEL, PROVINCE_CODE, 
+      CITY_CODE, TOWN_CODE, SERV_MAN_GPSID, 
+      BASESERV_TYPEID, SELFSERV_TYPEID, ENABLE
+      )
+    values (#{id,jdbcType=BIGINT}, #{sname,jdbcType=VARCHAR}, #{sage,jdbcType=INTEGER}, 
+      #{ssex,jdbcType=CHAR}, #{stel,jdbcType=VARCHAR}, #{identityCard,jdbcType=VARCHAR}, 
+      #{spic,jdbcType=VARCHAR}, #{sLevel,jdbcType=VARCHAR}, #{provinceCode,jdbcType=VARCHAR}, 
+      #{cityCode,jdbcType=VARCHAR}, #{townCode,jdbcType=VARCHAR}, #{servManGpsid,jdbcType=BIGINT}, 
+      #{baseservTypeid,jdbcType=BIGINT}, #{selfservTypeid,jdbcType=BIGINT}, #{enable,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huntech.pvs.model.services.ServMan" >
+    insert into TBL_SERV_MAN
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="sname != null" >
+        SNAME,
+      </if>
+      <if test="sage != null" >
+        SAGE,
+      </if>
+      <if test="ssex != null" >
+        SSEX,
+      </if>
+      <if test="stel != null" >
+        STEL,
+      </if>
+      <if test="identityCard != null" >
+        IDENTITY_CARD,
+      </if>
+      <if test="spic != null" >
+        SPIC,
+      </if>
+      <if test="sLevel != null" >
+        S_LEVEL,
+      </if>
+      <if test="provinceCode != null" >
+        PROVINCE_CODE,
+      </if>
+      <if test="cityCode != null" >
+        CITY_CODE,
+      </if>
+      <if test="townCode != null" >
+        TOWN_CODE,
+      </if>
+      <if test="servManGpsid != null" >
+        SERV_MAN_GPSID,
+      </if>
+      <if test="baseservTypeid != null" >
+        BASESERV_TYPEID,
+      </if>
+      <if test="selfservTypeid != null" >
+        SELFSERV_TYPEID,
+      </if>
+      <if test="enable != null" >
+        ENABLE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="sname != null" >
+        #{sname,jdbcType=VARCHAR},
+      </if>
+      <if test="sage != null" >
+        #{sage,jdbcType=INTEGER},
+      </if>
+      <if test="ssex != null" >
+        #{ssex,jdbcType=CHAR},
+      </if>
+      <if test="stel != null" >
+        #{stel,jdbcType=VARCHAR},
+      </if>
+      <if test="identityCard != null" >
+        #{identityCard,jdbcType=VARCHAR},
+      </if>
+      <if test="spic != null" >
+        #{spic,jdbcType=VARCHAR},
+      </if>
+      <if test="sLevel != null" >
+        #{sLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceCode != null" >
+        #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="townCode != null" >
+        #{townCode,jdbcType=VARCHAR},
+      </if>
+      <if test="servManGpsid != null" >
+        #{servManGpsid,jdbcType=BIGINT},
+      </if>
+      <if test="baseservTypeid != null" >
+        #{baseservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="selfservTypeid != null" >
+        #{selfservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huntech.pvs.model.services.ServManExample" resultType="java.lang.Integer" >
+    select count(*) from TBL_SERV_MAN
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update TBL_SERV_MAN
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.sname != null" >
+        SNAME = #{record.sname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sage != null" >
+        SAGE = #{record.sage,jdbcType=INTEGER},
+      </if>
+      <if test="record.ssex != null" >
+        SSEX = #{record.ssex,jdbcType=CHAR},
+      </if>
+      <if test="record.stel != null" >
+        STEL = #{record.stel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.identityCard != null" >
+        IDENTITY_CARD = #{record.identityCard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.spic != null" >
+        SPIC = #{record.spic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sLevel != null" >
+        S_LEVEL = #{record.sLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.provinceCode != null" >
+        PROVINCE_CODE = #{record.provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cityCode != null" >
+        CITY_CODE = #{record.cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.townCode != null" >
+        TOWN_CODE = #{record.townCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.servManGpsid != null" >
+        SERV_MAN_GPSID = #{record.servManGpsid,jdbcType=BIGINT},
+      </if>
+      <if test="record.baseservTypeid != null" >
+        BASESERV_TYPEID = #{record.baseservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="record.selfservTypeid != null" >
+        SELFSERV_TYPEID = #{record.selfservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="record.enable != null" >
+        ENABLE = #{record.enable,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update TBL_SERV_MAN
+    set ID = #{record.id,jdbcType=BIGINT},
+      SNAME = #{record.sname,jdbcType=VARCHAR},
+      SAGE = #{record.sage,jdbcType=INTEGER},
+      SSEX = #{record.ssex,jdbcType=CHAR},
+      STEL = #{record.stel,jdbcType=VARCHAR},
+      IDENTITY_CARD = #{record.identityCard,jdbcType=VARCHAR},
+      SPIC = #{record.spic,jdbcType=VARCHAR},
+      S_LEVEL = #{record.sLevel,jdbcType=VARCHAR},
+      PROVINCE_CODE = #{record.provinceCode,jdbcType=VARCHAR},
+      CITY_CODE = #{record.cityCode,jdbcType=VARCHAR},
+      TOWN_CODE = #{record.townCode,jdbcType=VARCHAR},
+      SERV_MAN_GPSID = #{record.servManGpsid,jdbcType=BIGINT},
+      BASESERV_TYPEID = #{record.baseservTypeid,jdbcType=BIGINT},
+      SELFSERV_TYPEID = #{record.selfservTypeid,jdbcType=BIGINT},
+      ENABLE = #{record.enable,jdbcType=CHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huntech.pvs.model.services.ServMan" >
+    update TBL_SERV_MAN
+    <set >
+      <if test="sname != null" >
+        SNAME = #{sname,jdbcType=VARCHAR},
+      </if>
+      <if test="sage != null" >
+        SAGE = #{sage,jdbcType=INTEGER},
+      </if>
+      <if test="ssex != null" >
+        SSEX = #{ssex,jdbcType=CHAR},
+      </if>
+      <if test="stel != null" >
+        STEL = #{stel,jdbcType=VARCHAR},
+      </if>
+      <if test="identityCard != null" >
+        IDENTITY_CARD = #{identityCard,jdbcType=VARCHAR},
+      </if>
+      <if test="spic != null" >
+        SPIC = #{spic,jdbcType=VARCHAR},
+      </if>
+      <if test="sLevel != null" >
+        S_LEVEL = #{sLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceCode != null" >
+        PROVINCE_CODE = #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        CITY_CODE = #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="townCode != null" >
+        TOWN_CODE = #{townCode,jdbcType=VARCHAR},
+      </if>
+      <if test="servManGpsid != null" >
+        SERV_MAN_GPSID = #{servManGpsid,jdbcType=BIGINT},
+      </if>
+      <if test="baseservTypeid != null" >
+        BASESERV_TYPEID = #{baseservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="selfservTypeid != null" >
+        SELFSERV_TYPEID = #{selfservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="enable != null" >
+        ENABLE = #{enable,jdbcType=CHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huntech.pvs.model.services.ServMan" >
+    update TBL_SERV_MAN
+    set SNAME = #{sname,jdbcType=VARCHAR},
+      SAGE = #{sage,jdbcType=INTEGER},
+      SSEX = #{ssex,jdbcType=CHAR},
+      STEL = #{stel,jdbcType=VARCHAR},
+      IDENTITY_CARD = #{identityCard,jdbcType=VARCHAR},
+      SPIC = #{spic,jdbcType=VARCHAR},
+      S_LEVEL = #{sLevel,jdbcType=VARCHAR},
+      PROVINCE_CODE = #{provinceCode,jdbcType=VARCHAR},
+      CITY_CODE = #{cityCode,jdbcType=VARCHAR},
+      TOWN_CODE = #{townCode,jdbcType=VARCHAR},
+      SERV_MAN_GPSID = #{servManGpsid,jdbcType=BIGINT},
+      BASESERV_TYPEID = #{baseservTypeid,jdbcType=BIGINT},
+      SELFSERV_TYPEID = #{selfservTypeid,jdbcType=BIGINT},
+      ENABLE = #{enable,jdbcType=CHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,8 @@
+1、服务层包结构说明：
+com.huntech.service.acq   数据采集类
+com.huntech.service.biz   基础业务类
+com.huntech.service.bsc   基础信息类
+com.huntech.service.exz   扩展业务类
+com.huntech.service.sts   统计数据类
+com.huntech.service.sys   系统信息类
+com.huntech.service.other 其它类
