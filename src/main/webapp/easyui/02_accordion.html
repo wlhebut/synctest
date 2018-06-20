@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Accordion（分类）</title>
+    <meta http-equiv="keywords" content="培训,IT培训,华南地区培训">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+  	<!-- 引入css文件，不限顺序 -->
+    <link rel="stylesheet" href="../themes/default/easyui.css" type="text/css"></link>
+    <link rel="stylesheet" href="../themes/icon.css" type="text/css"></link>
+  
+  	<!-- 引入js文件，有顺序限制 -->
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+
+	<!-- 所有的css文件和的有的js文件位置不限 -->
+    
+  </head>
+  
+  
+  <body>
+	
+	
+	<!-- 容器 -->
+	<div 
+		id="accordionID" 
+		class="easyui-accordion" 
+		data-options="fit:false,border:true,animate:true,multiple:false,selected:-1" 
+		style="width:300px;height:400px;">   
+	    
+	    <!-- 面板 -->
+	    <div title="标题1" data-options="iconCls:'icon-save'" style="overflow:auto;padding:10px;">   
+	       	北京  
+	    </div>   
+	    <div title="标题2" data-options="iconCls:'icon-reload'" style="padding:10px;">   
+	        上海    
+	    </div>   
+	    <div title="标题3">   
+	        广州    
+	    </div> 
+	    <div title="标题4" data-options="collapsible:true">   
+	        深圳    
+	    </div> 
+	     
+	</div> 
+	
+	
+	<script type="text/javascript">
+		//当浏览器加载web页面时触发
+		$(function(){
+			//增加一个面板
+			//$('selector').plugin('method', parameter); 
+			$("#accordionID").accordion("add",{
+				"title" : "标题5",
+				"iconCls" : "icon-add",
+				"content" : "武汉",
+				"selected" : false
+			});
+			//休息3秒
+			window.setTimeout(function(){
+				//移除标题1面板
+				$("#accordionID").accordion("remove",0);
+				//取消面板2选中
+				$("#accordionID").accordion("unselect",0);
+				//面板3选中
+				$("#accordionID").accordion("select",1);
+			},3000);
+		});
+	</script>
+	
+  </body>
+</html>
+
+
+
+
+
+
+
