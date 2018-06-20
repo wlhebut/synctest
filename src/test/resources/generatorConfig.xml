@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<!-- 配置Run As Maven build : Goals 参数 : mybatis-generator:generate -Dmybatis.generator.overwrite=true -->
+<!-- 配置 tableName,使用 Run As Maven build 生成 dao model 层 -->
+<generatorConfiguration>
+    <!-- 配置文件路径 -->
+    <properties url="${mybatis.generator.generatorConfig.properties}"/>
+
+    <!--数据库驱动包路径 -->
+    <classPathEntry location="${drive.class.path}"/>
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <!--关闭注释 -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!--数据库连接信息 -->
+        <jdbcConnection driverClass="${jdbc.driver}" connectionURL="${jdbc.url}" userId="${jdbc.username}"
+                        password="${jdbc.password}">
+        </jdbcConnection>
+
+        <!--生成的model 包路径 -->
+        <javaModelGenerator targetPackage="${model.package}" targetProject="${target.project}">
+            <property name="enableSubPackages" value="ture"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!--生成xml mapper文件 路径 -->
+        <sqlMapGenerator targetPackage="${xml.mapper.package}" targetProject="${target.project}">
+            <property name="enableSubPackages" value="ture"/>
+        </sqlMapGenerator>
+
+        <!-- 生成的Dao接口 的包路径 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="${dao.package}" targetProject="${target.project}">
+            <property name="enableSubPackages" value="ture"/>
+        </javaClientGenerator>
+
+        <!--对应数据库表名 --><!--schema="OMS_JHT"-->
+        <table  tableName="tbl_attention" domainObjectName="Attention" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_recommend" domainObjectName="Recommend" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <!--
+        <table  tableName="tbl_bsc_mec_dosage" domainObjectName="MecDosage" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_bsc_brand" domainObjectName="Brand" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_bsc_meal_type" domainObjectName="MealType" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_bsc_valid_date" domainObjectName="ValidDate" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_bsc_dosage_type" domainObjectName="DosageType" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_bsc_fac_name" domainObjectName="FacName" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_bsc_mec_specification" domainObjectName="MecSpecification" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_bsc_trade_type" domainObjectName="TradeType" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>-->
+
+       <!-- <table schema="root" tableName="tbl_bsc_patient" domainObjectName="Patient" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>-->
+
+        <!--<table schema="huntoms_jht_xjhn" tableName="TBL_CONFIG_DAILY" domainObjectName="ConfigDaily" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>-->
+
+
+        <!--<table schema="HUNTOMS_JHT_QLDZB" tableName="TBL_E_MONTHREPORT" domainObjectName="EMonthReport" >-->
+        <!--</table>-->
+        <!--<table schema="HUNTOMS_JHT_QLDZB" tableName="TBL_E_YEARREPORT" domainObjectName="EYearReport" >-->
+        <!--</table>-->
+        <!--<table schema="HUNTOMS_JHT_QLDZB" tableName="tbl_office_dailythings" domainObjectName="DailyThings" >-->
+        <!--</table>-->
+
+        <!--<table schema="HUNTOMS_JHT_QLDZB" tableName="tbl_office_tasktodo" domainObjectName="Waittodotask" >-->
+        <!--</table>-->
+
+        <!--<table schema="huntoms_jht_zt" tableName="TBL_CK_SYSTEM_ROLE_PERMISSION" domainObjectName="CKRolePermission" >-->
+        <!--</table>-->
+
+        <!--<table schema="huntoms_jht_zt" tableName="TBL_CK_SYSTEM_USER_DEP" domainObjectName="CKUserDep" >-->
+        <!--</table>-->
+
+        <!--<table schema="huntoms_jht_zt" tableName="TBL_CK_SYSTEM_USER_ROLE_TBL" domainObjectName="CKUserRole" >-->
+        <!--</table>-->
+
+        <!--<table schema="huntoms_jht_zt" tableName="TBL_CK_SYSTEM_ROLE_TBL" domainObjectName="CKRole" >-->
+        <!--</table>-->
+
+        <!--<table schema="huntoms_jht_zt" tableName="TBL_CK_SYSTEM_USER_TBL" domainObjectName="CKUser" >-->
+        <!--</table>-->
+
+    </context>
+</generatorConfiguration>
