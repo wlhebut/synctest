@@ -40,12 +40,42 @@
         </javaClientGenerator>
 
         <!--对应数据库表名 --><!--schema="OMS_JHT"-->
-        <table  tableName="tbl_attention" domainObjectName="Attention" >
+        <!--<table  tableName="weixin_user" domainObjectName="WeiXinUser" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>-->
+        <!--<table  tableName="tbl_illegal_serv" domainObjectName="illegalServ" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>-->
+        <!--<table  tableName="tbl_recommend" domainObjectName="Recommend" >
             <property name="ignoreQualifiersAtRuntime" value="true"></property>
         </table>
-        <table  tableName="tbl_recommend" domainObjectName="Recommend" >
+        <table  tableName="tbl_baseserv_type" domainObjectName="BaseServType" >
             <property name="ignoreQualifiersAtRuntime" value="true"></property>
         </table>
+        <table  tableName="tbl_label" domainObjectName="Label" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_satis" domainObjectName="Satis" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_self_baseserv_type" domainObjectName="SelfBaseServType" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_self_serv" domainObjectName="SelfServ" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_serv" domainObjectName="Serv" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_serv_content" domainObjectName="ServContent" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_serv_man" domainObjectName="ServMan" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_serv_man_gps" domainObjectName="ServManGps" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>-->
         <!--
         <table  tableName="tbl_bsc_mec_dosage" domainObjectName="MecDosage" >
             <property name="ignoreQualifiersAtRuntime" value="true"></property>
