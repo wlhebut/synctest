@@ -1,5 +1,6 @@
 package com.huntech.pvs.view.services;
 
+import com.huntech.pvs.model.services.Label;
 import com.huntech.pvs.model.services.ServContent;
 
 import java.io.Serializable;
@@ -13,6 +14,7 @@ public class DetailServView implements Serializable {
     private Long servContentid;
     private String sname;
     private String tname;
+    private String servName;
     private String stel;
 
     private Double serverSatis;
@@ -23,6 +25,66 @@ public class DetailServView implements Serializable {
     private Double distance;//距离
 
 
+    private Integer attention;
+
+    private Integer totalAttentions;
+
+    private String servTime;
+
+
+
+    private Integer servTimeid;
+    private Byte state;
+
+
+    public String getServTime() {
+        return servTime;
+    }
+
+    public void setServTime(String servTime) {
+        this.servTime = servTime;
+    }
+
+    public Integer getServTimeid() {
+        return servTimeid;
+    }
+
+    public void setServTimeid(Integer servTimeid) {
+        this.servTimeid = servTimeid;
+    }
+
+    public Byte getState() {
+        return state;
+    }
+
+    public void setState(Byte state) {
+        this.state = state;
+    }
+
+    public String getServName() {
+        return servName;
+    }
+
+    public void setServName(String servName) {
+        this.servName = servName;
+    }
+
+    public Integer getTotalAttentions() {
+        return totalAttentions;
+    }
+
+    public void setTotalAttentions(Integer totalAttentions) {
+        this.totalAttentions = totalAttentions;
+    }
+
+    public Integer getAttention() {
+        return attention;
+    }
+
+    public void setAttention(Integer attention) {
+        this.attention = attention;
+    }
+
     public Long getServContentid() {
         return servContentid;
     }
@@ -32,6 +94,15 @@ public class DetailServView implements Serializable {
     }
 
     private List<ServContent> servContents;
+    private List<Label> servLabels;
+
+    public List<Label> getServLabels() {
+        return servLabels;
+    }
+
+    public void setServLabels(List<Label> servLabels) {
+        this.servLabels = servLabels;
+    }
 
     public List<ServContent> getServContents() {
         return servContents;

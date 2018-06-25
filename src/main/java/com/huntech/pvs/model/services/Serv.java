@@ -3,6 +3,8 @@ package com.huntech.pvs.model.services;
 public class Serv {
     private Long id;
 
+    private String servName;
+
     private String servType;
 
     private Long baseservTypeid;
@@ -23,6 +25,14 @@ public class Serv {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getServName() {
+        return servName;
+    }
+
+    public void setServName(String servName) {
+        this.servName = servName == null ? null : servName.trim();
     }
 
     public String getServType() {

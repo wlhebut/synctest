@@ -1,6 +1,8 @@
 package com.huntech.pvs.service.services;
 
 
+import com.huntech.pvs.model.services.Attention;
+
 import java.util.List;
 
 //关注
@@ -10,4 +12,8 @@ public interface AttentionService {
 
     List<Long> getAttentionsByOpenId(String openid);
 
+    Integer getAttentionCount(Attention attention);
+
+
+    Integer insert(Attention attention);
 }

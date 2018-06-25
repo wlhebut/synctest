@@ -1,5 +1,12 @@
 package com.huntech.pvs.model.services;
 
+/**
+* @Description: 私服分类
+* @Param:
+* @return:
+* @Author: Mr.Wang
+* @Date: 2018/6/22
+*/
 public class BaseServType {
     private Integer id;
 

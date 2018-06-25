@@ -224,73 +224,73 @@ public class ServContentExample {
             return (Criteria) this;
         }
 
-        public Criteria andNameIsNull() {
-            addCriterion("NAME is null");
+        public Criteria andCnameIsNull() {
+            addCriterion("CNAME is null");
             return (Criteria) this;
         }
 
-        public Criteria andNameIsNotNull() {
-            addCriterion("NAME is not null");
+        public Criteria andCnameIsNotNull() {
+            addCriterion("CNAME is not null");
             return (Criteria) this;
         }
 
-        public Criteria andNameEqualTo(String value) {
-            addCriterion("NAME =", value, "name");
+        public Criteria andCnameEqualTo(String value) {
+            addCriterion("CNAME =", value, "cname");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotEqualTo(String value) {
-            addCriterion("NAME <>", value, "name");
+        public Criteria andCnameNotEqualTo(String value) {
+            addCriterion("CNAME <>", value, "cname");
             return (Criteria) this;
         }
 
-        public Criteria andNameGreaterThan(String value) {
-            addCriterion("NAME >", value, "name");
+        public Criteria andCnameGreaterThan(String value) {
+            addCriterion("CNAME >", value, "cname");
             return (Criteria) this;
         }
 
-        public Criteria andNameGreaterThanOrEqualTo(String value) {
-            addCriterion("NAME >=", value, "name");
+        public Criteria andCnameGreaterThanOrEqualTo(String value) {
+            addCriterion("CNAME >=", value, "cname");
             return (Criteria) this;
         }
 
-        public Criteria andNameLessThan(String value) {
-            addCriterion("NAME <", value, "name");
+        public Criteria andCnameLessThan(String value) {
+            addCriterion("CNAME <", value, "cname");
             return (Criteria) this;
         }
 
-        public Criteria andNameLessThanOrEqualTo(String value) {
-            addCriterion("NAME <=", value, "name");
+        public Criteria andCnameLessThanOrEqualTo(String value) {
+            addCriterion("CNAME <=", value, "cname");
             return (Criteria) this;
         }
 
-        public Criteria andNameLike(String value) {
-            addCriterion("NAME like", value, "name");
+        public Criteria andCnameLike(String value) {
+            addCriterion("CNAME like", value, "cname");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotLike(String value) {
-            addCriterion("NAME not like", value, "name");
+        public Criteria andCnameNotLike(String value) {
+            addCriterion("CNAME not like", value, "cname");
             return (Criteria) this;
         }
 
-        public Criteria andNameIn(List<String> values) {
-            addCriterion("NAME in", values, "name");
+        public Criteria andCnameIn(List<String> values) {
+            addCriterion("CNAME in", values, "cname");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotIn(List<String> values) {
-            addCriterion("NAME not in", values, "name");
+        public Criteria andCnameNotIn(List<String> values) {
+            addCriterion("CNAME not in", values, "cname");
             return (Criteria) this;
         }
 
-        public Criteria andNameBetween(String value1, String value2) {
-            addCriterion("NAME between", value1, value2, "name");
+        public Criteria andCnameBetween(String value1, String value2) {
+            addCriterion("CNAME between", value1, value2, "cname");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotBetween(String value1, String value2) {
-            addCriterion("NAME not between", value1, value2, "name");
+        public Criteria andCnameNotBetween(String value1, String value2) {
+            addCriterion("CNAME not between", value1, value2, "cname");
             return (Criteria) this;
         }
 

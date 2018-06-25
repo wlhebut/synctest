@@ -3,15 +3,15 @@ package com.huntech.pvs.model.services;
 public class ServContent {
     private Long id;
 
-    private Integer servid;//获取私服自增id
+    private Integer servid;
 
-    private String name;//页面提交
+    private String cname;
 
-    private Double unitMoney;//页面提交
+    private Double unitMoney;
 
-    private String unit;//页面提交
+    private String unit;
 
-    private String note;//页面提交
+    private String note;
 
     public Long getId() {
         return id;
@@ -29,12 +29,12 @@ public class ServContent {
         this.servid = servid;
     }
 
-    public String getName() {
-        return name;
+    public String getCname() {
+        return cname;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setCname(String cname) {
+        this.cname = cname == null ? null : cname.trim();
     }
 
     public Double getUnitMoney() {

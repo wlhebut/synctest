@@ -164,6 +164,76 @@ public class ServExample {
             return (Criteria) this;
         }
 
+        public Criteria andServNameIsNull() {
+            addCriterion("SERV_NAME is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServNameIsNotNull() {
+            addCriterion("SERV_NAME is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServNameEqualTo(String value) {
+            addCriterion("SERV_NAME =", value, "servName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServNameNotEqualTo(String value) {
+            addCriterion("SERV_NAME <>", value, "servName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServNameGreaterThan(String value) {
+            addCriterion("SERV_NAME >", value, "servName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServNameGreaterThanOrEqualTo(String value) {
+            addCriterion("SERV_NAME >=", value, "servName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServNameLessThan(String value) {
+            addCriterion("SERV_NAME <", value, "servName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServNameLessThanOrEqualTo(String value) {
+            addCriterion("SERV_NAME <=", value, "servName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServNameLike(String value) {
+            addCriterion("SERV_NAME like", value, "servName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServNameNotLike(String value) {
+            addCriterion("SERV_NAME not like", value, "servName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServNameIn(List<String> values) {
+            addCriterion("SERV_NAME in", values, "servName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServNameNotIn(List<String> values) {
+            addCriterion("SERV_NAME not in", values, "servName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServNameBetween(String value1, String value2) {
+            addCriterion("SERV_NAME between", value1, value2, "servName");
+            return (Criteria) this;
+        }
+
+        public Criteria andServNameNotBetween(String value1, String value2) {
+            addCriterion("SERV_NAME not between", value1, value2, "servName");
+            return (Criteria) this;
+        }
+
         public Criteria andServTypeIsNull() {
             addCriterion("SERV_TYPE is null");
             return (Criteria) this;

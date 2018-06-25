@@ -6,6 +6,16 @@ public class DetailServRequest {
     private String longitude;//:经度
     private String latitude;//:纬度
 
+    private String openid;
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
+
     public Integer getId() {
         return id;
     }

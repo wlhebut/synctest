@@ -36,4 +36,25 @@ public class AttentionServiceImpl implements AttentionService {
         }
         return longs;
     }
+
+    @Override
+    public Integer getAttentionCount(Attention attention) {
+        AttentionExample example = new AttentionExample();
+        AttentionExample.Criteria criteria = example.createCriteria();
+        if(null!=attention.getOpenid()&&!attention.getOpenid().equals("")){
+            criteria.andOpenidEqualTo(attention.getOpenid());
+        }
+
+        if(attention.getServid()!=null){
+            criteria.andServidEqualTo(attention.getServid());
+        }
+        int i = attentionMapper.countByExample(example);
+        return i;
+    }
+
+    @Override
+    public Integer insert(Attention attention) {
+        int i = attentionMapper.insertSelective(attention);
+        return i;
+    }
 }

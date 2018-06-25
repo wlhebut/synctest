@@ -60,7 +60,7 @@ public class WeinXinLoginController {
 		String encryptedData = weiXinLoginRequest.getEncryptedData();
 		String iv = weiXinLoginRequest.getIv();
 		if(null==code||code.equals("")){
-			resMap.put("erroCode",ERROCODE0);
+			resMap.put("dataCode",ERROCODE0);
 			resMap.put("JSESSIONID","BROWSETOURISTS");//浏览游客，拒绝获取用户的信息。
 			insertIntoRedis("JSESSIONID","BROWSETOURISTS");
 			return resMap;
@@ -68,6 +68,7 @@ public class WeinXinLoginController {
 		System.out.println("----------------------11111111---------------------------");
 		System.out.println("encryptedData="+encryptedData);
 		System.out.println("iv="+iv);
+		System.out.println("code="+code);
 		System.out.println("------------------------2222222-------------------------");
 //		String openid = weiXinLoginService.HasUser(weiXinLoginRequest);
 		String openid="okTs65C1THvPV39Q9uuqW_p4h7Jk";
@@ -85,7 +86,7 @@ public class WeinXinLoginController {
 		if(openid!=null){
 			//给用户jwt加密生成token
 			String token = JWT.sign(openid, 60*1000*60*24*10);
-			resMap.put("erroCode",ERROCODE1);//数据库现在已经有了。
+			resMap.put("dataCode",ERROCODE1);//数据库现在已经有了。
 			resMap.put("token",token);//给小程序前端，有小程序需要携带此信息到后台。
 //			insertIntoRedis(openid,openid);
 			weiXinLoginService.insertInToRedis(openid);
@@ -114,10 +115,10 @@ public class WeinXinLoginController {
 			weinXinUser = weiXinLoginService.getWeinXinUser(request);
 			if(weinXinUser!=null){
 				resMap.put("data","weinXinUser");
-				resMap.put("erroCode","1");
+				resMap.put("dataCode","1");
 			}
 		} catch (Exception e) {
-			resMap.put("erroCode","-1");
+			resMap.put("dataCode","-1");
 			e.printStackTrace();
 		}
 
@@ -135,10 +136,10 @@ public class WeinXinLoginController {
 			integer = weiXinLoginService.updateWeiXinUser(user);
 			if(integer!=null){
 				resMap.put("data","weinXinUser");
-				resMap.put("erroCode","1");
+				resMap.put("dataCode","1");
 			}
 		} catch (Exception e) {
-			resMap.put("erroCode","-1");
+			resMap.put("dataCode","-1");
 			e.printStackTrace();
 		}
 

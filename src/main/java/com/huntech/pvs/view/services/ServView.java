@@ -8,16 +8,60 @@ public class ServView implements Serializable {
     private Long baseservTypeid;
     private Long servManid;
     private String sname;
+    private String servName;
     private String tname;
     private String stel;
 
-    private Double serverSatis;
+    private Integer serverSatis;
+    private Integer servTimeid;
+    private Long servContentid;
+    private Byte state;
 
     private String longitude;//经度
     private String latitude;
 
     private Double distance;//距离
+    private String servTime;
 
+    public String getServTime() {
+        return servTime;
+    }
+
+    public void setServTime(String servTime) {
+        this.servTime = servTime;
+    }
+
+    public Byte getState() {
+        return state;
+    }
+
+    public void setState(Byte state) {
+        this.state = state;
+    }
+
+    public Integer getServTimeid() {
+        return servTimeid;
+    }
+
+    public void setServTimeid(Integer servTimeid) {
+        this.servTimeid = servTimeid;
+    }
+
+    public Long getServContentid() {
+        return servContentid;
+    }
+
+    public void setServContentid(Long servContentid) {
+        this.servContentid = servContentid;
+    }
+
+    public String getServName() {
+        return servName;
+    }
+
+    public void setServName(String servName) {
+        this.servName = servName;
+    }
 
     public Double getDistance() {
         return distance;
@@ -91,11 +135,11 @@ public class ServView implements Serializable {
         this.latitude = latitude;
     }
 
-    public Double getServerSatis() {
+    public Integer getServerSatis() {
         return serverSatis;
     }
 
-    public void setServerSatis(Double serverSatis) {
+    public void setServerSatis(Integer serverSatis) {
         this.serverSatis = serverSatis;
     }
 }

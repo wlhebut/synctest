@@ -164,6 +164,66 @@ public class WeiXinUserExample {
             return (Criteria) this;
         }
 
+        public Criteria andServManidIsNull() {
+            addCriterion("SERV_MANID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidIsNotNull() {
+            addCriterion("SERV_MANID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidEqualTo(Long value) {
+            addCriterion("SERV_MANID =", value, "servManid");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidNotEqualTo(Long value) {
+            addCriterion("SERV_MANID <>", value, "servManid");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidGreaterThan(Long value) {
+            addCriterion("SERV_MANID >", value, "servManid");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidGreaterThanOrEqualTo(Long value) {
+            addCriterion("SERV_MANID >=", value, "servManid");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidLessThan(Long value) {
+            addCriterion("SERV_MANID <", value, "servManid");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidLessThanOrEqualTo(Long value) {
+            addCriterion("SERV_MANID <=", value, "servManid");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidIn(List<Long> values) {
+            addCriterion("SERV_MANID in", values, "servManid");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidNotIn(List<Long> values) {
+            addCriterion("SERV_MANID not in", values, "servManid");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidBetween(Long value1, Long value2) {
+            addCriterion("SERV_MANID between", value1, value2, "servManid");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidNotBetween(Long value1, Long value2) {
+            addCriterion("SERV_MANID not between", value1, value2, "servManid");
+            return (Criteria) this;
+        }
+
         public Criteria andOpenIdIsNull() {
             addCriterion("OPEN_ID is null");
             return (Criteria) this;

@@ -3,6 +3,7 @@
 <mapper namespace="com.huntech.pvs.dao.sys.WeiXinUserMapper" >
   <resultMap id="BaseResultMap" type="com.huntech.pvs.model.sys.WeiXinUser" >
     <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="SERV_MANID" property="servManid" jdbcType="BIGINT" />
     <result column="OPEN_ID" property="openId" jdbcType="VARCHAR" />
     <result column="NICK_NAME" property="nickName" jdbcType="VARCHAR" />
     <result column="GENDER" property="gender" jdbcType="TINYINT" />
@@ -75,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    ID, OPEN_ID, NICK_NAME, GENDER, CITY, PROVINCE, COUNTRY, AVATAR_URL, UNION_ID, USER_INFO, 
-    HOME_ADDRESS, COMPANY_ADDRESS, USER_TEL
+    ID, SERV_MANID, OPEN_ID, NICK_NAME, GENDER, CITY, PROVINCE, COUNTRY, AVATAR_URL, 
+    UNION_ID, USER_INFO, HOME_ADDRESS, COMPANY_ADDRESS, USER_TEL
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.huntech.pvs.model.sys.WeiXinUserExample" >
     select
@@ -109,22 +110,25 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.huntech.pvs.model.sys.WeiXinUser" >
-    insert into weixin_user (ID, OPEN_ID, NICK_NAME, 
-      GENDER, CITY, PROVINCE, 
-      COUNTRY, AVATAR_URL, UNION_ID, 
-      USER_INFO, HOME_ADDRESS, COMPANY_ADDRESS, 
-      USER_TEL)
-    values (#{id,jdbcType=BIGINT}, #{openId,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, 
-      #{gender,jdbcType=TINYINT}, #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
-      #{country,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, #{unionId,jdbcType=VARCHAR}, 
-      #{userInfo,jdbcType=VARCHAR}, #{homeAddress,jdbcType=VARCHAR}, #{companyAddress,jdbcType=VARCHAR}, 
-      #{userTel,jdbcType=VARCHAR})
+    insert into weixin_user (ID, SERV_MANID, OPEN_ID, 
+      NICK_NAME, GENDER, CITY, 
+      PROVINCE, COUNTRY, AVATAR_URL, 
+      UNION_ID, USER_INFO, HOME_ADDRESS, 
+      COMPANY_ADDRESS, USER_TEL)
+    values (#{id,jdbcType=BIGINT}, #{servManid,jdbcType=BIGINT}, #{openId,jdbcType=VARCHAR}, 
+      #{nickName,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT}, #{city,jdbcType=VARCHAR}, 
+      #{province,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, 
+      #{unionId,jdbcType=VARCHAR}, #{userInfo,jdbcType=VARCHAR}, #{homeAddress,jdbcType=VARCHAR}, 
+      #{companyAddress,jdbcType=VARCHAR}, #{userTel,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.huntech.pvs.model.sys.WeiXinUser" >
     insert into weixin_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         ID,
+      </if>
+      <if test="servManid != null" >
+        SERV_MANID,
       </if>
       <if test="openId != null" >
         OPEN_ID,
@@ -166,6 +170,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=BIGINT},
+      </if>
+      <if test="servManid != null" >
+        #{servManid,jdbcType=BIGINT},
       </if>
       <if test="openId != null" >
         #{openId,jdbcType=VARCHAR},
@@ -217,6 +224,9 @@
       <if test="record.id != null" >
         ID = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.servManid != null" >
+        SERV_MANID = #{record.servManid,jdbcType=BIGINT},
+      </if>
       <if test="record.openId != null" >
         OPEN_ID = #{record.openId,jdbcType=VARCHAR},
       </if>
@@ -261,6 +271,7 @@
   <update id="updateByExample" parameterType="map" >
     update weixin_user
     set ID = #{record.id,jdbcType=BIGINT},
+      SERV_MANID = #{record.servManid,jdbcType=BIGINT},
       OPEN_ID = #{record.openId,jdbcType=VARCHAR},
       NICK_NAME = #{record.nickName,jdbcType=VARCHAR},
       GENDER = #{record.gender,jdbcType=TINYINT},
@@ -280,6 +291,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.huntech.pvs.model.sys.WeiXinUser" >
     update weixin_user
     <set >
+      <if test="servManid != null" >
+        SERV_MANID = #{servManid,jdbcType=BIGINT},
+      </if>
       <if test="openId != null" >
         OPEN_ID = #{openId,jdbcType=VARCHAR},
       </if>
@@ -321,7 +335,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.huntech.pvs.model.sys.WeiXinUser" >
     update weixin_user
-    set OPEN_ID = #{openId,jdbcType=VARCHAR},
+    set SERV_MANID = #{servManid,jdbcType=BIGINT},
+      OPEN_ID = #{openId,jdbcType=VARCHAR},
       NICK_NAME = #{nickName,jdbcType=VARCHAR},
       GENDER = #{gender,jdbcType=TINYINT},
       CITY = #{city,jdbcType=VARCHAR},

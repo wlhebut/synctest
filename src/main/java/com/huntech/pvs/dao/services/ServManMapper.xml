@@ -15,17 +15,10 @@
     <result column="TOWN_CODE" property="townCode" jdbcType="VARCHAR" />
     <result column="SERV_MAN_GPSID" property="servManGpsid" jdbcType="BIGINT" />
     <result column="BASESERV_TYPEID" property="baseservTypeid" jdbcType="BIGINT" />
+    <result column="SERV_ADDRESS" property="servAddress" jdbcType="VARCHAR" />
     <result column="SELFSERV_TYPEID" property="selfservTypeid" jdbcType="BIGINT" />
     <result column="ENABLE" property="enable" jdbcType="CHAR" />
   </resultMap>
-
-  <resultMap id="BaseResultMap2" type="com.huntech.pvs.view.services.BaseServTypeView" >
-    <id column="ID" property="id" jdbcType="BIGINT" />
-    <result column="BASESERV_TYPEID" property="typeid" jdbcType="BIGINT" />
-    <result column="SUMNUM" property="sumType" jdbcType="INTEGER" />
-  </resultMap>
-
-
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -86,7 +79,7 @@
   </sql>
   <sql id="Base_Column_List" >
     ID, SNAME, SAGE, SSEX, STEL, IDENTITY_CARD, SPIC, S_LEVEL, PROVINCE_CODE, CITY_CODE, 
-    TOWN_CODE, SERV_MAN_GPSID, BASESERV_TYPEID, SELFSERV_TYPEID, ENABLE
+    TOWN_CODE, SERV_MAN_GPSID, BASESERV_TYPEID, SERV_ADDRESS, SELFSERV_TYPEID, ENABLE
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.huntech.pvs.model.services.ServManExample" >
     select
@@ -94,7 +87,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from TBL_SERV_MAN
+    from tbl_serv_man
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -102,53 +95,38 @@
       order by ${orderByClause}
     </if>
   </select>
-
-  <select id="selectCountByServType"   resultMap="BaseResultMap2">
-    SELECT t1.ID,t.BASESERV_TYPEID,t1.TNAME ,count(1) AS SUMNUM FROM TBL_SERV_MAN t
-    LEFT JOIN TBL_BASESERV_TYPE t1 ON t.BASESERV_TYPEID=t1.ID
-    <where>
-      <if test="townCode!=null">
-        and CITYID=#{townCode}
-      </if>
-      <if test="cityCode!=null">
-        and TOWNID=#{cityCode}
-      </if>
-    </where>
-    GROUP BY t.BASESERV_TYPEID
-  </select>
-
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    from TBL_SERV_MAN
+    from tbl_serv_man
     where ID = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from TBL_SERV_MAN
+    delete from tbl_serv_man
     where ID = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.huntech.pvs.model.services.ServManExample" >
-    delete from TBL_SERV_MAN
+    delete from tbl_serv_man
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.huntech.pvs.model.services.ServMan" >
-    insert into TBL_SERV_MAN (ID, SNAME, SAGE, 
+    insert into tbl_serv_man (ID, SNAME, SAGE, 
       SSEX, STEL, IDENTITY_CARD, 
       SPIC, S_LEVEL, PROVINCE_CODE, 
       CITY_CODE, TOWN_CODE, SERV_MAN_GPSID, 
-      BASESERV_TYPEID, SELFSERV_TYPEID, ENABLE
-      )
+      BASESERV_TYPEID, SERV_ADDRESS, SELFSERV_TYPEID, 
+      ENABLE)
     values (#{id,jdbcType=BIGINT}, #{sname,jdbcType=VARCHAR}, #{sage,jdbcType=INTEGER}, 
       #{ssex,jdbcType=CHAR}, #{stel,jdbcType=VARCHAR}, #{identityCard,jdbcType=VARCHAR}, 
       #{spic,jdbcType=VARCHAR}, #{sLevel,jdbcType=VARCHAR}, #{provinceCode,jdbcType=VARCHAR}, 
       #{cityCode,jdbcType=VARCHAR}, #{townCode,jdbcType=VARCHAR}, #{servManGpsid,jdbcType=BIGINT}, 
-      #{baseservTypeid,jdbcType=BIGINT}, #{selfservTypeid,jdbcType=BIGINT}, #{enable,jdbcType=CHAR}
-      )
+      #{baseservTypeid,jdbcType=BIGINT}, #{servAddress,jdbcType=VARCHAR}, #{selfservTypeid,jdbcType=BIGINT}, 
+      #{enable,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.huntech.pvs.model.services.ServMan" >
-    insert into TBL_SERV_MAN
+    insert into tbl_serv_man
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         ID,
@@ -188,6 +166,9 @@
       </if>
       <if test="baseservTypeid != null" >
         BASESERV_TYPEID,
+      </if>
+      <if test="servAddress != null" >
+        SERV_ADDRESS,
       </if>
       <if test="selfservTypeid != null" >
         SELFSERV_TYPEID,
@@ -236,6 +217,9 @@
       <if test="baseservTypeid != null" >
         #{baseservTypeid,jdbcType=BIGINT},
       </if>
+      <if test="servAddress != null" >
+        #{servAddress,jdbcType=VARCHAR},
+      </if>
       <if test="selfservTypeid != null" >
         #{selfservTypeid,jdbcType=BIGINT},
       </if>
@@ -245,13 +229,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.huntech.pvs.model.services.ServManExample" resultType="java.lang.Integer" >
-    select count(*) from TBL_SERV_MAN
+    select count(*) from tbl_serv_man
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update TBL_SERV_MAN
+    update tbl_serv_man
     <set >
       <if test="record.id != null" >
         ID = #{record.id,jdbcType=BIGINT},
@@ -292,6 +276,9 @@
       <if test="record.baseservTypeid != null" >
         BASESERV_TYPEID = #{record.baseservTypeid,jdbcType=BIGINT},
       </if>
+      <if test="record.servAddress != null" >
+        SERV_ADDRESS = #{record.servAddress,jdbcType=VARCHAR},
+      </if>
       <if test="record.selfservTypeid != null" >
         SELFSERV_TYPEID = #{record.selfservTypeid,jdbcType=BIGINT},
       </if>
@@ -304,7 +291,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update TBL_SERV_MAN
+    update tbl_serv_man
     set ID = #{record.id,jdbcType=BIGINT},
       SNAME = #{record.sname,jdbcType=VARCHAR},
       SAGE = #{record.sage,jdbcType=INTEGER},
@@ -318,6 +305,7 @@
       TOWN_CODE = #{record.townCode,jdbcType=VARCHAR},
       SERV_MAN_GPSID = #{record.servManGpsid,jdbcType=BIGINT},
       BASESERV_TYPEID = #{record.baseservTypeid,jdbcType=BIGINT},
+      SERV_ADDRESS = #{record.servAddress,jdbcType=VARCHAR},
       SELFSERV_TYPEID = #{record.selfservTypeid,jdbcType=BIGINT},
       ENABLE = #{record.enable,jdbcType=CHAR}
     <if test="_parameter != null" >
@@ -325,7 +313,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.huntech.pvs.model.services.ServMan" >
-    update TBL_SERV_MAN
+    update tbl_serv_man
     <set >
       <if test="sname != null" >
         SNAME = #{sname,jdbcType=VARCHAR},
@@ -363,6 +351,9 @@
       <if test="baseservTypeid != null" >
         BASESERV_TYPEID = #{baseservTypeid,jdbcType=BIGINT},
       </if>
+      <if test="servAddress != null" >
+        SERV_ADDRESS = #{servAddress,jdbcType=VARCHAR},
+      </if>
       <if test="selfservTypeid != null" >
         SELFSERV_TYPEID = #{selfservTypeid,jdbcType=BIGINT},
       </if>
@@ -373,7 +364,7 @@
     where ID = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.huntech.pvs.model.services.ServMan" >
-    update TBL_SERV_MAN
+    update tbl_serv_man
     set SNAME = #{sname,jdbcType=VARCHAR},
       SAGE = #{sage,jdbcType=INTEGER},
       SSEX = #{ssex,jdbcType=CHAR},
@@ -386,6 +377,7 @@
       TOWN_CODE = #{townCode,jdbcType=VARCHAR},
       SERV_MAN_GPSID = #{servManGpsid,jdbcType=BIGINT},
       BASESERV_TYPEID = #{baseservTypeid,jdbcType=BIGINT},
+      SERV_ADDRESS = #{servAddress,jdbcType=VARCHAR},
       SELFSERV_TYPEID = #{selfservTypeid,jdbcType=BIGINT},
       ENABLE = #{enable,jdbcType=CHAR}
     where ID = #{id,jdbcType=BIGINT}

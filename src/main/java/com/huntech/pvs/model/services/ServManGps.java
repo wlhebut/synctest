@@ -5,7 +5,7 @@ public class ServManGps {
 
     private Long servManid;
 
-    private String longitude;//经度
+    private String longitude;
 
     private String latitude;
 

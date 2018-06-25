@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BaseServTypeImpl implements BaseServTypeService {
@@ -104,6 +106,7 @@ public class BaseServTypeImpl implements BaseServTypeService {
         SelfBaseServTypeExample selfBaseServTypeExample = new SelfBaseServTypeExample();
         SelfBaseServTypeExample.Criteria criteria = selfBaseServTypeExample.createCriteria();
         criteria.andOpenidEqualTo(openid);
+        criteria.andStateEqualTo(new Byte("1"));
         List<SelfBaseServType> selfBaseServTypes = selfBaseServTypeMapper.selectByExample(selfBaseServTypeExample);
 
         ArrayList<Integer> integers = new ArrayList<>();
@@ -119,5 +122,20 @@ public class BaseServTypeImpl implements BaseServTypeService {
         }
         List<BaseServType> list = baseServTypeMapper.selectByExample(example);
         return list;
+    }
+
+    @Override
+    public List<BaseServType> getOtherBaseServTypeByOpenId(BaseServTypeRequest baseServType) {
+        //获取所有私服
+        //当前用户的私服
+
+        //方法二
+        if(baseServType.getOpenid()!=null&&!baseServType.getOpenid().equals("")){
+            Map<String, Object> map = new HashMap<>();
+            map.put("openid",baseServType.getOpenid());
+            List<BaseServType> otherBaseServTypeByOpenId = baseServTypeMapper.getOtherBaseServTypeByOpenId(map);
+            return otherBaseServTypeByOpenId;
+        }
+        return null;
     }
 }

@@ -70,6 +70,30 @@
   <sql id="Base_Column_List" >
     ID, PID, TNAME, LAWFUL, STATE, SERV_TYPE
   </sql>
+
+  <select id="getOtherBaseServTypeByOpenId"   resultMap="BaseResultMap">
+    SELECT
+    tt.ID,
+    tt.TNAME,
+    tt.SERV_TYPE
+    FROM
+    tbl_baseserv_type tt
+    WHERE
+    tt.ID NOT IN (
+    SELECT
+    t.id
+    FROM
+    tbl_self_baseserv_type t
+    <where>
+      <if test="openid !=null">
+        AND t.OPENID =#{openid}
+      </if>
+        AND  t.STATE = 1
+    </where>
+    )
+  </select>
+
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.huntech.pvs.model.services.BaseServTypeExample" >
     select
     <if test="distinct" >

@@ -974,6 +974,76 @@ public class ServManExample {
             return (Criteria) this;
         }
 
+        public Criteria andServAddressIsNull() {
+            addCriterion("SERV_ADDRESS is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServAddressIsNotNull() {
+            addCriterion("SERV_ADDRESS is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServAddressEqualTo(String value) {
+            addCriterion("SERV_ADDRESS =", value, "servAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andServAddressNotEqualTo(String value) {
+            addCriterion("SERV_ADDRESS <>", value, "servAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andServAddressGreaterThan(String value) {
+            addCriterion("SERV_ADDRESS >", value, "servAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andServAddressGreaterThanOrEqualTo(String value) {
+            addCriterion("SERV_ADDRESS >=", value, "servAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andServAddressLessThan(String value) {
+            addCriterion("SERV_ADDRESS <", value, "servAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andServAddressLessThanOrEqualTo(String value) {
+            addCriterion("SERV_ADDRESS <=", value, "servAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andServAddressLike(String value) {
+            addCriterion("SERV_ADDRESS like", value, "servAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andServAddressNotLike(String value) {
+            addCriterion("SERV_ADDRESS not like", value, "servAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andServAddressIn(List<String> values) {
+            addCriterion("SERV_ADDRESS in", values, "servAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andServAddressNotIn(List<String> values) {
+            addCriterion("SERV_ADDRESS not in", values, "servAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andServAddressBetween(String value1, String value2) {
+            addCriterion("SERV_ADDRESS between", value1, value2, "servAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andServAddressNotBetween(String value1, String value2) {
+            addCriterion("SERV_ADDRESS not between", value1, value2, "servAddress");
+            return (Criteria) this;
+        }
+
         public Criteria andSelfservTypeidIsNull() {
             addCriterion("SELFSERV_TYPEID is null");
             return (Criteria) this;

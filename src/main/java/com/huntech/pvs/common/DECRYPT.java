@@ -56,6 +56,7 @@ public class DECRYPT {
             byte[] resultByte = cipher.doFinal(dataByte);
             if (null != resultByte && resultByte.length > 0) {
                 String result = new String(resultByte, "UTF-8");
+                System.out.println("解密用户信息："+result);
                 return JSON.parseObject(result);
             }
         } catch (NoSuchAlgorithmException e) {

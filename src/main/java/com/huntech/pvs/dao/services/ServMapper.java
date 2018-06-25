@@ -7,17 +7,26 @@ import java.util.List;
 import java.util.Map;
 
 import com.huntech.pvs.view.services.DetailServView;
-import com.huntech.pvs.view.services.ServView;
 import org.apache.ibatis.annotations.Param;
-
+import com.huntech.pvs.view.services.ServView;
 public interface ServMapper {
-    List<ServView> selectServsView(Page<ServView> servPage,Map<String, Object> params);
+
+
+    List<ServView> selectServsView(Page<ServView> servPage, Map<String, Object> params);
+
+    Integer selectServsViewCount(Map<String, Object> params);
+
+
     List<ServView> selectAttentionServsView(Page<ServView> servPage,Map<String, Object> params);
+    Integer selectAttentionServsViewCount(Map<String, Object> params);
+
+    List<ServView> selectRecommendServsView(Page<ServView> servPage,Map<String, Object> params);
+    Integer selectRecommendServsViewCount(Map<String, Object> params);
+
+    DetailServView getDetailServsView(Map<String, Object> params);
+
 
     int countByExample(ServExample example);
-    Integer selectServsViewCount(Map<String, Object> params);
-    Integer selectPrimServsViewCount(Map<String, Object> params);
-    DetailServView getDetailServsView(Map<String, Object> params);
 
     int deleteByExample(ServExample example);
 
@@ -28,7 +37,6 @@ public interface ServMapper {
     int insertSelective(Serv record);
 
     List<Serv> selectByExample(ServExample example);
-    List<Serv> selectByExampleAndPage(Page<Serv> servPage, ServExample example);
 
     Serv selectByPrimaryKey(Long id);
 
@@ -39,4 +47,7 @@ public interface ServMapper {
     int updateByPrimaryKeySelective(Serv record);
 
     int updateByPrimaryKey(Serv record);
+
+
+
 }

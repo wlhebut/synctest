@@ -2,27 +2,33 @@ package com.huntech.pvs.service.services.impl;
 
 import com.huntech.pvs.common.redis.VCache;
 import com.huntech.pvs.common.util.JWT;
+import com.huntech.pvs.common.util.MapUtils;
 import com.huntech.pvs.core.feature.orm.mybatis.Page;
 import com.huntech.pvs.dao.services.*;
+import com.huntech.pvs.dao.sys.WeiXinUserMapper;
 import com.huntech.pvs.model.services.*;
 import com.huntech.pvs.model.sys.WeiXinUser;
+import com.huntech.pvs.model.sys.WeiXinUserExample;
 import com.huntech.pvs.service.services.*;
 import com.huntech.pvs.view.request.DetailServRequest;
+import com.huntech.pvs.view.request.OptServRequest;
 import com.huntech.pvs.view.services.*;
 import com.huntech.web.common.ListUtils;
 import com.huntech.web.common.PageUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ServImpl implements ServService {
 
+    private static final Logger log = Logger.getLogger(ServImpl.class);
+
+    @Autowired
+    private WeiXinUserMapper weiXinUserMapper;
 
     @Autowired
     private BaseServTypeMapper baseServTypeMapper;
@@ -47,11 +53,24 @@ public class ServImpl implements ServService {
     private ServContentService servContentService;
 
 
+
+    @Autowired
+    private RecommendService recommendService;
+
+    @Autowired
+    private LabelService labelService;
+
+    @Autowired
+    private DisServMapper disServMapper;
+
     @Autowired
     private AttentionService attentionService;
 
     @Autowired
-    private RecommendService recommendService;
+    private illegalServMapper illegalServMapper;
+
+    @Autowired
+    private ClassificationServMapper classificationServMapper;
     /**
     * @Description:
     * @Param: [servRequest]
@@ -68,47 +87,62 @@ public class ServImpl implements ServService {
         //搜索结果跟请求人有关系
         String openid = servRequest.getOpenid();
 
-
-
         Map<String,Object> params=new HashMap<>();
         Long servType=servRequest.getServType();
         Byte states = servRequest.getState();
         Long baseservTypeid = servRequest.getBaseservTypeid();
         Long servManid = servRequest.getServManid();
         if(baseservTypeid.equals(1L)){//关注
-            List<Long> attentionsByOpenId = attentionService.getAttentionsByOpenId(openid);
-            params.put("list",attentionsByOpenId);
+//            List<Long> attentionsByOpenId = attentionService.getAttentionsByOpenId(openid);
+            params.put("openid",openid);
             List<ServView> servViews = servMapper.selectAttentionServsView(page,params);
-            Integer totalCount=servMapper.selectPrimServsViewCount(params);
+            Integer totalCount=servMapper.selectAttentionServsViewCount(params);
             PageUtils.setPage(servViews, totalCount, pageSize, page);
             return page;
         }else if(baseservTypeid.equals(2L)){//推荐
-            List<Long> recommendsByOpenId = recommendService.getRecommendsByOpenId(openid);
-            params.put("list",recommendsByOpenId);
-            List<ServView> servViews = servMapper.selectAttentionServsView(page,params);
-            Integer totalCount=servMapper.selectPrimServsViewCount(params);
+//            List<Long> recommendsByOpenId = recommendService.getRecommendsByOpenId(openid);
+            params.put("openid",openid);
+            List<ServView> servViews = servMapper.selectRecommendServsView(page,params);
+            Integer totalCount=servMapper.selectRecommendServsViewCount(params);
             PageUtils.setPage(servViews, totalCount, pageSize, page);
             return page;
         }
 
-
-
-        if(servType!=null){
-            params.put("servType",servType);
-        }
-        if(states!=null){
-            params.put("states",states);
-        }
         if(baseservTypeid!=null){
             params.put("baseservTypeid",baseservTypeid);
         }
         if(servManid!=null){
-            params.put("servManid",servManid);
+            params.put("openid",openid);
         }
 
 
 
         List<ServView> list = servMapper.selectServsView(page,params);
+
+        if(servRequest.getLatitude()!=null&&servRequest.getLongitude()!=null&&list!=null&&list.size()>0){
+            Double latitude = Double.valueOf(servRequest.getLatitude());
+            Double longitude = Double.valueOf(servRequest.getLongitude());
+            for (ServView servView : list) {
+                Double latitude1 =  Double.valueOf(servRequest.getLatitude());
+                Double longitude1 =  Double.valueOf(servView.getLongitude());
+                if(latitude1 !=null&& longitude1 !=null){
+                    //计算两个经纬度的距离
+                    double v = MapUtils.GetDistance(latitude, longitude, latitude1, longitude1);
+                    servView.setDistance(v);
+                }else{
+                    continue;
+                }
+            }
+        }else{
+                for (ServView servView : list) {
+                        servView.setDistance(-1D);//需要开启位置权限
+                    }
+            }
+
+
+
+
+
         Integer totalCount=servMapper.selectServsViewCount(params);
         PageUtils.setPage(list, totalCount, pageSize, page);
         return page;
@@ -120,29 +154,7 @@ public class ServImpl implements ServService {
         return servs;
     }
 
-    /**
-    * @Description:  分页查找
-    * @Param: [servRequest]
-    * @return: com.huntech.pvs.core.feature.orm.mybatis.Page<com.huntech.pvs.model.services.Serv>
-    * @Author: Mr.Wang
-    * @Date: 2018/5/25
-    */
-    @Override
-    public Page<Serv> selectByExampleAndPage(ServRequest servRequest) {
-        Integer pageNo = servRequest.getPageNo();
-        Integer pageSize = servRequest.getPageSize();
-        Page<Serv> page = new Page<>(pageNo,pageSize);
-        Long servManid = servRequest.getServManid();
-        ServExample servExample = new ServExample();
-        ServExample.Criteria criteria = servExample.createCriteria();
-        if(servManid!=null){
-            criteria.andServManidEqualTo(servManid);
-        }
-        List<Serv> list = servMapper.selectByExampleAndPage(page, servExample);
-        int totalCount=servMapper.countByExample(null);
-        PageUtils.setPage(list, totalCount, pageSize, page);
-        return page;
-    }
+
 
     @Override
     public Page<ServView> getBaseServOnMap(ServRequest servRequest) {
@@ -174,14 +186,29 @@ public class ServImpl implements ServService {
     public Integer releaseServ(ReleaseServRequest releaseServRequest, HttpServletRequest request) {
         String token = request.getHeader("token");
         String openid = JWT.unsign(token, String.class);
+        if(openid==null||openid.equals("")){
+            openid=releaseServRequest.getOpenid();
+        }
+        Long id = null;
         WeiXinUser weiXinUser = VCache.get(openid, WeiXinUser.class);
-        Long id = weiXinUser.getId();//serv_manid
+        if(null==weiXinUser){
+            WeiXinUserExample example = new WeiXinUserExample();
+            WeiXinUserExample.Criteria criteria = example.createCriteria();
+            criteria.andOpenIdEqualTo(openid);
+            List<WeiXinUser> weiXinUsers = weiXinUserMapper.selectByExample(example);
+            if(weiXinUsers!=null&&weiXinUsers.size()>0){
+                id=weiXinUsers.get(0).getId();
+            }
+        }else{
+             id = weiXinUser.getId();//serv_manid
+        }
         Serv serv = new Serv();
         int insert = 0;
         if(releaseServRequest.getServType()==0L){
+            serv.setServName(releaseServRequest.getServName());
             serv.setBaseservTypeid(releaseServRequest.getBaseServTypeid());
             serv.setServManid(id);
-            serv.setSelfservTypeid(0L);//个性化私服为0L
+//            serv.setSelfservTypeid(0L);//个性化私服为0L
             serv.setServType("0");
             serv.setState((byte)1);
             serv.setServTimeid(releaseServRequest.getServTimeId().intValue());
@@ -223,23 +250,128 @@ public class ServImpl implements ServService {
     public DetailServView getDetailServViewById(DetailServRequest detailServRequest) {
         Integer id = detailServRequest.getId();
 
-        String longitude = detailServRequest.getLongitude();
-        String latitude = detailServRequest.getLatitude();
+        String openid = detailServRequest.getOpenid();
+        Double longitude = null;
+        Double latitude = null;
+
+        if(detailServRequest.getLongitude()!=null){
+             longitude = Double.valueOf(detailServRequest.getLongitude());
+        }
+        if(detailServRequest.getLatitude()!=null){
+             latitude = Double.valueOf(detailServRequest.getLatitude());
+        }
+
+
         Map<String, Object> objectObjectHashMap = new HashMap<>();
         objectObjectHashMap.put("id",id);
         DetailServView detailServsView = servMapper.getDetailServsView(objectObjectHashMap);
-        String latitude1 = detailServsView.getLatitude();
-        String longitude1 = detailServsView.getLongitude();
+        Double latitude1 =Double.valueOf(detailServsView.getLatitude()) ;
+        Double longitude1 = Double.valueOf(detailServsView.getLongitude());
         if(longitude!=null&&latitude!=null&&longitude1!=null&&latitude1!=null){//计算两个经纬度之间的距离。
-            detailServsView.setDistance(100D);
+            double v = MapUtils.GetDistance(latitude, longitude, latitude1, longitude1);
+            detailServsView.setDistance(v);
         }
+
+        List<Label> labelsByServId = labelService.getLabelsByServId(Long.valueOf(id));//评价
+
+        detailServsView.setServLabels(labelsByServId);
+        Integer attentionCount = attentionService.getAttentionCount(new Attention(openid, Long.valueOf(id)));
+        detailServsView.setAttention(attentionCount);//是否关注
+
+        Integer totalAttentionCount = attentionService.getAttentionCount(new Attention(null, Long.valueOf(id)));
+
+        detailServsView.setTotalAttentions(totalAttentionCount);//总关注次数
+
         Long servContentid = detailServsView.getServContentid();
 
         ServContent servContent = new ServContent();
-        servContent.setServid(new Integer(String.valueOf(servContentid)));
-        List<ServContent> servContents = servContentService.getServContentByServId(servContent);
-        detailServsView.setServContents(servContents);
-
+        if(servContentid!=null){
+            servContent.setServid(new Integer(String.valueOf(servContentid)));
+            List<ServContent> servContents = servContentService.getServContentByServId(servContent);//条目
+            detailServsView.setServContents(servContents);
+        }
         return detailServsView;
+    }
+
+    @Override
+    public void optBaseServByUser(OptServRequest optServRequest) {
+        /*
+        输入参数	servid	必填项	对应列表id
+        disserv		 （喜欢：1，不喜欢0）
+        attention		红心（关注：1，不关注0 ）
+        illegal		违法内容 illegal  （违法：1，不违法0）
+        classification		（分类错误1，没错误0）
+        openid		用户的openid
+        */
+
+        Long servid = optServRequest.getServid();
+
+        Integer disserv = optServRequest.getDisserv();
+        Integer attention = optServRequest.getAttention();
+        Integer illegal = optServRequest.getIllegal();
+        Integer classification = optServRequest.getClassification();
+
+        String openid = optServRequest.getOpenid();
+        Serv serv = servMapper.selectByPrimaryKey(servid);
+        if(disserv!=null&&disserv.equals(0)&&serv.getServManid()!=null&&openid!=null){//
+            log.debug(openid+"用户**** 不喜欢  **** : " + servid+"disserv私服");
+            DisServExample example = new DisServExample();
+            DisServExample.Criteria criteria = example.createCriteria();
+            criteria.andOpenidEqualTo(openid);
+            criteria.andServManidEqualTo(serv.getServManid());
+
+            List<DisServ> disServs = disServMapper.selectByExample(example);
+            if(disServs!=null&&disServs.size()>0){
+                DisServ disServ = disServs.get(0);
+                if(new Byte("0").equals(disServ.getState())){
+                    disServ.setState(new Byte("1"));
+                    disServMapper.updateByPrimaryKey(disServ);
+                }
+            }else{
+                disServMapper.insertSelective(new DisServ(openid,serv.getServManid(),Byte.valueOf("1")));
+            }
+        }
+
+        if(attention!=null&&attention.equals(1)){
+            log.debug(openid+"用户**** attention **** : " + servid+"私服");
+            Integer attentionCount = attentionService.getAttentionCount(new Attention(openid,servid));
+            if(attentionCount>0){
+
+            }else{
+                attentionService.insert(new Attention(openid, servid));
+            }
+        }
+        if(illegal!=null&&illegal.equals(1)){
+            log.debug("**** illegal **** : " + servid);
+            illegalServExample example = new illegalServExample();
+            illegalServExample.Criteria criteria = example.createCriteria();
+            criteria.andOpenidEqualTo(openid);
+            criteria.andServManidEqualTo(servid);
+            List<illegalServ> illegalServs = illegalServMapper.selectByExample(example);
+            if(null!=illegalServs&&illegalServs.size()>0){
+                illegalServ illegalServ = illegalServs.get(0);
+                if(Objects.equals(((byte) 0), illegalServ.getState())){
+                    illegalServ.setState((byte) 1);
+                    illegalServMapper.updateByPrimaryKey(illegalServ);
+                }
+            }else{
+                illegalServMapper.insert(new illegalServ(openid, servid,new Byte("1")));
+            }
+        }
+        if(classification!=null&&classification.equals(1)){
+            log.debug("**** classification wrong **** : " + servid);
+            ClassificationServExample example = new ClassificationServExample();
+            ClassificationServExample.Criteria criteria = example.createCriteria();
+            criteria.andOpenidEqualTo(openid);
+            criteria.andServManidEqualTo(servid);
+            List<ClassificationServ> classificationServs = classificationServMapper.selectByExample(example);
+            if(classificationServs!=null&&classificationServs.size()>0){
+                ClassificationServ classificationServ = classificationServs.get(0);
+                classificationServ.setState((byte)1);
+                classificationServMapper.updateByPrimaryKey(classificationServ);
+            }else{
+                classificationServMapper.insert(new ClassificationServ(openid, servid,new Byte("1")));
+            }
+        }
     }
 }

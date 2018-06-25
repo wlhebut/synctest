@@ -6,7 +6,9 @@ import com.huntech.pvs.model.services.ServMan;
 import com.huntech.pvs.model.services.ServManExample;
 import com.huntech.pvs.model.services.ServManGps;
 import com.huntech.pvs.model.services.ServManGpsExample;
+import com.huntech.pvs.model.sys.WeiXinUser;
 import com.huntech.pvs.service.services.ServManService;
+import com.huntech.pvs.service.sys.WeiXinUserService;
 import com.huntech.pvs.view.request.AddressRequest;
 import com.huntech.pvs.view.request.ServManRequest;
 import com.huntech.pvs.view.services.BaseServTypeView;
@@ -23,15 +25,34 @@ import java.util.Map;
 public class ServManServiceImpl implements ServManService {
 
 
-    static  Long BASESERVTYPEID;
+//    static  Long BASESERVTYPEID;
+
+    @Autowired
+    private WeiXinUserService weiXinUserService;
     @Autowired
     private ServManMapper servManMapper;
     @Autowired
     private ServManGpsMapper servManGpsMapper;
     @Override
-    public List<ServMan> getServMan() {
-        List<ServMan> servMEN = servManMapper.selectByExample(null);
-        return servMEN;
+    public ServMan getServMan(String openid) {
+
+        WeiXinUser weiXinUserByOpenId = weiXinUserService.getWeiXinUserByOpenId(openid);
+        if(weiXinUserByOpenId!=null&&weiXinUserByOpenId.getServManid()!=null){
+            ServMan servMan= servManMapper.selectByPrimaryKey(weiXinUserByOpenId.getServManid());
+            return servMan;
+        }
+        return null;
+
+    }
+
+    @Override
+    public ServMan getServManByPriKey(Long id) {
+
+        if(id!=null){
+            ServMan servMan = servManMapper.selectByPrimaryKey(id);
+            return servMan;
+        }
+        return null;
     }
 
     @Override
@@ -97,6 +118,12 @@ public class ServManServiceImpl implements ServManService {
     }
 
     @Override
+    public int updateByPriKey(ServMan man) {
+        int i = servManMapper.updateByPrimaryKey(man);
+        return i;
+    }
+
+    /*@Override
     public List<BaseServTypeView> getBaseServTypeView(AddressRequest addressRequest) {
 
         Map<String,Object> params=new HashMap<>();
@@ -111,6 +138,6 @@ public class ServManServiceImpl implements ServManService {
         List<BaseServTypeView> baseServTypeViewList = servManMapper.selectCountByServType(params);
 
         return  baseServTypeViewList;
-    }
+    }*/
 
 }

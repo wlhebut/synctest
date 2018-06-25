@@ -3,6 +3,7 @@ package com.huntech.pvs.dao.services;
 import com.huntech.pvs.model.services.BaseServType;
 import com.huntech.pvs.model.services.BaseServTypeExample;
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 public interface BaseServTypeMapper {
@@ -27,4 +28,6 @@ public interface BaseServTypeMapper {
     int updateByPrimaryKeySelective(BaseServType record);
 
     int updateByPrimaryKey(BaseServType record);
+
+    List<BaseServType> getOtherBaseServTypeByOpenId(Map<String, Object> map);
 }

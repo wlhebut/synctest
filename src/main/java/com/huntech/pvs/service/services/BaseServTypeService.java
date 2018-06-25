@@ -16,4 +16,6 @@ public interface BaseServTypeService {
 
     List<BaseServType> getBaseServTypeByOpenId(BaseServTypeRequest baseServType);
 
+    List<BaseServType> getOtherBaseServTypeByOpenId(BaseServTypeRequest baseServType);
+
 }

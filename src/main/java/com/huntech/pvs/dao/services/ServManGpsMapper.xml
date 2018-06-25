@@ -74,7 +74,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from TBL_SERV_MAN_GPS
+    from tbl_serv_man_gps
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -85,27 +85,27 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    from TBL_SERV_MAN_GPS
+    from tbl_serv_man_gps
     where ID = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from TBL_SERV_MAN_GPS
+    delete from tbl_serv_man_gps
     where ID = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.huntech.pvs.model.services.ServManGpsExample" >
-    delete from TBL_SERV_MAN_GPS
+    delete from tbl_serv_man_gps
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.huntech.pvs.model.services.ServManGps" >
-    insert into TBL_SERV_MAN_GPS (ID, SERV_MANID, LONGITUDE, 
+    insert into tbl_serv_man_gps (ID, SERV_MANID, LONGITUDE, 
       LATITUDE)
     values (#{id,jdbcType=BIGINT}, #{servManid,jdbcType=BIGINT}, #{longitude,jdbcType=VARCHAR}, 
       #{latitude,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.huntech.pvs.model.services.ServManGps" >
-    insert into TBL_SERV_MAN_GPS
+    insert into tbl_serv_man_gps
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         ID,
@@ -136,13 +136,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.huntech.pvs.model.services.ServManGpsExample" resultType="java.lang.Integer" >
-    select count(*) from TBL_SERV_MAN_GPS
+    select count(*) from tbl_serv_man_gps
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update TBL_SERV_MAN_GPS
+    update tbl_serv_man_gps
     <set >
       <if test="record.id != null" >
         ID = #{record.id,jdbcType=BIGINT},
@@ -162,7 +162,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update TBL_SERV_MAN_GPS
+    update tbl_serv_man_gps
     set ID = #{record.id,jdbcType=BIGINT},
       SERV_MANID = #{record.servManid,jdbcType=BIGINT},
       LONGITUDE = #{record.longitude,jdbcType=VARCHAR},
@@ -172,7 +172,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.huntech.pvs.model.services.ServManGps" >
-    update TBL_SERV_MAN_GPS
+    update tbl_serv_man_gps
     <set >
       <if test="servManid != null" >
         SERV_MANID = #{servManid,jdbcType=BIGINT},
@@ -187,7 +187,7 @@
     where ID = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.huntech.pvs.model.services.ServManGps" >
-    update TBL_SERV_MAN_GPS
+    update tbl_serv_man_gps
     set SERV_MANID = #{servManid,jdbcType=BIGINT},
       LONGITUDE = #{longitude,jdbcType=VARCHAR},
       LATITUDE = #{latitude,jdbcType=VARCHAR}

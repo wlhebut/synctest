@@ -27,5 +27,4 @@ public interface SelfBaseServTypeMapper {
     int updateByPrimaryKeySelective(SelfBaseServType record);
 
     int updateByPrimaryKey(SelfBaseServType record);
-
 }

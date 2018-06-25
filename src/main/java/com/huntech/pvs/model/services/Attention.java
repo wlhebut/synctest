@@ -42,4 +42,12 @@ public class Attention {
     public void setAttentionDate(Date attentionDate) {
         this.attentionDate = attentionDate;
     }
+
+    public Attention(String openid, Long servid) {
+        this.openid = openid;
+        this.servid = servid;
+    }
+
+    public Attention() {
+    }
 }

@@ -31,22 +31,74 @@ public class BaseServTypeController extends BaseController {
     @RequestMapping(value = "getBaseServType")
     @ResponseBody
     public Map<String, Object> getBaseServType(@RequestBody BaseServType baseServType) {
-        List<BaseServType> list = baseServTypeService.getBaseServType( baseServType);
-        resultMap.put("data",list);
+        try {
+            List<BaseServType> list = baseServTypeService.getBaseServType( baseServType);
+            resultMap.put("data",list);
+            resultMap.put("dataCode","1");
+        } catch (Exception e) {
+            resultMap.put("dataCode","0");
+            e.printStackTrace();
+        }
         return resultMap;
     }
+
+    /**
+    * @Description:  根据用户的penid获取私服分类
+    * @Param: [baseServType]
+    * @return: java.util.Map<java.lang.String,java.lang.Object>
+    * @Author: Mr.Wang
+    * @Date: 2018/6/22
+    */
     @RequestMapping(value = "getBaseServTypeByOpenId")
     @ResponseBody
     public Map<String, Object> getBaseServTypeByOpenId(@RequestBody BaseServTypeRequest baseServType) {
-        List<BaseServType> list = baseServTypeService.getBaseServTypeByOpenId( baseServType);
-        resultMap.put("data",list);
+        try {
+            List<BaseServType> list = baseServTypeService.getBaseServTypeByOpenId( baseServType);
+            resultMap.put("data",list);
+            resultMap.put("dataCode","1");
+        } catch (Exception e) {
+            resultMap.put("dataCode","0");
+            e.printStackTrace();
+        }
         return resultMap;
     }
+    /**
+    * @Description: 获取全部私服当前用户的补集
+    * @Param: [baseServType]
+    * @return: java.util.Map<java.lang.String,java.lang.Object>
+    * @Author: Mr.Wang
+    * @Date: 2018/6/22
+    */
+    @RequestMapping(value = "getOtherBaseServTypeByOpenId")
+    @ResponseBody
+    public Map<String, Object> getOtherBaseServTypeByOpenId(@RequestBody BaseServTypeRequest baseServType) {
+        try {
+            List<BaseServType> list = baseServTypeService.getOtherBaseServTypeByOpenId( baseServType);
+            resultMap.put("data",list);
+            resultMap.put("dataCode","1");
+        } catch (Exception e) {
+            resultMap.put("dataCode","0");
+            e.printStackTrace();
+        }
+        return resultMap;
+    }
+    /**
+    * @Description: 更新分类
+    * @Param: [baseServTypes]
+    * @return: java.util.Map<java.lang.String,java.lang.Object>
+    * @Author: Mr.Wang
+    * @Date: 2018/6/22
+    */
     @RequestMapping(value = "updateBaseServTypeByOpenId")
     @ResponseBody
     public Map<String, Object> updateBaseServTypeByOpenId(@RequestBody BaseServTypeRequest baseServTypes) {
-        Integer integer = baseServTypeService.updateByOpenId(baseServTypes);
-        resultMap.put("erroCode","1");
+        try {
+            Integer integer = baseServTypeService.updateByOpenId(baseServTypes);
+            resultMap.put("dataCode","1");
+        } catch (Exception e) {
+            resultMap.put("dataCode","0");
+            e.printStackTrace();
+        }
         return resultMap;
     }
 

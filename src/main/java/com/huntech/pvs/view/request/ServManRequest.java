@@ -1,9 +1,21 @@
 package com.huntech.pvs.view.request;
 
-public class ServManRequest {
+import com.huntech.pvs.model.services.ServMan;
+
+public class ServManRequest extends ServMan{
     private Long baseservTypeid;
     private String cityCode;
     private String townCode;
+
+    private String openid;
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
 
     public Long getBaseservTypeid() {
         return baseservTypeid;

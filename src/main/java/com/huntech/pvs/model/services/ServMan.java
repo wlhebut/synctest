@@ -25,9 +25,11 @@ public class ServMan {
 
     private Long servManGpsid;
 
-    private Long baseservTypeid;//是否是没有用的。
+    private Long baseservTypeid;
 
-    private Long selfservTypeid;//是否是没有用的。
+    private String servAddress;
+
+    private Long selfservTypeid;
 
     private String enable;
 
@@ -133,6 +135,14 @@ public class ServMan {
 
     public void setBaseservTypeid(Long baseservTypeid) {
         this.baseservTypeid = baseservTypeid;
+    }
+
+    public String getServAddress() {
+        return servAddress;
+    }
+
+    public void setServAddress(String servAddress) {
+        this.servAddress = servAddress == null ? null : servAddress.trim();
     }
 
     public Long getSelfservTypeid() {

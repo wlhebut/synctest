@@ -3,6 +3,8 @@ package com.huntech.pvs.model.sys;
 public class WeiXinUser {
     private Long id;
 
+    private Long servManid;
+
     private String openId;
 
     private String nickName;
@@ -33,6 +35,14 @@ public class WeiXinUser {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getServManid() {
+        return servManid;
+    }
+
+    public void setServManid(Long servManid) {
+        this.servManid = servManid;
     }
 
     public String getOpenId() {
@@ -131,4 +141,3 @@ public class WeiXinUser {
         this.userTel = userTel == null ? null : userTel.trim();
     }
 }
-
