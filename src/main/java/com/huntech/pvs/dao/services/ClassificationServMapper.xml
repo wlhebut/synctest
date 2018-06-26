@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huntech.pvs.dao.services.ClassificationServMapper" >
+  <resultMap id="BaseResultMap" type="com.huntech.pvs.model.services.ClassificationServ" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="OPENID" property="openid" jdbcType="VARCHAR" />
+    <result column="SERV_MANID" property="servManid" jdbcType="BIGINT" />
+    <result column="STATE" property="state" jdbcType="TINYINT" />
+    <result column="DDATE" property="ddate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, OPENID, SERV_MANID, STATE, DDATE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.huntech.pvs.model.services.ClassificationServExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tbl_classification_serv
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_classification_serv
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tbl_classification_serv
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huntech.pvs.model.services.ClassificationServExample" >
+    delete from tbl_classification_serv
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huntech.pvs.model.services.ClassificationServ" >
+    insert into tbl_classification_serv (ID, OPENID, SERV_MANID, 
+      STATE, DDATE)
+    values (#{id,jdbcType=BIGINT}, #{openid,jdbcType=VARCHAR}, #{servManid,jdbcType=BIGINT}, 
+      #{state,jdbcType=TINYINT}, #{ddate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huntech.pvs.model.services.ClassificationServ" >
+    insert into tbl_classification_serv
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="openid != null" >
+        OPENID,
+      </if>
+      <if test="servManid != null" >
+        SERV_MANID,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="ddate != null" >
+        DDATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="openid != null" >
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="servManid != null" >
+        #{servManid,jdbcType=BIGINT},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="ddate != null" >
+        #{ddate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huntech.pvs.model.services.ClassificationServExample" resultType="java.lang.Integer" >
+    select count(*) from tbl_classification_serv
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tbl_classification_serv
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.openid != null" >
+        OPENID = #{record.openid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.servManid != null" >
+        SERV_MANID = #{record.servManid,jdbcType=BIGINT},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=TINYINT},
+      </if>
+      <if test="record.ddate != null" >
+        DDATE = #{record.ddate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tbl_classification_serv
+    set ID = #{record.id,jdbcType=BIGINT},
+      OPENID = #{record.openid,jdbcType=VARCHAR},
+      SERV_MANID = #{record.servManid,jdbcType=BIGINT},
+      STATE = #{record.state,jdbcType=TINYINT},
+      DDATE = #{record.ddate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huntech.pvs.model.services.ClassificationServ" >
+    update tbl_classification_serv
+    <set >
+      <if test="openid != null" >
+        OPENID = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="servManid != null" >
+        SERV_MANID = #{servManid,jdbcType=BIGINT},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="ddate != null" >
+        DDATE = #{ddate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huntech.pvs.model.services.ClassificationServ" >
+    update tbl_classification_serv
+    set OPENID = #{openid,jdbcType=VARCHAR},
+      SERV_MANID = #{servManid,jdbcType=BIGINT},
+      STATE = #{state,jdbcType=TINYINT},
+      DDATE = #{ddate,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
