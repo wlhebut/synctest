@@ -40,9 +40,9 @@
         </javaClientGenerator>
 
         <!--对应数据库表名 --><!--schema="OMS_JHT"-->
-        <!--<table  tableName="weixin_user" domainObjectName="WeiXinUser" >
+        <table  tableName="tbl_serv_time" domainObjectName="ServTime" >
             <property name="ignoreQualifiersAtRuntime" value="true"></property>
-        </table>-->
+        </table>
         <!--<table  tableName="tbl_illegal_serv" domainObjectName="illegalServ" >
             <property name="ignoreQualifiersAtRuntime" value="true"></property>
         </table>-->
