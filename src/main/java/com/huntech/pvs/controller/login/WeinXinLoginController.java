@@ -70,17 +70,18 @@ public class WeinXinLoginController {
 		System.out.println("iv="+iv);
 		System.out.println("code="+code);
 		System.out.println("------------------------2222222-------------------------");
-//		String openid = weiXinLoginService.HasUser(weiXinLoginRequest);
-		String openid="okTs65C1THvPV39Q9uuqW_p4h7Jk";
-		request.getSession().setAttribute("openid",openid);
+		String openid = weiXinLoginService.HasUser(weiXinLoginRequest);
+//		String openid="okTs65C1THvPV39Q9uuqW_p4h7Jk";
+		System.out.println("当前登录openid:"+openid);
+//		request.getSession().setAttribute("openid",openid);
 //		weiXinLoginService.insertInToRedis(openid);
 		BaseServTypeRequest baseServTypeRequest = new BaseServTypeRequest();
 		baseServTypeRequest.setOpenid(openid);
-		List<BaseServType> baseServTypes = baseServTypeService.getBaseServTypeByOpenId(baseServTypeRequest);
+		/*List<BaseServType> baseServTypes = baseServTypeService.getBaseServTypeByOpenId(baseServTypeRequest);
 		if(baseServTypes!=null&&baseServTypes.size()>0){
 		}else{
 			selfServTypeService.insertAllType(openid);
-		}
+		}*/
 
 
 		if(openid!=null){
