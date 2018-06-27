@@ -123,20 +123,18 @@ public class ServImpl implements ServService {
             Double latitude = Double.valueOf(servRequest.getLatitude());
             Double longitude = Double.valueOf(servRequest.getLongitude());
             for (ServView servView : list) {
-                Double latitude1 =  Double.valueOf(servRequest.getLatitude());
-                Double longitude1 =  Double.valueOf(servView.getLongitude());
-                if(latitude1 !=null&& longitude1 !=null){
-                    //计算两个经纬度的距离
-                    double v = MapUtils.GetDistance(latitude, longitude, latitude1, longitude1);
-                    servView.setDistance(v);
-                }else{
-                    continue;
+                if(servRequest.getLatitude()!=null&&servView.getLongitude()!=null){
+                    Double latitude1 =  Double.valueOf(servRequest.getLatitude());
+                    Double longitude1 =  Double.valueOf(servView.getLongitude());
+                    if(latitude1 !=null&& longitude1 !=null){
+                        //计算两个经纬度的距离
+                        double v = MapUtils.GetDistance(latitude, longitude, latitude1, longitude1);
+                        servView.setDistance(v);
+                    }
                 }
             }
         }else{
-                for (ServView servView : list) {
-                        servView.setDistance(-1D);//需要开启位置权限
-                    }
+                System.out.println("需要开启位置权限");
             }
 
 

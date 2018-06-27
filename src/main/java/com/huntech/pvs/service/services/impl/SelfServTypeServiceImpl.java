@@ -59,4 +59,14 @@ public class SelfServTypeServiceImpl implements SelfServTypeService {
         }
         return -1;
     }
+
+    @Override
+    public List<SelfBaseServType> selectAll(String openid) {
+
+        SelfBaseServTypeExample example = new SelfBaseServTypeExample();
+        SelfBaseServTypeExample.Criteria criteria = example.createCriteria();
+        criteria.andOpenidEqualTo(openid);
+        List<SelfBaseServType> selfBaseServTypes = selfBaseServTypeMapper.selectByExample(example);
+        return selfBaseServTypes;
+    }
 }

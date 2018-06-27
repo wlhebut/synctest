@@ -41,7 +41,10 @@ public class BaseServTypeImpl implements BaseServTypeService {
         BaseServTypeExample example = new BaseServTypeExample();
         BaseServTypeExample.Criteria criteria = example.createCriteria();
 
-        criteria.andLawfulEqualTo(lawful);
+        if(lawful!=null){
+            criteria.andLawfulEqualTo(lawful);
+        }
+
         if(state!= null){
             criteria.andServTypeEqualTo(state);
         }
