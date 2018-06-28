@@ -93,9 +93,13 @@ public class ServController extends BaseController {
     @ResponseBody
     public Map<String, Object> releaseServ(@RequestBody ReleaseServRequest releaseServRequest, HttpServletRequest request) {
 //        List<ServView> list = servService.getBaseServ( servRequest);
-        Integer integer = servService.releaseServ( releaseServRequest,request);
-        resultMap.put("data",integer);
-        resultMap.put("dataCode",integer);
+        try {
+            servService.releaseServ( releaseServRequest,request);
+            resultMap.put("dataCode",1);
+        } catch (Exception e) {
+            resultMap.put("dataCode",-1);
+            e.printStackTrace();
+        }
         return resultMap;
     }
     @RequestMapping(value = "insertSelfAddServ")
@@ -148,14 +152,20 @@ public class ServController extends BaseController {
     @ResponseBody
     public Map<String, Object> getDetailBaseServ(@RequestBody DetailServRequest detailServRequest) {
 
-        try {
-            DetailServView detailServView = servService.getDetailServViewById(detailServRequest);
-            resultMap.put("data",detailServView);
-            resultMap.put("dataCode","1");
-        } catch (Exception e) {
-            resultMap.put("dataCode","-1");
-            e.printStackTrace();
+        if(detailServRequest!=null&&detailServRequest.getId()!=null){
+            try {
+                DetailServView detailServView = servService.getDetailServViewById(detailServRequest);
+                resultMap.put("data",detailServView);
+                resultMap.put("dataCode","1");
+                return resultMap;
+            } catch (Exception e) {
+                resultMap.put("dataCode","-1");
+                e.printStackTrace();
+                return  resultMap;
+            }
         }
+        resultMap.put("dataCode","0");//参数不全
+        resultMap.put("dataDesc","参数不全");//参数不全
         return resultMap;
     }
 

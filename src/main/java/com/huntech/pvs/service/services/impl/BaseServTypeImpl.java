@@ -104,26 +104,30 @@ public class BaseServTypeImpl implements BaseServTypeService {
 
     @Override
     public List<BaseServType> getBaseServTypeByOpenId(BaseServTypeRequest baseServType) {
+        List<BaseServType> list;
         String openid = baseServType.getOpenid();
+        if(openid!=null&&!"".equals(openid)){
+            SelfBaseServTypeExample selfBaseServTypeExample = new SelfBaseServTypeExample();
+            SelfBaseServTypeExample.Criteria criteria = selfBaseServTypeExample.createCriteria();
+            criteria.andOpenidEqualTo(openid);
+            criteria.andStateEqualTo(new Byte("1"));
+            List<SelfBaseServType> selfBaseServTypes = selfBaseServTypeMapper.selectByExample(selfBaseServTypeExample);
 
-        SelfBaseServTypeExample selfBaseServTypeExample = new SelfBaseServTypeExample();
-        SelfBaseServTypeExample.Criteria criteria = selfBaseServTypeExample.createCriteria();
-        criteria.andOpenidEqualTo(openid);
-        criteria.andStateEqualTo(new Byte("1"));
-        List<SelfBaseServType> selfBaseServTypes = selfBaseServTypeMapper.selectByExample(selfBaseServTypeExample);
-
-        ArrayList<Integer> integers = new ArrayList<>();
-        if(selfBaseServTypes!=null&&selfBaseServTypes.size()>0){
-            for (SelfBaseServType selfBaseServType : selfBaseServTypes) {
-                integers.add(selfBaseServType.getBaseServTypeid());
+            ArrayList<Integer> integers = new ArrayList<>();
+            if(selfBaseServTypes!=null&&selfBaseServTypes.size()>0){
+                for (SelfBaseServType selfBaseServType : selfBaseServTypes) {
+                    integers.add(selfBaseServType.getBaseServTypeid());
+                }
             }
+            BaseServTypeExample example = new BaseServTypeExample();
+            BaseServTypeExample.Criteria criteria1 = example.createCriteria();
+            if(integers.size()>0){
+                criteria1.andIdIn(integers);
+            }
+            list = baseServTypeMapper.selectByExample(example);
+        }else{
+            list = baseServTypeMapper.selectByExample(null);
         }
-        BaseServTypeExample example = new BaseServTypeExample();
-        BaseServTypeExample.Criteria criteria1 = example.createCriteria();
-        if(integers.size()>0){
-            criteria1.andIdIn(integers);
-        }
-        List<BaseServType> list = baseServTypeMapper.selectByExample(example);
         return list;
     }
 

@@ -1,6 +1,8 @@
 package com.huntech.pvs.model.sys;
 
-public class WeiXinUser {
+import java.io.Serializable;
+
+public class WeiXinUser implements Serializable{
     private Long id;
 
     private Long servManid;

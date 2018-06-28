@@ -11,4 +11,5 @@ public interface SelfServTypeService {
     Integer insertAllType(String openid);
 
     List<SelfBaseServType> selectAll(String openid);
+    Integer selectCount(String openid);
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,15 @@ public class BaseServTypeController extends BaseController {
     public Map<String, Object> getBaseServType(@RequestBody BaseServType baseServType) {
         try {
             List<BaseServType> list = baseServTypeService.getBaseServType( baseServType);
-            resultMap.put("data",list);
+            ArrayList<BaseServType> baseServTypes = new ArrayList<>();
+
+            for (BaseServType servType : list) {
+                if(servType.getId()!=1&&servType.getId()!=2){//去除关注与推荐分类
+                    baseServTypes.add(servType);
+                }
+            }
+
+            resultMap.put("data",baseServTypes);
             resultMap.put("dataCode","1");
         } catch (Exception e) {
             resultMap.put("dataCode","0");
@@ -51,7 +60,7 @@ public class BaseServTypeController extends BaseController {
     */
     @RequestMapping(value = "getBaseServTypeByOpenId")
     @ResponseBody
-    public Map<String, Object> getBaseServTypeByOpenId(@RequestBody BaseServTypeRequest baseServType) {
+    public Map<String, Object> getBaseServTypeByOpenId(@RequestBody  BaseServTypeRequest baseServType) {
         try {
             List<BaseServType> list = baseServTypeService.getBaseServTypeByOpenId( baseServType);
             resultMap.put("data",list);

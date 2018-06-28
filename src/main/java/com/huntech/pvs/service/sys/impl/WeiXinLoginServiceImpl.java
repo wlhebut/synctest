@@ -57,10 +57,11 @@ public class WeiXinLoginServiceImpl implements WeiXinLoginService {
         WeiXinUserExample.Criteria criteria = weiXinUserExample.createCriteria();
         criteria.andOpenIdEqualTo(openid);
         List<WeiXinUser> weiXinUsers = weiXinUserMapper.selectByExample(weiXinUserExample);
-
+        System.out.println("查询当前登录用户的信息："+weiXinUsers);
         JSONObject userInfo = null;
         try {
             if(weiXinLoginRequest.getEncryptedData()!=null&&session_key!=null&&weiXinLoginRequest.getIv()!=null){
+                System.out.println("1111111111");
                 try {
                     userInfo = DECRYPT.getUserInfo(weiXinLoginRequest.getEncryptedData(), session_key, weiXinLoginRequest.getIv());
                     System.out.println("解密用户userInfo:"+userInfo);
@@ -75,16 +76,29 @@ public class WeiXinLoginServiceImpl implements WeiXinLoginService {
         }
 
         if(weiXinUsers!=null){
+            System.out.println("null...........");
             if(weiXinUsers.size()>0){
-                selfServTypeService.insertAllType(openid);
-                System.out.println("weixin_user表中存在当前openid:"+weiXinUsers.get(0).getOpenId());
+                //查询是否存在
+                Integer integer = selfServTypeService.selectCount(openid);
+                if(integer<1){
+                    selfServTypeService.insertAllType(openid);
+                }
             }else{
                 WeiXinUser weiXinUser = new WeiXinUser();
-                userInfo.get("nickName");
                 weiXinUser.setOpenId(openid);
+                if(userInfo!=null){
+                    weiXinUser.setNickName((String)userInfo.get("nickName"));
+                    weiXinUser.setAvatarUrl((String)userInfo.get("avatarUrl"));
+                    String gender = (String)userInfo.get("gender");
+                    weiXinUser.setGender(new Byte(gender));
+                }
                 weiXinUserMapper.insert(weiXinUser);
+                Integer integer = selfServTypeService.selectCount(openid);
+                if(integer<1){
+                    selfServTypeService.insertAllType(openid);
+                }
             }
-            selfServTypeService.insertAllType(openid);
+
         }else{
             System.out.println("查询当前的登录用户为null。。。。。");
             WeiXinUser weiXinUser = new WeiXinUser();

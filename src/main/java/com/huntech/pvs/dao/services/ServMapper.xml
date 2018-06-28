@@ -330,12 +330,12 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.huntech.pvs.model.services.Serv" >
+  <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.huntech.pvs.model.services.Serv" >
     insert into tbl_serv (ID, SERV_NAME, SERV_TYPE, 
-      BASESERV_TYPEID, STATE
+      BASESERV_TYPEID,SERV_MANID, SERV_TIMEID,STATE
       )
     values (#{id,jdbcType=BIGINT}, #{servName,jdbcType=VARCHAR}, #{servType,jdbcType=CHAR}, 
-      #{baseservTypeid,jdbcType=BIGINT}, #{state,jdbcType=TINYINT}
+      #{baseservTypeid,jdbcType=BIGINT},#{servManid,jdbcType=BIGINT},#{servTimeid,jdbcType=INTEGER}, #{state,jdbcType=TINYINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.huntech.pvs.model.services.Serv" >

@@ -17,9 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -41,9 +45,9 @@ public class SerManController extends BaseController {
                 String openid=servManRequest.getOpenid();
                 ServMan servMan = servManService.getServMan(openid);
                 resultMap.put("data",servMan);
-                resultMap.put("dataCode",-1);
-            }else{
                 resultMap.put("dataCode",1);
+            }else{
+                resultMap.put("dataCode",-1);
             }
 
         } catch (Exception e) {
@@ -127,6 +131,33 @@ public class SerManController extends BaseController {
         }
         resultMap.put("dataCode",-1);
         return resultMap;
+    }
+
+
+    //获取头像
+
+    @RequestMapping("pic/{openid}")
+    public void getServManPic(@PathVariable("openid")String openid, HttpServletRequest request, HttpServletResponse response ) throws IOException{
+        String realPath = request.getServletContext().getRealPath("/");
+        String url=realPath+File.separator+"images"+File.separator+openid+".jpg";
+        InputStream inputStream;
+        if(new File(url).exists()){
+            inputStream=new FileInputStream(url);
+        }else{
+            url=realPath+File.separator+"images"+File.separator+"default.png";
+            inputStream=new FileInputStream(url);
+        }
+        ServletOutputStream outputStream = response.getOutputStream();
+        response.setContentType("image/jpeg; charset=UTF-8");
+
+        byte[] bytes = new byte[1024];
+        int i;
+        while ((i=inputStream.read(bytes))!=-1){
+            outputStream.write(bytes,0, i);
+        }
+        outputStream.flush();
+        outputStream.close();
+        inputStream.close();
     }
 
 }
