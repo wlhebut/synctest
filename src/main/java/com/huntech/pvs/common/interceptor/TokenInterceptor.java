@@ -16,61 +16,41 @@ import java.io.PrintWriter;
 public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
-
-
-
-
         response.setCharacterEncoding("utf-8");
-
-        WeiXinUser weiXinUser = new WeiXinUser();
-        weiXinUser.setOpenId("123456");
-        weiXinUser.setCity("beijing");
-        VCache.setCache(0,"test:1",weiXinUser,1);
-        VCache.setCache(0,"test:10",weiXinUser,10);
-        VCache.setCache(0,"test:100",weiXinUser,100);
-        VCache.setCache(0,"test:1000",weiXinUser,1000);
-
-
-
-
-
-
-
         String token ;
         token=request.getHeader("token");
+        System.out.println("当前用户请求头为:"+token);
         ResponseData responseData = ResponseData.ok();
-
-
-
         //token不存在
         if(null != token) {
             String openid_new = JWT.unsign(token, String.class);
-            String openid = (String) request.getSession().getAttribute("openid");
+//            String openid = (String) request.getSession().getAttribute("openid");
+            String openid = "";
+
+            WeiXinUser weiXinUser1 = VCache.get(openid_new, WeiXinUser.class);
+
+            if(weiXinUser1!=null){
+                openid= weiXinUser1.getOpenId();
+            }
             //解密token后的loginId与用户传来的loginId不一致，一般都是token过期
-            System.out.println("小程序传过来的token："+openid_new);
-            System.out.println("session中的token："+openid);
+            System.out.println("小程序传过来的openid_new："+openid_new);
+            System.out.println("redis中的openid："+ (weiXinUser1 != null ? weiXinUser1.getOpenId() : null));
 
             if(null != openid_new) {
-                if(!openid_new.equals("")) {
-                    System.out.println("小程序传过来的认证通过token："+openid_new);
+                if(!openid_new.equals("")&&openid.equals(openid_new)) {
+                    System.out.println("小程序当前登录用户以前登录过："+openid_new);
                     return true;
-                }
-                else{
+                }else{
                     responseData = ResponseData.forbidden();
                     responseMessage(response, response.getWriter(), responseData);
                     return false;
                 }
-            }
-            else
-            {
+            }else{
                 responseData = ResponseData.forbidden();
                 responseMessage(response, response.getWriter(), responseData);
                 return false;
             }
-        }
-        else
-        {
+        }else{
             responseData = ResponseData.forbidden();
             responseMessage(response, response.getWriter(), responseData);
             return false;
