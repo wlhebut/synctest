@@ -129,7 +129,7 @@ public class ServImpl implements ServService {
                     if(latitude1 !=null&& longitude1 !=null){
                         //计算两个经纬度的距离
                         double v = MapUtils.GetDistance(latitude, longitude, latitude1, longitude1);
-                        servView.setDistance(v);
+                        servView.setDistance(v/1000);//千米(单位)
                     }
                 }
             }
