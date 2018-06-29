@@ -22,6 +22,16 @@ public class ServView implements Serializable {
 
     private Double distance;//距离
     private String servTime;
+    private String servAddress;//位置
+
+
+    public String getServAddress() {
+        return servAddress;
+    }
+
+    public void setServAddress(String servAddress) {
+        this.servAddress = servAddress;
+    }
 
     public String getServTime() {
         return servTime;

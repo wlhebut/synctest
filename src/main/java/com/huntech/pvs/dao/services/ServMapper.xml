@@ -26,6 +26,7 @@
     <result column="LONGITUDE" property="longitude" jdbcType="VARCHAR" />
     <result column="LATITUDE" property="latitude" jdbcType="VARCHAR" />
     <result column="STEL" property="stel" jdbcType="VARCHAR" />
+    <result column="SERV_ADDRESS" property="servAddress" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="BaseResultMap3" type="com.huntech.pvs.view.services.DetailServView" >
     <id column="ID" property="id" jdbcType="BIGINT" />
@@ -117,7 +118,8 @@
     g.LATITUDE,
     t.ERVERSATIS,
     st.serv_time,
-      s.STATE
+      s.STATE,
+    m.SERV_ADDRESS
     FROM
     TBL_SERV s
     LEFT JOIN tbl_serv_man m ON m.ID = s.SERV_MANID

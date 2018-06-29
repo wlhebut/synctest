@@ -89,6 +89,7 @@ public class WeinXinLoginController {
 			String token = JWT.sign(openid, 60*1000*60*24*10);
 			resMap.put("dataCode",ERROCODE1);//数据库现在已经有了。
 			resMap.put("token",token);//给小程序前端，有小程序需要携带此信息到后台。
+			resMap.put("openid",openid);//给小程序前端，有小程序需要携带此信息到后台。
 //			insertIntoRedis(openid,openid);
 			weiXinLoginService.insertInToRedis(openid);
 			System.out.println("insert ok"+weiXinLoginRequest.getCode());

@@ -51,7 +51,7 @@ public class JedisManager {
         		
         		System.out.println("|PS.如果对Redis表示排斥，请使用Ehcache版本：http://www.sojson.com/jc_shiro_ssm_ehcache.html");
         		System.out.println("项目退出中....生产环境中，请删除这些东西。我来自。JedisManage.java line:53");
-        		System.exit(0);//停止项目
+//        		System.exit(0);//停止项目
         	}
         	throw new JedisConnectionException(e);
         } catch (Exception e) {

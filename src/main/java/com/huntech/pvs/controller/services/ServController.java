@@ -50,15 +50,23 @@ public class ServController extends BaseController {
     @RequestMapping(value = "getBaseServ")
     @ResponseBody
     public Map<String, Object> getBaseServ(@RequestBody ServRequest servRequest) {
+
+        if(servRequest.getBaseservTypeid()==null){
+            resultMap.put("dataCode","0");
+            resultMap.put("dataDesc","缺少参数");
+            return resultMap;
+        }
         try {
             Page<ServView> list = servService.getBaseServ( servRequest);
             resultMap.put("data",list);
             resultMap.put("dataCode","1");
+            return resultMap;
         } catch (Exception e) {
-            resultMap.put("dataCode","0");
+            resultMap.put("dataCode","-1");
+            resultMap.put("dataDesc","后台错误");
             e.printStackTrace();
+            return resultMap;
         }
-        return resultMap;
     }
     /**
     * @Description: get serv on map

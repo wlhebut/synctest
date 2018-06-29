@@ -11,7 +11,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 
 public class TokenInterceptor implements HandlerInterceptor {
     @Override
@@ -20,23 +22,40 @@ public class TokenInterceptor implements HandlerInterceptor {
         String token ;
         token=request.getHeader("token");
         System.out.println("当前用户请求头为:"+token);
+
+        String requestURI = request.getRequestURI();
+        Enumeration<String> em = request.getParameterNames();
+
+        System.out.println("current request meth:"+requestURI);
+       /* boolean b = em.hasMoreElements();
+        if(b){
+            String name =  em.nextElement();
+            String value = request.getParameter(name);
+            System.out.println("form表单请求的参数名称:"+name+"请求的参数值："+value);
+        }
+
+
+        BufferedReader br = request.getReader();
+        String str, wholeStr = "";
+        while((str = br.readLine()) != null){
+            wholeStr += str;
+        }
+        System.out.println("body--Json中请求的参数名称:"+wholeStr);*/
+
         ResponseData responseData = ResponseData.ok();
         //token不存在
         if(null != token) {
             String openid_new = JWT.unsign(token, String.class);
 //            String openid = (String) request.getSession().getAttribute("openid");
             String openid = "";
-
-            WeiXinUser weiXinUser1 = VCache.get(openid_new, WeiXinUser.class);
-
-            if(weiXinUser1!=null){
-                openid= weiXinUser1.getOpenId();
-            }
-            //解密token后的loginId与用户传来的loginId不一致，一般都是token过期
-            System.out.println("小程序传过来的openid_new："+openid_new);
-            System.out.println("redis中的openid："+ (weiXinUser1 != null ? weiXinUser1.getOpenId() : null));
-
             if(null != openid_new) {
+                WeiXinUser weiXinUser1 = VCache.get(openid_new, WeiXinUser.class);
+                if(weiXinUser1!=null){
+                    openid= weiXinUser1.getOpenId();
+                }
+                //解密token后的loginId与用户传来的loginId不一致，一般都是token过期
+                System.out.println("小程序传过来的openid_new："+openid_new);
+                System.out.println("redis中的openid："+ (weiXinUser1 != null ? weiXinUser1.getOpenId() : null));
                 if(!openid_new.equals("")&&openid.equals(openid_new)) {
                     System.out.println("小程序当前登录用户以前登录过："+openid_new);
                     return true;
