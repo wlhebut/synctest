@@ -89,7 +89,7 @@ public class WeiXinLoginServiceImpl implements WeiXinLoginService {
                 if(userInfo!=null){
                     weiXinUser.setNickName((String)userInfo.get("nickName"));
                     weiXinUser.setAvatarUrl((String)userInfo.get("avatarUrl"));
-                    String gender = (String)userInfo.get("gender");
+                    String gender =String.valueOf(userInfo.get("gender"));
                     weiXinUser.setGender(new Byte(gender));
                 }
                 weiXinUserMapper.insert(weiXinUser);
