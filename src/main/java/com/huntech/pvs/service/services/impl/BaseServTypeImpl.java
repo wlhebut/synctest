@@ -9,6 +9,7 @@ import com.huntech.pvs.model.services.SelfBaseServTypeExample;
 import com.huntech.pvs.service.services.BaseServTypeService;
 import com.huntech.pvs.view.request.BaseServTypeRequest;
 import com.huntech.pvs.view.services.BaseServTypeView;
+import org.apache.poi.util.SystemOutLogger;
 import org.apache.taglibs.standard.lang.jstl.NullLiteral;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -125,8 +126,16 @@ public class BaseServTypeImpl implements BaseServTypeService {
                 criteria1.andIdIn(integers);
             }
             list = baseServTypeMapper.selectByExample(example);
+            for (BaseServType servType : list) {
+
+                System.out.println("1查询的私服分类："+servType.getTname());
+            }
         }else{
             list = baseServTypeMapper.selectByExample(null);
+            for (BaseServType servType : list) {
+                System.out.println("22查询的私服分类："+servType.getTname());
+            }
+
         }
         return list;
     }
