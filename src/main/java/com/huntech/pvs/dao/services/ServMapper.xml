@@ -32,6 +32,7 @@
     <id column="ID" property="id" jdbcType="BIGINT" />
     <result column="SERV_NAME" property="servName" jdbcType="VARCHAR" />
     <result column="SNAME" property="sname" jdbcType="VARCHAR" />
+    <result column="SERV_NOTE" property="servNote" jdbcType="VARCHAR" />
     <result column="BASESERV_TYPEID" property="baseservTypeid" jdbcType="BIGINT" />
     <result column="SERV_MANID" property="servManid" jdbcType="BIGINT" />
     <result column="SERV_CONTENTID" property="servContentid" jdbcType="BIGINT" />
@@ -119,7 +120,8 @@
     t.ERVERSATIS,
     st.serv_time,
       s.STATE,
-    m.SERV_ADDRESS
+    m.SERV_ADDRESS,
+    s.SERV_NOTE
     FROM
     TBL_SERV s
     LEFT JOIN tbl_serv_man m ON m.ID = s.SERV_MANID
@@ -136,6 +138,9 @@
       <if test="baseservTypeid!=null">
         and s.BASESERV_TYPEID=#{baseservTypeid}
       </if>
+      <if test="servManid!=null">
+        and s.SERV_MANID=#{servManid}
+      </if>
       <if test="openid!=null">
         AND s.SERV_MANID NOT IN (
         SELECT
@@ -151,6 +156,43 @@
     </where>
 
 
+  </select>
+
+  <select id="selectReleaseServsView"   resultMap="BaseResultMap2">
+    SELECT
+    s.ID,
+    s.BASESERV_TYPEID,
+    s.SERV_NAME,
+    s.SERV_MANID,
+    m.SNAME,
+    m.STEL,
+    g.LONGITUDE,
+    g.LATITUDE,
+    t.ERVERSATIS,
+    st.serv_time,
+      s.STATE,
+    m.SERV_ADDRESS,
+    s.SERV_NOTE
+    FROM
+    TBL_SERV s
+    LEFT JOIN tbl_serv_man m ON m.ID = s.SERV_MANID
+    LEFT JOIN tbl_serv_man_gps g ON s.SERV_MANID = g.SERV_MANID
+    LEFT JOIN tbl_satis t ON s.ID = t.SERID
+    LEFT JOIN tbl_serv_time st ON s.SERV_TIMEID=st.ID
+    <where>
+      <if test="servType!=null">
+        and s.SERV_TYPE=#{servType}
+      </if>
+      <if test="states!=null">
+        and s.STATE=#{states}
+      </if>
+      <if test="baseservTypeid!=null">
+        and s.BASESERV_TYPEID=#{baseservTypeid}
+      </if>
+      <if test="servManid!=null">
+        and s.SERV_MANID=#{servManid}
+      </if>
+    </where>
   </select>
 
 
@@ -185,6 +227,31 @@
     </where>
   </select>
 
+  <select id="selectReleaseServsViewCount"   resultType="java.lang.Integer">
+    SELECT
+    COUNT(s.ID) AS  ID
+    FROM
+    TBL_SERV s
+    LEFT JOIN tbl_serv_man m ON m.ID = s.SERV_MANID
+    LEFT JOIN tbl_serv_man_gps g ON s.SERV_MANID = g.SERV_MANID
+    LEFT JOIN tbl_satis t ON s.ID = t.SERID
+    LEFT JOIN tbl_serv_time st ON s.SERV_TIMEID=st.ID
+    <where>
+      <if test="servType!=null">
+        and s.SERV_TYPE=#{servType}
+      </if>
+      <if test="states!=null">
+        and s.STATE=#{states}
+      </if>
+      <if test="baseservTypeid!=null">
+        and s.BASESERV_TYPEID=#{baseservTypeid}
+      </if>
+      <if test="servManid!=null">
+        and s.SERV_MANID=#{servManid}
+      </if>
+    </where>
+  </select>
+
   <select id="selectAttentionServsView"   resultMap="BaseResultMap2">
     SELECT
     s.ID,
@@ -197,7 +264,8 @@
     g.LATITUDE,
     t.ERVERSATIS,
     st.serv_time,
-      s.STATE
+      s.STATE,
+    s.SERV_NOTE
     FROM
     tbl_attention a
     LEFT JOIN TBL_SERV s ON s.ID = a.SERVID
@@ -239,7 +307,8 @@
     g.LATITUDE,
     t.ERVERSATIS,
       st.serv_time,
-      s.STATE
+      s.STATE,
+    s.SERV_NOTE
     FROM
      tbl_recommend r
     LEFT JOIN TBL_SERV s ON s.ID=r.SERVID
@@ -285,7 +354,8 @@
     m.SERV_ADDRESS,
       st.serv_time,
       s.STATE,
-      s.SERV_CONTENTID
+      s.SERV_CONTENTID,
+    s.SERV_NOTE
     FROM
     TBL_SERV s
     LEFT JOIN tbl_serv_man m ON m.ID = s.SERV_MANID
@@ -294,7 +364,7 @@
       LEFT JOIN tbl_serv_time st ON s.SERV_TIMEID=st.ID
     <where>
       <if test="id!=null">
-        and t.ID=#{id}
+        and s.ID=#{id}
       </if>
     </where>
   </select>
@@ -334,10 +404,10 @@
   </delete>
   <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.huntech.pvs.model.services.Serv" >
     insert into tbl_serv (ID, SERV_NAME, SERV_TYPE, 
-      BASESERV_TYPEID,SERV_MANID, SERV_TIMEID,STATE
+      BASESERV_TYPEID,SERV_MANID, SERV_TIMEID,STATE,SERV_NOTE
       )
     values (#{id,jdbcType=BIGINT}, #{servName,jdbcType=VARCHAR}, #{servType,jdbcType=CHAR}, 
-      #{baseservTypeid,jdbcType=BIGINT},#{servManid,jdbcType=BIGINT},#{servTimeid,jdbcType=INTEGER}, #{state,jdbcType=TINYINT}
+      #{baseservTypeid,jdbcType=BIGINT},#{servManid,jdbcType=BIGINT},#{servTimeid,jdbcType=INTEGER}, #{state,jdbcType=TINYINT},#{servNote,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.huntech.pvs.model.services.Serv" >
@@ -370,6 +440,9 @@
       <if test="state != null" >
         STATE,
       </if>
+      <if test="servNote != null" >
+        SERV_NOTE,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -398,6 +471,9 @@
       </if>
       <if test="state != null" >
         #{state,jdbcType=TINYINT},
+      </if>
+      <if test="servNote != null" >
+        #{servNote,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

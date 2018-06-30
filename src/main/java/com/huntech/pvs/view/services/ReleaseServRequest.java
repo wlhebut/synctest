@@ -18,6 +18,17 @@ public class ReleaseServRequest {
     private String servName;//私服名称
     private String openid;
 
+    private String servNote;//私服备注
+
+
+    public String getServNote() {
+        return servNote;
+    }
+
+    public void setServNote(String servNote) {
+        this.servNote = servNote;
+    }
+
     public String getOpenid() {
         return openid;
     }

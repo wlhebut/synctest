@@ -13,8 +13,10 @@ public interface ServMapper {
 
 
     List<ServView> selectServsView(Page<ServView> servPage, Map<String, Object> params);
+    List<ServView> selectReleaseServsView(Page<ServView> servPage, Map<String, Object> params);
 
     Integer selectServsViewCount(Map<String, Object> params);
+    Integer selectReleaseServsViewCount(Map<String, Object> params);
 
 
     List<ServView> selectAttentionServsView(Page<ServView> servPage,Map<String, Object> params);

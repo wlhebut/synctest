@@ -7,6 +7,7 @@ import com.huntech.pvs.model.services.BaseServTypeExample;
 import com.huntech.pvs.model.services.SelfBaseServType;
 import com.huntech.pvs.model.services.SelfBaseServTypeExample;
 import com.huntech.pvs.service.services.BaseServTypeService;
+import com.huntech.pvs.service.services.SelfServTypeService;
 import com.huntech.pvs.view.request.BaseServTypeRequest;
 import com.huntech.pvs.view.services.BaseServTypeView;
 import org.apache.poi.util.SystemOutLogger;
@@ -27,6 +28,9 @@ public class BaseServTypeImpl implements BaseServTypeService {
 
     @Autowired
     private SelfBaseServTypeMapper selfBaseServTypeMapper;
+
+    @Autowired
+    private SelfServTypeService selfServTypeService;
     /**
     * @Description: getServType
     * @Param: [baseServType]
@@ -124,6 +128,8 @@ public class BaseServTypeImpl implements BaseServTypeService {
             BaseServTypeExample.Criteria criteria1 = example.createCriteria();
             if(integers.size()>0){
                 criteria1.andIdIn(integers);
+            }else{
+                selfServTypeService.insertAllType(openid);
             }
             list = baseServTypeMapper.selectByExample(example);
             for (BaseServType servType : list) {
@@ -144,14 +150,49 @@ public class BaseServTypeImpl implements BaseServTypeService {
     public List<BaseServType> getOtherBaseServTypeByOpenId(BaseServTypeRequest baseServType) {
         //获取所有私服
         //当前用户的私服
+        List<BaseServType> list;
+        String openid = baseServType.getOpenid();
+        if(openid!=null&&!"".equals(openid)){
+            SelfBaseServTypeExample selfBaseServTypeExample = new SelfBaseServTypeExample();
+            SelfBaseServTypeExample.Criteria criteria = selfBaseServTypeExample.createCriteria();
+            criteria.andOpenidEqualTo(openid);
+            criteria.andStateEqualTo(new Byte("0"));
+            List<SelfBaseServType> selfBaseServTypes = selfBaseServTypeMapper.selectByExample(selfBaseServTypeExample);
 
+            ArrayList<Integer> integers = new ArrayList<>();
+            if(selfBaseServTypes!=null&&selfBaseServTypes.size()>0){
+                for (SelfBaseServType selfBaseServType : selfBaseServTypes) {
+                    integers.add(selfBaseServType.getBaseServTypeid());
+                }
+            }
+            BaseServTypeExample example = new BaseServTypeExample();
+            BaseServTypeExample.Criteria criteria1 = example.createCriteria();
+            if((integers.size() ==0)){
+                integers.add(-1);
+                criteria1.andIdIn(integers);
+            }else{
+                criteria1.andIdIn(integers);
+            }
+            list = baseServTypeMapper.selectByExample(example);
+            for (BaseServType servType : list) {
+
+                System.out.println("1查询的私服分类："+servType.getTname());
+            }
+        }else{
+            list = baseServTypeMapper.selectByExample(null);
+            for (BaseServType servType : list) {
+                System.out.println("22查询的私服分类："+servType.getTname());
+            }
+
+        }
+        return list;
         //方法二
-        if(baseServType.getOpenid()!=null&&!baseServType.getOpenid().equals("")){
+        /*if(baseServType.getOpenid()!=null&&!baseServType.getOpenid().equals("")){
             Map<String, Object> map = new HashMap<>();
             map.put("openid",baseServType.getOpenid());
             List<BaseServType> otherBaseServTypeByOpenId = baseServTypeMapper.getOtherBaseServTypeByOpenId(map);
             return otherBaseServTypeByOpenId;
-        }
-        return null;
+        }*/
+//        return null;
     }
 }

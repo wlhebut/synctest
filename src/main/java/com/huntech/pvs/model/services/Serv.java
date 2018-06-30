@@ -19,6 +19,16 @@ public class Serv {
 
     private Byte state;
 
+    private String servNote;
+
+    public String getServNote() {
+        return servNote;
+    }
+
+    public void setServNote(String servNote) {
+        this.servNote = servNote;
+    }
+
     public Long getId() {
         return id;
     }

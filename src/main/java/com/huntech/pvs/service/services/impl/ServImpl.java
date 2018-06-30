@@ -54,6 +54,7 @@ public class ServImpl implements ServService {
 
 
 
+
     @Autowired
     private RecommendService recommendService;
 
@@ -71,6 +72,12 @@ public class ServImpl implements ServService {
 
     @Autowired
     private ClassificationServMapper classificationServMapper;
+
+
+    @Autowired
+    private  SatisMapper satisMapper;
+
+
     /**
     * @Description:
     * @Param: [servRequest]
@@ -92,14 +99,14 @@ public class ServImpl implements ServService {
         Byte states = servRequest.getState();
         Long baseservTypeid = servRequest.getBaseservTypeid();
         Long servManid = servRequest.getServManid();
-        if(baseservTypeid.equals(1L)){//关注
+        if(null!=baseservTypeid&&baseservTypeid.equals(1L)){//关注
 //            List<Long> attentionsByOpenId = attentionService.getAttentionsByOpenId(openid);
             params.put("openid",openid);
             List<ServView> servViews = servMapper.selectAttentionServsView(page,params);
             Integer totalCount=servMapper.selectAttentionServsViewCount(params);
             PageUtils.setPage(servViews, totalCount, pageSize, page);
             return page;
-        }else if(baseservTypeid.equals(2L)){//推荐
+        }else if(null!=baseservTypeid&&baseservTypeid.equals(2L)){//推荐
 //            List<Long> recommendsByOpenId = recommendService.getRecommendsByOpenId(openid);
             params.put("openid",openid);
             List<ServView> servViews = servMapper.selectRecommendServsView(page,params);
@@ -111,9 +118,12 @@ public class ServImpl implements ServService {
         if(baseservTypeid!=null){
             params.put("baseservTypeid",baseservTypeid);
         }
-        if(servManid!=null){
+        if(openid!=null){
             params.put("openid",openid);
         }
+        /*if(servManid!=null){
+            params.put("servManid",servManid);
+        }*/
 
 
 
@@ -209,6 +219,7 @@ public class ServImpl implements ServService {
 //            serv.setSelfservTypeid(0L);//个性化私服为0L
             serv.setServType("0");
             serv.setState((byte)1);
+            serv.setServNote(releaseServRequest.getServNote());
             serv.setServTimeid(releaseServRequest.getServTimeId().intValue());
              insert = servMapper.insert(serv);
             Long autoId = serv.getId();
@@ -219,6 +230,14 @@ public class ServImpl implements ServService {
                     servContentMapper.insertSelective(servContent);
                 }
             }
+            //insert 默认的满意度
+            Satis satis = new Satis();
+//            satis.setId(autoId.intValue());
+            satis.setErversatis(5);
+            satis.setSerid(autoId);
+            satisMapper.insert(satis);
+
+
         }else {
             //个性化私服
         }
@@ -231,11 +250,21 @@ public class ServImpl implements ServService {
         String token = request.getHeader("token");
         String openid = JWT.unsign(token, String.class);
         WeiXinUser weiXinUser = VCache.get(openid, WeiXinUser.class);
-        Long id = weiXinUser.getId();//serv_manid
+        assert weiXinUser != null;
+        Long id = weiXinUser.getServManid();//serv_manid
 
         servRequest.setServManid(id);
-        Page<ServView> baseServ = this.getBaseServ(servRequest);
-        return baseServ;
+//        Page<ServView> baseServ = this.getBaseServ(servRequest);
+        Integer pageNo = servRequest.getPageNo();
+        Integer pageSize = servRequest.getPageSize();
+        Page<ServView> page = new Page<>(pageNo,pageSize);
+        Map<String,Object> params=new HashMap<>();
+        Long servManid = servRequest.getServManid();
+        params.put("servManid",servManid);
+        List<ServView> servViews = servMapper.selectReleaseServsView(page,params);
+        Integer totalCount=servMapper.selectReleaseServsViewCount(params);
+        PageUtils.setPage(servViews, totalCount, pageSize, page);
+        return page;
     }
 
     @Override
