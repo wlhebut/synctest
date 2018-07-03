@@ -1,8 +1,13 @@
 package com.huntech.pvs.model.services;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class ServContent {
     private Long id;
 
+
+//    @JsonProperty(value = "HPHM")
     private Integer servid;
 
     private String cname;

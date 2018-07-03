@@ -8,6 +8,7 @@ import java.util.List;
 public class ReleaseServRequest {
 
 
+    private Long id;
     private Long baseServTypeid;//baseServ-id
     private Long servType;//0-baseServ;1-selfServ
     private List<ServContent> servContents;
@@ -20,6 +21,13 @@ public class ReleaseServRequest {
 
     private String servNote;//私服备注
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getServNote() {
         return servNote;

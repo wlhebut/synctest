@@ -18,11 +18,13 @@ import com.huntech.web.common.PageUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
+@Transactional
 public class ServImpl implements ServService {
 
     private static final Logger log = Logger.getLogger(ServImpl.class);
@@ -192,6 +194,13 @@ public class ServImpl implements ServService {
     */
     @Override
     public Integer releaseServ(ReleaseServRequest releaseServRequest, HttpServletRequest request) {
+
+
+        Integer releaseServCount = this.getReleaseServCount(releaseServRequest.getOpenid());
+        if(releaseServCount!=null&&releaseServCount>3){
+            return 0;
+        }
+
         String token = request.getHeader("token");
         String openid = JWT.unsign(token, String.class);
         if(openid==null||openid.equals("")){
@@ -261,10 +270,29 @@ public class ServImpl implements ServService {
         Map<String,Object> params=new HashMap<>();
         Long servManid = servRequest.getServManid();
         params.put("servManid",servManid);
+        params.put("state",1);
         List<ServView> servViews = servMapper.selectReleaseServsView(page,params);
         Integer totalCount=servMapper.selectReleaseServsViewCount(params);
         PageUtils.setPage(servViews, totalCount, pageSize, page);
         return page;
+    }
+
+    /**
+    * @Description: 查询所有已经发布的私服数量
+    * @Param: [openid]
+    * @return: java.lang.Integer
+    * @Author: Mr.Wang
+    * @Date: 2018/7/2
+    */
+    public Integer getReleaseServCount(String openid){
+        Map<String,Object> params=new HashMap<>();
+        WeiXinUser weiXinUser = VCache.get(openid, WeiXinUser.class);
+        assert weiXinUser != null;
+        Long servManid = weiXinUser.getServManid();
+        params.put("servManid",servManid);
+//        params.put("state",1);
+        Integer totalCount=servMapper.selectReleaseServsViewCount(params);
+        return totalCount;
     }
 
     @Override
@@ -309,15 +337,23 @@ public class ServImpl implements ServService {
 
         detailServsView.setTotalAttentions(totalAttentionCount);//总关注次数
 
-        Long servContentid = detailServsView.getServContentid();
+//        Long servContentid = detailServsView.getServContentid();
 
+
+
+        //服务内容
         ServContent servContent = new ServContent();
-        if(servContentid!=null){
-            servContent.setServid(new Integer(String.valueOf(servContentid)));
+            servContent.setServid(id);
             List<ServContent> servContents = servContentService.getServContentByServId(servContent);//条目
             detailServsView.setServContents(servContents);
-        }
         return detailServsView;
+    }
+
+    @Override
+    public Serv selectByPrimaryKey(Long id) {
+
+        Serv serv = servMapper.selectByPrimaryKey(id);
+        return serv;
     }
 
     @Override
@@ -339,6 +375,17 @@ public class ServImpl implements ServService {
         Integer classification = optServRequest.getClassification();
 
         String openid = optServRequest.getOpenid();
+
+        System.out.println("servid"+servid);
+        System.out.println("disserv"+disserv);
+        System.out.println("attention"+attention);
+        System.out.println("illegal"+illegal);
+        System.out.println("classification"+classification);
+        System.out.println("openid"+openid);
+
+        if(null==servid){
+            servid=optServRequest.getId();
+        }
         Serv serv = servMapper.selectByPrimaryKey(servid);
         if(disserv!=null&&disserv.equals(0)&&serv.getServManid()!=null&&openid!=null){//
             log.debug(openid+"用户**** 不喜欢  **** : " + servid+"disserv私服");
@@ -359,11 +406,13 @@ public class ServImpl implements ServService {
             }
         }
 
-        if(attention!=null&&attention.equals(1)){
+        if(attention!=null){
             log.debug(openid+"用户**** attention **** : " + servid+"私服");
-            Integer attentionCount = attentionService.getAttentionCount(new Attention(openid,servid));
-            if(attentionCount>0){
-
+            if(attention==0){
+                Integer attentionCount = attentionService.getAttentionCount(new Attention(openid,servid));
+                if(attentionCount>0){
+                    attentionService.delete(new Attention(openid,servid));
+                }
             }else{
                 attentionService.insert(new Attention(openid, servid));
             }
@@ -399,6 +448,70 @@ public class ServImpl implements ServService {
             }else{
                 classificationServMapper.insert(new ClassificationServ(openid, servid,new Byte("1")));
             }
+        }
+    }
+
+
+    @Override
+    public Integer deleteServ(ServRequest request){
+        int i = 0;
+            Serv serv = new Serv();
+            serv.setId(request.getId());
+            serv.setState((byte) 0);
+            i = servMapper.updateByPrimaryKeySelective(serv);
+            int i1=1;
+            int ii=i1/0;
+        return i;
+    }
+
+    @Override
+    public DetailServView getServById(ServRequest servRequest) {
+
+        try {
+            Serv serv = servMapper.selectByPrimaryKey(servRequest.getId());
+            DetailServView detailServView = new DetailServView();
+            detailServView.setId(serv.getId());
+            detailServView.setServName(serv.getServName());
+            detailServView.setServTimeid(serv.getServTimeid());
+            detailServView.setBaseservTypeid(serv.getBaseservTypeid());
+            detailServView.setServNote(serv.getServNote());
+            ServContent servContent = new ServContent();
+            servContent.setServid(new Integer(serv.getId().toString()));
+            List<ServContent> servContentByServId = servContentService.getServContentByServId(servContent);
+
+            detailServView.setServContents(servContentByServId);
+            return detailServView;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Integer updateReleaseServ(ReleaseServRequest releaseServRequest) {
+        try {
+            Long id = releaseServRequest.getId();
+            Long baseServTypeid = releaseServRequest.getBaseServTypeid();//服务类型
+            List<ServContent> servContents = releaseServRequest.getServContents();//服务内容
+            Long servTimeId = releaseServRequest.getServTimeId();//私服时间
+            String servNote = releaseServRequest.getServNote();//个性化服务内容
+            String servName = releaseServRequest.getServName();
+            Serv serv = new Serv();
+            serv.setId(id);
+            serv.setBaseservTypeid(baseServTypeid);
+            serv.setServTimeid(servTimeId.intValue());
+            serv.setServNote(servNote);
+            serv.setServName(servName);
+            servMapper.updateByPrimaryKeySelective(serv);
+
+            //更新服务内容
+            for (ServContent servContent : servContents) {
+                servContentMapper.updateByPrimaryKeySelective(servContent);
+            }
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
         }
     }
 }

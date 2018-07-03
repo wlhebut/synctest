@@ -5,5 +5,5 @@ import com.huntech.pvs.model.services.ServTime;
 import java.util.List;
 
 public interface ServTimeService {
-    public List<ServTime> getAllServTime();
+    List<ServTime> getAllServTime();
 }

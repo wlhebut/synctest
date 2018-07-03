@@ -30,12 +30,20 @@ public class DetailServView implements Serializable {
     private Integer totalAttentions;
 
     private String servTime;
+    private String servNote;
 
 
 
     private Integer servTimeid;
     private Byte state;
 
+    public String getServNote() {
+        return servNote;
+    }
+
+    public void setServNote(String servNote) {
+        this.servNote = servNote;
+    }
 
     public String getServTime() {
         return servTime;

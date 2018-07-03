@@ -70,8 +70,8 @@ public class WeinXinLoginController {
 		System.out.println("iv="+iv);
 		System.out.println("code="+code);
 		System.out.println("------------------------2222222-------------------------");
-		String openid = weiXinLoginService.HasUser(weiXinLoginRequest);
-//		String openid="okTs65C1THvPV39Q9uuqW_p4h7Jk";
+//		String openid = weiXinLoginService.HasUser(weiXinLoginRequest);
+		String openid="okTs65C1THvPV39Q9uuqW_p4h7Jk";
 		System.out.println("当前登录openid:"+openid);
 //		request.getSession().setAttribute("openid",openid);
 //		weiXinLoginService.insertInToRedis(openid);

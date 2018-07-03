@@ -132,8 +132,8 @@
       <if test="servType!=null">
         and s.SERV_TYPE=#{servType}
       </if>
-      <if test="states!=null">
-        and s.STATE=#{states}
+      <if test="state!=null">
+        and s.STATE=#{state}
       </if>
       <if test="baseservTypeid!=null">
         and s.BASESERV_TYPEID=#{baseservTypeid}
@@ -183,8 +183,8 @@
       <if test="servType!=null">
         and s.SERV_TYPE=#{servType}
       </if>
-      <if test="states!=null">
-        and s.STATE=#{states}
+      <if test="state!=null">
+        and s.STATE=#{state}
       </if>
       <if test="baseservTypeid!=null">
         and s.BASESERV_TYPEID=#{baseservTypeid}
@@ -208,8 +208,8 @@
       <if test="servType!=null">
         and s.SERV_TYPE=#{servType}
       </if>
-      <if test="states!=null">
-        and s.STATE=#{states}
+      <if test="state!=null">
+        and s.STATE=#{state}
       </if>
       <if test="baseservTypeid!=null">
         and s.BASESERV_TYPEID=#{baseservTypeid}
@@ -240,8 +240,8 @@
       <if test="servType!=null">
         and s.SERV_TYPE=#{servType}
       </if>
-      <if test="states!=null">
-        and s.STATE=#{states}
+      <if test="state!=null">
+        and s.STATE=#{state}
       </if>
       <if test="baseservTypeid!=null">
         and s.BASESERV_TYPEID=#{baseservTypeid}

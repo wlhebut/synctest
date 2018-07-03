@@ -10,6 +10,8 @@ package com.huntech.pvs.view.request;
  openid		用户的openid
 */
 public class OptServRequest {
+
+    private Long id;
     private Long servid;
     private  Integer disserv;
     private  Integer attention;
@@ -17,6 +19,14 @@ public class OptServRequest {
     private  Integer classification;
     private String openid;
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getServid() {
         return servid;

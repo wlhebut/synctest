@@ -26,6 +26,12 @@ public interface ServService {
 
     DetailServView getDetailServViewById(DetailServRequest detailServRequest);
 
+    Serv selectByPrimaryKey(Long id);
     void optBaseServByUser(OptServRequest optServRequest);
 
+    Integer deleteServ(ServRequest request) throws Exception;
+
+    DetailServView getServById(ServRequest servRequest);
+
+    Integer updateReleaseServ(ReleaseServRequest releaseServRequest);
 }

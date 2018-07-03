@@ -3,7 +3,6 @@ package com.huntech.pvs.controller.services;
 import com.huntech.pvs.common.BaseController;
 import com.huntech.pvs.core.feature.orm.mybatis.Page;
 import com.huntech.pvs.model.services.SelfServ;
-import com.huntech.pvs.model.services.Serv;
 import com.huntech.pvs.model.services.ServMan;
 import com.huntech.pvs.service.services.SelfServService;
 import com.huntech.pvs.service.services.ServManService;
@@ -102,10 +101,36 @@ public class ServController extends BaseController {
     public Map<String, Object> releaseServ(@RequestBody ReleaseServRequest releaseServRequest, HttpServletRequest request) {
 //        List<ServView> list = servService.getBaseServ( servRequest);
         try {
-            servService.releaseServ( releaseServRequest,request);
+            Integer integer = servService.releaseServ(releaseServRequest, request);
             resultMap.put("dataCode",1);
+            if(integer==0){
+                resultMap.put("dataCode",0);
+                resultMap.put("dataDesc","每个用户只可以发布3条私服");
+            }
         } catch (Exception e) {
             resultMap.put("dataCode",-1);
+            e.printStackTrace();
+        }
+        return resultMap;
+    }
+
+
+    @RequestMapping(value = "updateReleaseServ")
+    @ResponseBody
+    public Map<String, Object> updateReleaseServ(@RequestBody ReleaseServRequest releaseServRequest) {
+//        List<ServView> list = servService.getBaseServ( servRequest);
+        if(releaseServRequest.getId()==null){
+            resultMap.put("dataCode",-2);
+            resultMap.put("dataDesc","参数不足");
+            return resultMap;
+        }
+        try {
+            Integer integer = servService.updateReleaseServ(releaseServRequest);
+            resultMap.put("dataCode",integer);
+            resultMap.put("dataDesc","修改成功!");
+        } catch (Exception e) {
+            resultMap.put("dataCode",-1);
+            resultMap.put("dataDesc","系统错误");
             e.printStackTrace();
         }
         return resultMap;
@@ -139,6 +164,31 @@ public class ServController extends BaseController {
         }
         return resultMap;
     }
+    @RequestMapping(value = "delReleaseServ")
+    @ResponseBody
+    public Map<String, Object> delReleaseServ(@RequestBody ServRequest request) {
+        Integer integer;
+        Long id = request.getId();
+        if(id==null){
+            resultMap.put("dataCode","-2");
+            resultMap.put("dataDesc","请求参数不足");
+            return resultMap;
+        }
+        try {
+            Integer integer1 = servService.deleteServ(request);
+            resultMap.put("dataCode",integer1);
+            if(integer1==0){
+                resultMap.put("dataDesc","删除失败");
+            }else{
+                resultMap.put("dataDesc","删除成功");
+            }
+        } catch (Exception e) {
+            resultMap.put("dataCode","-1");
+            resultMap.put("dataDesc","系统错误");
+            e.printStackTrace();
+        }
+        return resultMap;
+    }
     @RequestMapping(value = "getReleaseServs")
     @ResponseBody
     public Map<String, Object> getReleaseServs(@RequestBody ServRequest servRequest,HttpServletRequest request) {
@@ -148,12 +198,36 @@ public class ServController extends BaseController {
             resultMap.put("data",releaseServs);
             resultMap.put("dataCode",1);
         } catch (Exception e) {
+            resultMap.put("dataCode",-1);
             e.printStackTrace();
-        } finally {
-            resultMap.put("dataCode",0);
         }
-
         return resultMap;
+    }
+
+
+    @RequestMapping(value ="getReleaseServById")
+    @ResponseBody
+    public Map<String, Object> getReleaseServById(@RequestBody ServRequest servRequest) {
+//        List<ServView> list = servService.getBaseServ( servRequest);
+        if(servRequest.getId()==null){
+            resultMap.put("dataCode",-2);
+            resultMap.put("dataDesc","参数不足");
+            return resultMap;
+        }
+        try {
+            DetailServView serv= servService.getServById(servRequest);
+            if(serv!=null){
+                resultMap.put("data",serv);
+                resultMap.put("dataCode",1);
+                resultMap.put("dataDesc","OK");
+                return resultMap;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("dataCode",-1);
+            return resultMap;
+        }
+        return resultMap ;
     }
 
     @RequestMapping(value = "getDetailBaseServ")
@@ -172,7 +246,7 @@ public class ServController extends BaseController {
                 return  resultMap;
             }
         }
-        resultMap.put("dataCode","0");//参数不全
+        resultMap.put("dataCode","-2");//参数不全
         resultMap.put("dataDesc","参数不全");//参数不全
         return resultMap;
     }
@@ -235,15 +309,5 @@ public class ServController extends BaseController {
             outputStream.close();
             inputStream.close();
         }
-
-
-
-
-
-
-
     }
-
-
-
 }

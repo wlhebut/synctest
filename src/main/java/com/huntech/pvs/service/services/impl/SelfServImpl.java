@@ -33,6 +33,7 @@ public class SelfServImpl implements SelfServService {
         SelfServExample selfServExample = new SelfServExample();
         SelfServExample.Criteria criteria = selfServExample.createCriteria();
         criteria.andOpenidEqualTo(openid);
+//        criteria.anss
         List<SelfServ> selfServs = selfServMapper.selectByExample(selfServExample);
         for (SelfServ selfServ : selfServs) {
             Byte servtype = selfServ.getServtype();

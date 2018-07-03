@@ -57,4 +57,25 @@ public class AttentionServiceImpl implements AttentionService {
         int i = attentionMapper.insertSelective(attention);
         return i;
     }
+
+    @Override
+    public Integer update(Attention attention) {
+        AttentionExample example = new AttentionExample();
+        AttentionExample.Criteria criteria = example.createCriteria();
+        criteria.andServidEqualTo(attention.getServid());
+        criteria.andOpenidEqualTo(attention.getOpenid());
+        int i = attentionMapper.updateByExampleSelective(attention, example);
+        return i;
+    }
+
+    @Override
+    public Integer delete(Attention attention) {
+        AttentionExample example = new AttentionExample();
+        AttentionExample.Criteria criteria = example.createCriteria();
+        criteria.andServidEqualTo(attention.getServid());
+        criteria.andOpenidEqualTo(attention.getOpenid());
+        int i = attentionMapper.deleteByExample(example);
+
+        return i;
+    }
 }

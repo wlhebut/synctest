@@ -16,4 +16,6 @@ public interface AttentionService {
 
 
     Integer insert(Attention attention);
+    Integer update(Attention attention);
+    Integer delete(Attention attention);
 }
