@@ -125,7 +125,7 @@
       #{baseservTypeid,jdbcType=BIGINT}, #{servAddress,jdbcType=VARCHAR}, #{selfservTypeid,jdbcType=BIGINT}, 
       #{enable,jdbcType=CHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.huntech.pvs.model.services.ServMan" >
+  <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true" parameterType="com.huntech.pvs.model.services.ServMan" >
     insert into tbl_serv_man
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

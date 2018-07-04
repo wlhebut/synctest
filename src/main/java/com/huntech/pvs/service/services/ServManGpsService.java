@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface ServManGpsService {
 
-    List<ServManGps> getServManGps();
+    ServManGps getServManGps(Long serManId);
     List<ServManGps> getServManGps(List<Object> ids);
+
+    int saveServManGpa(ServManGps servManGps);
 
 
 }

@@ -4,7 +4,9 @@ import com.huntech.pvs.common.BaseController;
 import com.huntech.pvs.common.util.JWT;
 import com.huntech.pvs.dto.sys.User;
 import com.huntech.pvs.model.services.ServMan;
+import com.huntech.pvs.model.services.ServManGps;
 import com.huntech.pvs.model.sys.WeiXinUser;
+import com.huntech.pvs.service.services.ServManGpsService;
 import com.huntech.pvs.service.services.ServManService;
 import com.huntech.pvs.service.sys.WeiXinUserService;
 import com.huntech.pvs.view.request.AddressRequest;
@@ -36,6 +38,8 @@ public class SerManController extends BaseController {
     @Autowired
     private WeiXinUserService weiXinUserService;
 
+    @Autowired
+    private ServManGpsService servManGpsService;
 
     @RequestMapping(value = "getServMan")
     @ResponseBody
@@ -43,7 +47,7 @@ public class SerManController extends BaseController {
         try {
             if(servManRequest!=null&&servManRequest.getOpenid()!=null){
                 String openid=servManRequest.getOpenid();
-                ServMan servMan = servManService.getServMan(openid);
+                ServManView servMan = servManService.getServMan(openid);
                 resultMap.put("data",servMan);
                 resultMap.put("dataCode",1);
             }else{
@@ -123,8 +127,17 @@ public class SerManController extends BaseController {
                 man.setSname(manRequest.getSname()==null?"-":manRequest.getSname());
                 man.setSsex(manRequest.getSsex()==null?"-":manRequest.getSsex());//0-女；1:-男.
                 man.setStel(manRequest.getStel()==null?"-":manRequest.getStel());
+                man.setServAddress(manRequest.getServAddress());
                 man.setEnable("1");
+                man.setIdentityCard(manRequest.getIdentityCard());
                 int i = servManService.updateByPriKey(man);
+                Long servManGpsid = man.getServManGpsid();
+
+                ServManGps servManGps = servManGpsService.getServManGps(servManid);
+                servManGps.setLongitude(manRequest.getLongitude());
+                servManGps.setLatitude(manRequest.getLatitude());
+                servManGpsService.saveServManGpa(servManGps);
+
                 resultMap.put("dataCode",i);
                 return resultMap;
             }

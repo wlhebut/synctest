@@ -6,7 +6,7 @@ import com.huntech.pvs.model.sys.WeiXinUser;
 import javax.servlet.http.HttpServletRequest;
 
 public interface WeiXinLoginService {
-    String HasUser(WeiXinLoginRequest weiXinLoginRequest);
+    String HasUser(WeiXinLoginRequest weiXinLoginRequest, HttpServletRequest request);
     int insertUser(WeiXinLoginRequest weiXinLoginRequest);
 
     WeiXinUser getWeinXinUser(HttpServletRequest request);

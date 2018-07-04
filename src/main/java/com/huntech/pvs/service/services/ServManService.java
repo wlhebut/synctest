@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ServManService {
 
-    ServMan getServMan(String openid);
+    ServManView getServMan(String openid);
     ServMan getServManByPriKey(Long id);
     List<ServManView> getServMan(ServManRequest servManRequest);
     List<ServMan> getServMan(List<Object> ids);

@@ -2,11 +2,14 @@ package com.huntech.pvs.controller.services;
 
 import com.huntech.pvs.common.BaseController;
 import com.huntech.pvs.core.feature.orm.mybatis.Page;
+import com.huntech.pvs.dao.sys.WeiXinUserMapper;
 import com.huntech.pvs.model.services.SelfServ;
 import com.huntech.pvs.model.services.ServMan;
+import com.huntech.pvs.model.sys.WeiXinUser;
 import com.huntech.pvs.service.services.SelfServService;
 import com.huntech.pvs.service.services.ServManService;
 import com.huntech.pvs.service.services.ServService;
+import com.huntech.pvs.service.sys.WeiXinUserService;
 import com.huntech.pvs.view.request.DetailServRequest;
 import com.huntech.pvs.view.request.OptServRequest;
 import com.huntech.pvs.view.services.*;
@@ -39,6 +42,9 @@ public class ServController extends BaseController {
 
     @Autowired
     private ServManService servManService;
+
+    @Autowired
+    private WeiXinUserService weiXinUserService;
 /**
 * @Description: find serv
 * @Param: [servRequest]
@@ -50,11 +56,31 @@ public class ServController extends BaseController {
     @ResponseBody
     public Map<String, Object> getBaseServ(@RequestBody ServRequest servRequest) {
 
-        if(servRequest.getBaseservTypeid()==null){
-            resultMap.put("dataCode","0");
+        if(servRequest.getBaseservTypeid()==null||servRequest.getOpenid()==null||"".equals(servRequest.getOpenid())){
+            resultMap.put("dataCode","-2");
             resultMap.put("dataDesc","缺少参数");
             return resultMap;
         }
+
+        if(servRequest.getLatitude()==null||servRequest.getLongitude()==null){
+            resultMap.put("dataCode","-3");
+            resultMap.put("dataDesc","为了更好的提供附近的私服，建议开启位置权限");
+            return resultMap;
+        }
+        Double latitude =  Double.valueOf(servRequest.getLatitude());//当前用户的（可能有缓存）
+        Double longitude =  Double.valueOf(servRequest.getLongitude());
+        System.out.println("当前经纬度为，latitude："+latitude+"-----longitude："+longitude);
+        /*if(weiXinUserService.posChanged(servRequest)){//查询当前用户的经纬度是否发生了变化，若果变化了，就需要从新获取经纬度。
+            *//*resultMap.put("dataCode","0");
+            resultMap.put("dataDesc","当前位置发生了变化,请从新定位");
+            return resultMap;*//*
+            new WeiXinUser().
+            weiXinUserService.updateWeiXinUserByOpenId()
+        }*/
+        //是否可以开始实时定位 ？？？？、
+
+
+
         try {
             Page<ServView> list = servService.getBaseServ( servRequest);
             resultMap.put("data",list);
@@ -106,6 +132,9 @@ public class ServController extends BaseController {
             if(integer==0){
                 resultMap.put("dataCode",0);
                 resultMap.put("dataDesc","每个用户只可以发布3条私服");
+            }else if(integer==-3){
+                resultMap.put("dataCode",-3);
+                resultMap.put("dataDesc","需要获取微信登录权限");
             }
         } catch (Exception e) {
             resultMap.put("dataCode",-1);

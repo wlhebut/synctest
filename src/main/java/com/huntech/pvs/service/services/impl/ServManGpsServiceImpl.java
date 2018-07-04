@@ -12,8 +12,17 @@ import java.util.List;
 public class ServManGpsServiceImpl implements ServManGpsService {
     @Autowired
     private ServManGpsMapper servManGpsMapper;
+
+
     @Override
-    public List<ServManGps> getServManGps() {
+    public ServManGps getServManGps(Long serManId) {
+        ServManGpsExample example = new ServManGpsExample();
+        ServManGpsExample.Criteria criteria = example.createCriteria();
+        criteria.andServManidEqualTo(serManId);
+        List<ServManGps> servManGps = servManGpsMapper.selectByExample(example);
+        if(servManGps!=null&&servManGps.size()>0){
+            return servManGps.get(0);
+        }
         return null;
     }
 
@@ -25,5 +34,11 @@ public class ServManGpsServiceImpl implements ServManGpsService {
         criteria.andIdIn(longs);
         List<ServManGps> servManGps = servManGpsMapper.selectByExample(example);
         return servManGps;
+    }
+
+    @Override
+    public int saveServManGpa(ServManGps servManGps) {
+
+        return servManGpsMapper.updateByPrimaryKeySelective(servManGps);
     }
 }

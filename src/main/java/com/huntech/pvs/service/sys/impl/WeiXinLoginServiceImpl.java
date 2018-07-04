@@ -7,6 +7,7 @@ import com.huntech.pvs.common.DECRYPT;
 import com.huntech.pvs.common.ResourceLoad;
 import com.huntech.pvs.common.UrlUtil;
 import com.huntech.pvs.common.redis.VCache;
+import com.huntech.pvs.common.util.DownLoadUrl;
 import com.huntech.pvs.common.util.JWT;
 import com.huntech.pvs.dao.sys.WeiXinUserMapper;
 import com.huntech.pvs.model.services.SelfBaseServType;
@@ -15,11 +16,13 @@ import com.huntech.pvs.model.sys.WeiXinUser;
 import com.huntech.pvs.model.sys.WeiXinUserExample;
 import com.huntech.pvs.service.services.SelfServTypeService;
 import com.huntech.pvs.service.sys.WeiXinLoginService;
+import com.huntech.web.common.DownloadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.NoSuchPaddingException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -38,7 +41,7 @@ public class WeiXinLoginServiceImpl implements WeiXinLoginService {
     @Autowired
     private WeiXinUserMapper weiXinUserMapper;
     @Override
-    public String HasUser(WeiXinLoginRequest weiXinLoginRequest) {
+    public String HasUser(WeiXinLoginRequest weiXinLoginRequest, HttpServletRequest request) {
         JSONObject sessionKeyOropenid = getSessionKeyOropenid(weiXinLoginRequest.getCode());
         //解析返回的json数据，获得OPPID
         Map<String, String> params = JSONObject.parseObject(sessionKeyOropenid.toJSONString(), new TypeReference<Map<String, String>>(){});
@@ -89,6 +92,7 @@ public class WeiXinLoginServiceImpl implements WeiXinLoginService {
                 if(userInfo!=null){
                     weiXinUser.setNickName((String)userInfo.get("nickName"));
                     weiXinUser.setAvatarUrl((String)userInfo.get("avatarUrl"));
+
                     String gender =String.valueOf(userInfo.get("gender"));
                     weiXinUser.setGender(new Byte(gender));
                 }

@@ -1,6 +1,7 @@
 package com.huntech.pvs.service.services.impl;
 
 import com.huntech.pvs.common.redis.VCache;
+import com.huntech.pvs.common.util.DownLoadUrl;
 import com.huntech.pvs.common.util.JWT;
 import com.huntech.pvs.common.util.MapUtils;
 import com.huntech.pvs.core.feature.orm.mybatis.Page;
@@ -10,6 +11,7 @@ import com.huntech.pvs.model.services.*;
 import com.huntech.pvs.model.sys.WeiXinUser;
 import com.huntech.pvs.model.sys.WeiXinUserExample;
 import com.huntech.pvs.service.services.*;
+import com.huntech.pvs.service.sys.WeiXinUserService;
 import com.huntech.pvs.view.request.DetailServRequest;
 import com.huntech.pvs.view.request.OptServRequest;
 import com.huntech.pvs.view.services.*;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.*;
 
 @Service
@@ -80,6 +83,9 @@ public class ServImpl implements ServService {
     private  SatisMapper satisMapper;
 
 
+    @Autowired
+    private WeiXinUserService weiXinUserService;
+
     /**
     * @Description:
     * @Param: [servRequest]
@@ -132,12 +138,14 @@ public class ServImpl implements ServService {
         List<ServView> list = servMapper.selectServsView(page,params);
 
         if(servRequest.getLatitude()!=null&&servRequest.getLongitude()!=null&&list!=null&&list.size()>0){
-            Double latitude = Double.valueOf(servRequest.getLatitude());
+            Double latitude = Double.valueOf(servRequest.getLatitude());//当前用户的
             Double longitude = Double.valueOf(servRequest.getLongitude());
             for (ServView servView : list) {
                 if(servRequest.getLatitude()!=null&&servView.getLongitude()!=null){
-                    Double latitude1 =  Double.valueOf(servRequest.getLatitude());
+                    Double latitude1 =  Double.valueOf(servView.getLatitude());//服务人员的。
                     Double longitude1 =  Double.valueOf(servView.getLongitude());
+//                    插入经纬度
+
                     if(latitude1 !=null&& longitude1 !=null){
                         //计算两个经纬度的距离
                         double v = MapUtils.GetDistance(latitude, longitude, latitude1, longitude1);
@@ -194,8 +202,6 @@ public class ServImpl implements ServService {
     */
     @Override
     public Integer releaseServ(ReleaseServRequest releaseServRequest, HttpServletRequest request) {
-
-
         Integer releaseServCount = this.getReleaseServCount(releaseServRequest.getOpenid());
         if(releaseServCount!=null&&releaseServCount>3){
             return 0;
@@ -208,17 +214,52 @@ public class ServImpl implements ServService {
         }
         Long id = null;
         WeiXinUser weiXinUser = VCache.get(openid, WeiXinUser.class);
+        String avatarUrl = null;
         if(null==weiXinUser){
             WeiXinUserExample example = new WeiXinUserExample();
             WeiXinUserExample.Criteria criteria = example.createCriteria();
             criteria.andOpenIdEqualTo(openid);
             List<WeiXinUser> weiXinUsers = weiXinUserMapper.selectByExample(example);
             if(weiXinUsers!=null&&weiXinUsers.size()>0){
-                id=weiXinUsers.get(0).getId();
+                weiXinUser=weiXinUsers.get(0);
+                id=weiXinUsers.get(0).getId();//serv_manid
+            }else{
+                return  -3;
             }
-        }else{
-             id = weiXinUser.getId();//serv_manid
         }
+
+        assert weiXinUser != null;
+//        id = weiXinUser.getId();//serv_manid
+        //发布私服前，获取当前登录用户的信息，新增servman到服务器。
+        Long servManid = weiXinUser.getServManid();
+        if(null==servManid){
+            ServMan servMan = new ServMan();
+            servMan.setSname(weiXinUser.getNickName());
+            servMan.setSsex(weiXinUser.getGender().toString());
+            servMan.setEnable("1");
+
+            ServManGps servManGps = new ServManGps();
+
+            servManGpsMapper.insertSelective(servManGps);
+            Long autoId = servManGps.getId();
+            servMan.setServManGpsid(autoId);
+            servManMapper.insertSelective(servMan);
+
+            Long servManIdOuto = servMan.getId();
+            servManGps.setServManid(servManIdOuto);
+            servManGpsMapper.updateByPrimaryKey(servManGps);
+        }
+
+
+
+        //发布私服前下载用户头像到服务器
+        avatarUrl = weiXinUser.getAvatarUrl();
+        if(avatarUrl!=null){
+            String realurl=request.getServletContext().getRealPath("/");
+            String path=realurl+"images"+ File.separator;
+            DownLoadUrl.getImageByUrl(avatarUrl,path,openid+".png");
+        }
+
         Serv serv = new Serv();
         int insert = 0;
         if(releaseServRequest.getServType()==0L){
@@ -287,7 +328,10 @@ public class ServImpl implements ServService {
     public Integer getReleaseServCount(String openid){
         Map<String,Object> params=new HashMap<>();
         WeiXinUser weiXinUser = VCache.get(openid, WeiXinUser.class);
-        assert weiXinUser != null;
+        if(weiXinUser==null){
+            weiXinUser=weiXinUserService.getWeiXinUserByOpenId(openid);
+            VCache.setCache(1,openid,weiXinUser,1000*60*60*24*30);
+        }
         Long servManid = weiXinUser.getServManid();
         params.put("servManid",servManid);
 //        params.put("state",1);

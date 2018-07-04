@@ -2,7 +2,7 @@ package com.huntech.pvs.model.sys;
 
 import java.io.Serializable;
 
-public class WeiXinUser implements Serializable{
+public class WeiXinUser implements Serializable {
     private Long id;
 
     private Long servManid;
@@ -30,6 +30,10 @@ public class WeiXinUser implements Serializable{
     private String companyAddress;
 
     private String userTel;
+
+    private String longitude;
+
+    private String latitude;
 
     public Long getId() {
         return id;
@@ -141,5 +145,21 @@ public class WeiXinUser implements Serializable{
 
     public void setUserTel(String userTel) {
         this.userTel = userTel == null ? null : userTel.trim();
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude == null ? null : longitude.trim();
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude == null ? null : latitude.trim();
     }
 }

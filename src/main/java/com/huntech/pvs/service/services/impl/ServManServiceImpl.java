@@ -7,11 +7,10 @@ import com.huntech.pvs.model.services.ServManExample;
 import com.huntech.pvs.model.services.ServManGps;
 import com.huntech.pvs.model.services.ServManGpsExample;
 import com.huntech.pvs.model.sys.WeiXinUser;
+import com.huntech.pvs.service.services.ServManGpsService;
 import com.huntech.pvs.service.services.ServManService;
 import com.huntech.pvs.service.sys.WeiXinUserService;
-import com.huntech.pvs.view.request.AddressRequest;
 import com.huntech.pvs.view.request.ServManRequest;
-import com.huntech.pvs.view.services.BaseServTypeView;
 import com.huntech.pvs.view.services.ServManView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ServManServiceImpl implements ServManService {
@@ -33,13 +31,26 @@ public class ServManServiceImpl implements ServManService {
     private ServManMapper servManMapper;
     @Autowired
     private ServManGpsMapper servManGpsMapper;
+    @Autowired
+    private ServManGpsService servManGpsService;
     @Override
-    public ServMan getServMan(String openid) {
+    public ServManView getServMan(String openid) {
 
         WeiXinUser weiXinUserByOpenId = weiXinUserService.getWeiXinUserByOpenId(openid);
         if(weiXinUserByOpenId!=null&&weiXinUserByOpenId.getServManid()!=null){
             ServMan servMan= servManMapper.selectByPrimaryKey(weiXinUserByOpenId.getServManid());
-            return servMan;
+            ServManGps servManGps = servManGpsService.getServManGps(servMan.getId());
+            ServManView servManView = new ServManView();
+            servManView.setId(servMan.getId());
+            servManView.setSage(servMan.getSage());
+            servManView.setSname(servMan.getSname());
+            servManView.setSsex(servMan.getSsex());
+            servManView.setStel(servMan.getStel());
+            servManView.setLatitude(servManGps.getLatitude());
+            servManView.setLongitude(servManGps.getLongitude());
+            servManView.setServAddress(servMan.getServAddress());
+            servManView.setIdentityCard(servMan.getIdentityCard());
+            return servManView;
         }
         return null;
 
@@ -119,7 +130,7 @@ public class ServManServiceImpl implements ServManService {
 
     @Override
     public int updateByPriKey(ServMan man) {
-        int i = servManMapper.updateByPrimaryKey(man);
+        int i = servManMapper.updateByPrimaryKeySelective(man);
         return i;
     }
 

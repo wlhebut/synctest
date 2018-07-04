@@ -14,6 +14,33 @@ public class ServManView {
     private String longitude;
 
     private String latitude;
+    private String servAddress;
+    private String identityCard;
+    private String spic;
+
+    public String getServAddress() {
+        return servAddress;
+    }
+
+    public void setServAddress(String servAddress) {
+        this.servAddress = servAddress;
+    }
+
+    public String getIdentityCard() {
+        return identityCard;
+    }
+
+    public void setIdentityCard(String identityCard) {
+        this.identityCard = identityCard;
+    }
+
+    public String getSpic() {
+        return spic;
+    }
+
+    public void setSpic(String spic) {
+        this.spic = spic;
+    }
 
     public Long getId() {
         return id;

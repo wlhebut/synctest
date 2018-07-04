@@ -16,6 +16,8 @@
     <result column="HOME_ADDRESS" property="homeAddress" jdbcType="VARCHAR" />
     <result column="COMPANY_ADDRESS" property="companyAddress" jdbcType="VARCHAR" />
     <result column="USER_TEL" property="userTel" jdbcType="VARCHAR" />
+    <result column="LONGITUDE" property="longitude" jdbcType="VARCHAR" />
+    <result column="LATITUDE" property="latitude" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -77,7 +79,7 @@
   </sql>
   <sql id="Base_Column_List" >
     ID, SERV_MANID, OPEN_ID, NICK_NAME, GENDER, CITY, PROVINCE, COUNTRY, AVATAR_URL, 
-    UNION_ID, USER_INFO, HOME_ADDRESS, COMPANY_ADDRESS, USER_TEL
+    UNION_ID, USER_INFO, HOME_ADDRESS, COMPANY_ADDRESS, USER_TEL, LONGITUDE, LATITUDE
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.huntech.pvs.model.sys.WeiXinUserExample" >
     select
@@ -114,12 +116,14 @@
       NICK_NAME, GENDER, CITY, 
       PROVINCE, COUNTRY, AVATAR_URL, 
       UNION_ID, USER_INFO, HOME_ADDRESS, 
-      COMPANY_ADDRESS, USER_TEL)
+      COMPANY_ADDRESS, USER_TEL, LONGITUDE, 
+      LATITUDE)
     values (#{id,jdbcType=BIGINT}, #{servManid,jdbcType=BIGINT}, #{openId,jdbcType=VARCHAR}, 
       #{nickName,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT}, #{city,jdbcType=VARCHAR}, 
       #{province,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, 
       #{unionId,jdbcType=VARCHAR}, #{userInfo,jdbcType=VARCHAR}, #{homeAddress,jdbcType=VARCHAR}, 
-      #{companyAddress,jdbcType=VARCHAR}, #{userTel,jdbcType=VARCHAR})
+      #{companyAddress,jdbcType=VARCHAR}, #{userTel,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, 
+      #{latitude,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.huntech.pvs.model.sys.WeiXinUser" >
     insert into weixin_user
@@ -166,6 +170,12 @@
       <if test="userTel != null" >
         USER_TEL,
       </if>
+      <if test="longitude != null" >
+        LONGITUDE,
+      </if>
+      <if test="latitude != null" >
+        LATITUDE,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -209,6 +219,12 @@
       </if>
       <if test="userTel != null" >
         #{userTel,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -263,6 +279,12 @@
       <if test="record.userTel != null" >
         USER_TEL = #{record.userTel,jdbcType=VARCHAR},
       </if>
+      <if test="record.longitude != null" >
+        LONGITUDE = #{record.longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.latitude != null" >
+        LATITUDE = #{record.latitude,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -283,7 +305,9 @@
       USER_INFO = #{record.userInfo,jdbcType=VARCHAR},
       HOME_ADDRESS = #{record.homeAddress,jdbcType=VARCHAR},
       COMPANY_ADDRESS = #{record.companyAddress,jdbcType=VARCHAR},
-      USER_TEL = #{record.userTel,jdbcType=VARCHAR}
+      USER_TEL = #{record.userTel,jdbcType=VARCHAR},
+      LONGITUDE = #{record.longitude,jdbcType=VARCHAR},
+      LATITUDE = #{record.latitude,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -330,6 +354,12 @@
       <if test="userTel != null" >
         USER_TEL = #{userTel,jdbcType=VARCHAR},
       </if>
+      <if test="longitude != null" >
+        LONGITUDE = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        LATITUDE = #{latitude,jdbcType=VARCHAR},
+      </if>
     </set>
     where ID = #{id,jdbcType=BIGINT}
   </update>
@@ -347,7 +377,9 @@
       USER_INFO = #{userInfo,jdbcType=VARCHAR},
       HOME_ADDRESS = #{homeAddress,jdbcType=VARCHAR},
       COMPANY_ADDRESS = #{companyAddress,jdbcType=VARCHAR},
-      USER_TEL = #{userTel,jdbcType=VARCHAR}
+      USER_TEL = #{userTel,jdbcType=VARCHAR},
+      LONGITUDE = #{longitude,jdbcType=VARCHAR},
+      LATITUDE = #{latitude,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -104,7 +104,7 @@
     values (#{id,jdbcType=BIGINT}, #{servManid,jdbcType=BIGINT}, #{longitude,jdbcType=VARCHAR}, 
       #{latitude,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.huntech.pvs.model.services.ServManGps" >
+  <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true" parameterType="com.huntech.pvs.model.services.ServManGps" >
     insert into tbl_serv_man_gps
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

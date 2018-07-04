@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huntech.pvs.dao.services.MyServsMapper" >
+  <resultMap id="BaseResultMap" type="com.huntech.pvs.model.services.MyServs" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="OPENID" property="openid" jdbcType="VARCHAR" />
+    <result column="MY_BASESERV_TYPEID" property="myBaseservTypeid" jdbcType="BIGINT" />
+    <result column="SERV_NAME" property="servName" jdbcType="VARCHAR" />
+    <result column="SERV_TEL" property="servTel" jdbcType="VARCHAR" />
+    <result column="SERV_ADDRESS" property="servAddress" jdbcType="VARCHAR" />
+    <result column="SERV_NOTE" property="servNote" jdbcType="VARCHAR" />
+    <result column="LONGITUDE" property="longitude" jdbcType="VARCHAR" />
+    <result column="LATITUDE" property="latitude" jdbcType="VARCHAR" />
+    <result column="SDATE" property="sdate" jdbcType="TIMESTAMP" />
+    <result column="STATE" property="state" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, OPENID, MY_BASESERV_TYPEID, SERV_NAME, SERV_TEL, SERV_ADDRESS, SERV_NOTE, LONGITUDE, 
+    LATITUDE, SDATE, STATE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.huntech.pvs.model.services.MyServsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tbl_my_servs
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_my_servs
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tbl_my_servs
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huntech.pvs.model.services.MyServsExample" >
+    delete from tbl_my_servs
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huntech.pvs.model.services.MyServs" >
+    insert into tbl_my_servs (ID, OPENID, MY_BASESERV_TYPEID, 
+      SERV_NAME, SERV_TEL, SERV_ADDRESS, 
+      SERV_NOTE, LONGITUDE, LATITUDE, 
+      SDATE, STATE)
+    values (#{id,jdbcType=BIGINT}, #{openid,jdbcType=VARCHAR}, #{myBaseservTypeid,jdbcType=BIGINT}, 
+      #{servName,jdbcType=VARCHAR}, #{servTel,jdbcType=VARCHAR}, #{servAddress,jdbcType=VARCHAR}, 
+      #{servNote,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
+      #{sdate,jdbcType=TIMESTAMP}, #{state,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huntech.pvs.model.services.MyServs" >
+    insert into tbl_my_servs
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="openid != null" >
+        OPENID,
+      </if>
+      <if test="myBaseservTypeid != null" >
+        MY_BASESERV_TYPEID,
+      </if>
+      <if test="servName != null" >
+        SERV_NAME,
+      </if>
+      <if test="servTel != null" >
+        SERV_TEL,
+      </if>
+      <if test="servAddress != null" >
+        SERV_ADDRESS,
+      </if>
+      <if test="servNote != null" >
+        SERV_NOTE,
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE,
+      </if>
+      <if test="latitude != null" >
+        LATITUDE,
+      </if>
+      <if test="sdate != null" >
+        SDATE,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="openid != null" >
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="myBaseservTypeid != null" >
+        #{myBaseservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="servName != null" >
+        #{servName,jdbcType=VARCHAR},
+      </if>
+      <if test="servTel != null" >
+        #{servTel,jdbcType=VARCHAR},
+      </if>
+      <if test="servAddress != null" >
+        #{servAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="servNote != null" >
+        #{servNote,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="sdate != null" >
+        #{sdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huntech.pvs.model.services.MyServsExample" resultType="java.lang.Integer" >
+    select count(*) from tbl_my_servs
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tbl_my_servs
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.openid != null" >
+        OPENID = #{record.openid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.myBaseservTypeid != null" >
+        MY_BASESERV_TYPEID = #{record.myBaseservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="record.servName != null" >
+        SERV_NAME = #{record.servName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.servTel != null" >
+        SERV_TEL = #{record.servTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.servAddress != null" >
+        SERV_ADDRESS = #{record.servAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.servNote != null" >
+        SERV_NOTE = #{record.servNote,jdbcType=VARCHAR},
+      </if>
+      <if test="record.longitude != null" >
+        LONGITUDE = #{record.longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.latitude != null" >
+        LATITUDE = #{record.latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sdate != null" >
+        SDATE = #{record.sdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tbl_my_servs
+    set ID = #{record.id,jdbcType=BIGINT},
+      OPENID = #{record.openid,jdbcType=VARCHAR},
+      MY_BASESERV_TYPEID = #{record.myBaseservTypeid,jdbcType=BIGINT},
+      SERV_NAME = #{record.servName,jdbcType=VARCHAR},
+      SERV_TEL = #{record.servTel,jdbcType=VARCHAR},
+      SERV_ADDRESS = #{record.servAddress,jdbcType=VARCHAR},
+      SERV_NOTE = #{record.servNote,jdbcType=VARCHAR},
+      LONGITUDE = #{record.longitude,jdbcType=VARCHAR},
+      LATITUDE = #{record.latitude,jdbcType=VARCHAR},
+      SDATE = #{record.sdate,jdbcType=TIMESTAMP},
+      STATE = #{record.state,jdbcType=TINYINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huntech.pvs.model.services.MyServs" >
+    update tbl_my_servs
+    <set >
+      <if test="openid != null" >
+        OPENID = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="myBaseservTypeid != null" >
+        MY_BASESERV_TYPEID = #{myBaseservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="servName != null" >
+        SERV_NAME = #{servName,jdbcType=VARCHAR},
+      </if>
+      <if test="servTel != null" >
+        SERV_TEL = #{servTel,jdbcType=VARCHAR},
+      </if>
+      <if test="servAddress != null" >
+        SERV_ADDRESS = #{servAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="servNote != null" >
+        SERV_NOTE = #{servNote,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        LATITUDE = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="sdate != null" >
+        SDATE = #{sdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=TINYINT},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huntech.pvs.model.services.MyServs" >
+    update tbl_my_servs
+    set OPENID = #{openid,jdbcType=VARCHAR},
+      MY_BASESERV_TYPEID = #{myBaseservTypeid,jdbcType=BIGINT},
+      SERV_NAME = #{servName,jdbcType=VARCHAR},
+      SERV_TEL = #{servTel,jdbcType=VARCHAR},
+      SERV_ADDRESS = #{servAddress,jdbcType=VARCHAR},
+      SERV_NOTE = #{servNote,jdbcType=VARCHAR},
+      LONGITUDE = #{longitude,jdbcType=VARCHAR},
+      LATITUDE = #{latitude,jdbcType=VARCHAR},
+      SDATE = #{sdate,jdbcType=TIMESTAMP},
+      STATE = #{state,jdbcType=TINYINT}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
