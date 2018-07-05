@@ -69,7 +69,7 @@ public class ServController extends BaseController {
         }
         Double latitude =  Double.valueOf(servRequest.getLatitude());//当前用户的（可能有缓存）
         Double longitude =  Double.valueOf(servRequest.getLongitude());
-        System.out.println("当前经纬度为，latitude："+latitude+"-----longitude："+longitude);
+        System.out.println("controller:getBaseServ:api当前请求经纬度为:[longitude,latitude]---["+longitude+","+latitude+"]");
         /*if(weiXinUserService.posChanged(servRequest)){//查询当前用户的经纬度是否发生了变化，若果变化了，就需要从新获取经纬度。
             *//*resultMap.put("dataCode","0");
             resultMap.put("dataDesc","当前位置发生了变化,请从新定位");
@@ -126,6 +126,18 @@ public class ServController extends BaseController {
     @ResponseBody
     public Map<String, Object> releaseServ(@RequestBody ReleaseServRequest releaseServRequest, HttpServletRequest request) {
 //        List<ServView> list = servService.getBaseServ( servRequest);
+
+        if(releaseServRequest.getLongitude()==null||releaseServRequest.getLatitude()==null){
+            resultMap.put("dataCode","-2");
+            resultMap.put("dataDesc","经纬度参数：[longitude,latitude]");
+            return resultMap;
+        }
+
+
+        String longitude = releaseServRequest.getLongitude();
+        String latitude = releaseServRequest.getLatitude();
+
+        System.out.println("发布私服：releaseServ:api当前请求经纬度为的经纬度为:[longitude,latitude]---["+longitude+","+latitude+"]");
         try {
             Integer integer = servService.releaseServ(releaseServRequest, request);
             resultMap.put("dataCode",1);
