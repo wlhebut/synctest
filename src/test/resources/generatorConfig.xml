@@ -40,9 +40,12 @@
         </javaClientGenerator>
 
         <!--对应数据库表名 --><!--schema="OMS_JHT"-->
-        <table  tableName="tbl_serv_time" domainObjectName="ServTime" >
+        <table  tableName="tbl_transmits" domainObjectName="Transmits" >
             <property name="ignoreQualifiersAtRuntime" value="true"></property>
         </table>
+        <!--<table  tableName="tbl_my_baseserv_type" domainObjectName="MyBaseservType" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>-->
         <!--<table  tableName="tbl_illegal_serv" domainObjectName="illegalServ" >
             <property name="ignoreQualifiersAtRuntime" value="true"></property>
         </table>-->
