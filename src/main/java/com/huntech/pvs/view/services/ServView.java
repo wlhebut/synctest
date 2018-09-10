@@ -2,8 +2,9 @@ package com.huntech.pvs.view.services;
 
 import java.io.Serializable;
 
-public class ServView implements Serializable {
+public class ServView implements  Comparable ,Serializable {
 
+    private static final long serialVersionUID = -2765147794959359589L;
     private Long id;
     private Long baseservTypeid;
     private Long servManid;
@@ -24,6 +25,24 @@ public class ServView implements Serializable {
     private String servTime;
     private String servAddress;//位置
 
+    @Override
+    public String toString() {
+        return "ServView{" +
+                "id=" + id +
+                ", sname='" + sname + '\'' +
+                ", servName='" + servName + '\'' +
+                ", tname='" + tname + '\'' +
+                ", stel='" + stel + '\'' +
+                ", serverSatis=" + serverSatis +
+                ", servTimeid=" + servTimeid +
+                ", servContentid=" + servContentid +
+                ", longitude='" + longitude + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", distance=" + distance +
+                ", servTime='" + servTime + '\'' +
+                ", servAddress='" + servAddress + '\'' +
+                '}';
+    }
 
     public String getServAddress() {
         return servAddress;
@@ -151,5 +170,10 @@ public class ServView implements Serializable {
 
     public void setServerSatis(Integer serverSatis) {
         this.serverSatis = serverSatis;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return ((ServView)o).getServerSatis()-this.getServerSatis();
     }
 }

@@ -7,31 +7,27 @@ import com.huntech.pvs.common.DECRYPT;
 import com.huntech.pvs.common.ResourceLoad;
 import com.huntech.pvs.common.UrlUtil;
 import com.huntech.pvs.common.redis.VCache;
-import com.huntech.pvs.common.util.DownLoadUrl;
 import com.huntech.pvs.common.util.JWT;
 import com.huntech.pvs.dao.sys.WeiXinUserMapper;
-import com.huntech.pvs.model.services.SelfBaseServType;
 import com.huntech.pvs.model.sys.WeiXinLoginRequest;
 import com.huntech.pvs.model.sys.WeiXinUser;
 import com.huntech.pvs.model.sys.WeiXinUserExample;
+import com.huntech.pvs.service.address.AddressService;
 import com.huntech.pvs.service.services.SelfServTypeService;
 import com.huntech.pvs.service.sys.WeiXinLoginService;
-import com.huntech.web.common.DownloadUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.NoSuchPaddingException;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+@Slf4j
 @Service
 public class WeiXinLoginServiceImpl implements WeiXinLoginService {
 
@@ -40,82 +36,128 @@ public class WeiXinLoginServiceImpl implements WeiXinLoginService {
 
     @Autowired
     private WeiXinUserMapper weiXinUserMapper;
+
+    @Autowired
+    private AddressService addressService;
     @Override
     public String HasUser(WeiXinLoginRequest weiXinLoginRequest, HttpServletRequest request) {
-        JSONObject sessionKeyOropenid = getSessionKeyOropenid(weiXinLoginRequest.getCode());
-        //解析返回的json数据，获得OPPID
-        Map<String, String> params = JSONObject.parseObject(sessionKeyOropenid.toJSONString(), new TypeReference<Map<String, String>>(){});
-        String openid=params.get("openid");
-        String session_key=params.get("session_key");
-        if(openid!=null){
-            System.out.println("------------------------------------------------");
-            Set<String> strings = params.keySet();
-            for (String string : strings) {
-                System.out.println("微信服务器获取的参数:key"+string+"------value:"+params.get(string));
-            }
-            System.out.println("------------------------------------------------");
-            /*在此处添加自己的逻辑代码，将openid保存在数据库，或是，使用session_key去微信服务器换取用户头像、昵称等信息。我在这里并没有用到，因此我只保存了用户的openid*/
-        }
-        WeiXinUserExample weiXinUserExample = new WeiXinUserExample();
-        WeiXinUserExample.Criteria criteria = weiXinUserExample.createCriteria();
-        criteria.andOpenIdEqualTo(openid);
-        List<WeiXinUser> weiXinUsers = weiXinUserMapper.selectByExample(weiXinUserExample);
-        System.out.println("查询当前登录用户的信息："+weiXinUsers);
+
         JSONObject userInfo = null;
+        JSONObject sessionKeyOropenid=null;
+        Map<String, String> params=null;
+        String openid="";
+        String session_key=null;
+
+
+        if(weiXinLoginRequest.getCode()!=null&&weiXinLoginRequest.getCode().length()!=0){
+            sessionKeyOropenid = getSessionKeyOropenid(weiXinLoginRequest.getCode());
+        }
+
+        //解析返回的json数据，获得OPPID
+        if(sessionKeyOropenid!=null){
+            params = JSONObject.parseObject(sessionKeyOropenid.toJSONString(), new TypeReference<Map<String, String>>(){});
+        }
+        if(params!=null){
+            openid=params.get("openid");
+            session_key=params.get("session_key");
+            log.info("111......解析的params:{}",params);
+        }else{
+            return  null;
+        }
+        log.info("session_key{}",session_key);
+
         try {
             if(weiXinLoginRequest.getEncryptedData()!=null&&session_key!=null&&weiXinLoginRequest.getIv()!=null){
-                System.out.println("1111111111");
                 try {
                     userInfo = DECRYPT.getUserInfo(weiXinLoginRequest.getEncryptedData(), session_key, weiXinLoginRequest.getIv());
-                    System.out.println("解密用户userInfo:"+userInfo);
+                    log.info("22222.....微信服务器获取的用户信息：{}",userInfo);
+                    if(null==userInfo){
+                        return  openid;
+                    }
+
                 } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | InvalidKeyException e) {
+                    log.error(e.toString());
                     e.printStackTrace();
                 }
-//                userInfo.get("");
             }
 
         } catch (NoSuchPaddingException e) {
             e.printStackTrace();
         }
 
+        WeiXinUserExample weiXinUserExample = new WeiXinUserExample();
+        WeiXinUserExample.Criteria criteria = weiXinUserExample.createCriteria();
+        List<WeiXinUser> weiXinUsers =null;
+        if(openid!=null&&!openid.equals("")){
+            criteria.andOpenIdEqualTo(openid);
+            weiXinUsers = weiXinUserMapper.selectByExample(weiXinUserExample);
+        }
+
+        System.out.println("查询当前登录用户的信息："+weiXinUsers.toString());
+
+        WeiXinUser weiXinUser = new WeiXinUser();
+        String country= (String)userInfo.get("country");
+        String avatarUrl= (String)userInfo.get("avatarUrl");
+        String nickName= (String)userInfo.get("nickName");
+        String gender =String.valueOf(userInfo.get("gender"));
         if(weiXinUsers!=null){
-            System.out.println("null...........");
-            if(weiXinUsers.size()>0){
-                //查询是否存在
-                Integer integer = selfServTypeService.selectCount(openid);
-                if(integer<1){
-                    selfServTypeService.insertAllType(openid);
-                }
-            }else{
-                WeiXinUser weiXinUser = new WeiXinUser();
+            if(weiXinUsers.size()==0){
                 weiXinUser.setOpenId(openid);
                 if(userInfo!=null){
-                    weiXinUser.setNickName((String)userInfo.get("nickName"));
-                    weiXinUser.setAvatarUrl((String)userInfo.get("avatarUrl"));
-
-                    String gender =String.valueOf(userInfo.get("gender"));
+                    log.debug("gender:{}",gender);
+                    weiXinUser.setCountry(country);
+                    weiXinUser.setAvatarUrl(avatarUrl);
+                    weiXinUser.setNickName(nickName);
                     weiXinUser.setGender(new Byte(gender));
                 }
                 weiXinUserMapper.insert(weiXinUser);
-                Integer integer = selfServTypeService.selectCount(openid);
-                if(integer<1){
-                    selfServTypeService.insertAllType(openid);
-                }
+            }else if(weiXinUsers.size()==1){
+                weiXinUser = weiXinUsers.get(0);
+                weiXinUser.setCountry(country);
+                weiXinUser.setAvatarUrl(avatarUrl);
+                weiXinUser.setNickName(nickName);
+                weiXinUser.setGender(new Byte(gender));
+                weiXinUserMapper.updateByPrimaryKeySelective(weiXinUser);
             }
-
         }else{
-            System.out.println("查询当前的登录用户为null。。。。。");
-            WeiXinUser weiXinUser = new WeiXinUser();
-            weiXinUser.setOpenId(openid);
-            weiXinUserMapper.insert(weiXinUser);
-            selfServTypeService.insertAllType(openid);
+            weiXinUser = weiXinUsers.get(0);
+            weiXinUser.setCountry(country);
+            weiXinUser.setAvatarUrl(avatarUrl);
+            weiXinUser.setNickName(nickName);
+            weiXinUser.setGender(new Byte(gender));
+            weiXinUserMapper.updateByPrimaryKeySelective(weiXinUser);
+        }
+        if(openid!=null){
+            Integer integer = selfServTypeService.selectCount(openid);
+            if(integer<1){
+                selfServTypeService.insertAllType(openid);
+            }
         }
         return openid;
     }
 
+    private void setparams(JSONObject userInfo, WeiXinUser weiXinUser) {
+        weiXinUser.setNickName((String)userInfo.get("nickName"));
+        weiXinUser.setAvatarUrl((String)userInfo.get("avatarUrl"));
+        String gender =String.valueOf(userInfo.get("gender"));
+        weiXinUser.setGender(new Byte(gender));
+    }
+
     @Override
-    public int insertUser(WeiXinLoginRequest weiXinLoginRequest) {
-        return 0;
+    public int insertUser(WeiXinUser weiXinUser) {
+        int i=0;
+        WeiXinUserExample example = new WeiXinUserExample();
+        WeiXinUserExample.Criteria criteria = example.createCriteria();
+        if(weiXinUser!=null){
+            if(weiXinUser.getOpenId()!=null){
+                criteria.andOpenIdEqualTo(weiXinUser.getOpenId());
+                List<WeiXinUser> weiXinUsers = weiXinUserMapper.selectByExample(example);
+                if(weiXinUsers!=null&&weiXinUsers.size()==0){
+                    i = weiXinUserMapper.insertSelective(weiXinUser);
+                }
+            }
+        }
+        return i;
     }
 
     @Override
@@ -142,7 +184,7 @@ public class WeiXinLoginServiceImpl implements WeiXinLoginService {
         if(weiXinUsers!=null&&weiXinUsers.size()>0){
             WeiXinUser weiXinUser = weiXinUsers.get(0);
             WeiXinUser weiXinUser1 = VCache.get(openid, WeiXinUser.class);
-            if(weiXinUser1==null){
+            if(weiXinUser1==null||!weiXinUser.equals(weiXinUser1)){
                 VCache.set(openid,weiXinUser);
             }
         }

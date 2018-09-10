@@ -119,7 +119,7 @@
     g.LATITUDE,
     t.ERVERSATIS,
     st.serv_time,
-      s.STATE,
+    s.STATE,
     m.SERV_ADDRESS,
     s.SERV_NOTE
     FROM
@@ -144,7 +144,7 @@
       <if test="openid!=null">
         AND s.SERV_MANID NOT IN (
         SELECT
-        d.ID
+        d.SERV_MANID
         FROM
         tbl_dis_serv d
         WHERE
@@ -155,7 +155,7 @@
 
     </where>
 
-
+    ORDER BY t.ERVERSATIS DESC
   </select>
 
   <select id="selectReleaseServsView"   resultMap="BaseResultMap2">
@@ -265,7 +265,8 @@
     t.ERVERSATIS,
     st.serv_time,
       s.STATE,
-    s.SERV_NOTE
+    s.SERV_NOTE,
+    m.SERV_ADDRESS
     FROM
     tbl_attention a
     LEFT JOIN TBL_SERV s ON s.ID = a.SERVID

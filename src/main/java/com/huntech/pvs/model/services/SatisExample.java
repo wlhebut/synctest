@@ -283,6 +283,186 @@ public class SatisExample {
             addCriterion("ERVERSATIS not between", value1, value2, "erversatis");
             return (Criteria) this;
         }
+
+        public Criteria andTransmitsIsNull() {
+            addCriterion("TRANSMITS is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransmitsIsNotNull() {
+            addCriterion("TRANSMITS is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransmitsEqualTo(Integer value) {
+            addCriterion("TRANSMITS =", value, "transmits");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransmitsNotEqualTo(Integer value) {
+            addCriterion("TRANSMITS <>", value, "transmits");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransmitsGreaterThan(Integer value) {
+            addCriterion("TRANSMITS >", value, "transmits");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransmitsGreaterThanOrEqualTo(Integer value) {
+            addCriterion("TRANSMITS >=", value, "transmits");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransmitsLessThan(Integer value) {
+            addCriterion("TRANSMITS <", value, "transmits");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransmitsLessThanOrEqualTo(Integer value) {
+            addCriterion("TRANSMITS <=", value, "transmits");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransmitsIn(List<Integer> values) {
+            addCriterion("TRANSMITS in", values, "transmits");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransmitsNotIn(List<Integer> values) {
+            addCriterion("TRANSMITS not in", values, "transmits");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransmitsBetween(Integer value1, Integer value2) {
+            addCriterion("TRANSMITS between", value1, value2, "transmits");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransmitsNotBetween(Integer value1, Integer value2) {
+            addCriterion("TRANSMITS not between", value1, value2, "transmits");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectionsIsNull() {
+            addCriterion("COLLECTIONS is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectionsIsNotNull() {
+            addCriterion("COLLECTIONS is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectionsEqualTo(Integer value) {
+            addCriterion("COLLECTIONS =", value, "collections");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectionsNotEqualTo(Integer value) {
+            addCriterion("COLLECTIONS <>", value, "collections");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectionsGreaterThan(Integer value) {
+            addCriterion("COLLECTIONS >", value, "collections");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectionsGreaterThanOrEqualTo(Integer value) {
+            addCriterion("COLLECTIONS >=", value, "collections");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectionsLessThan(Integer value) {
+            addCriterion("COLLECTIONS <", value, "collections");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectionsLessThanOrEqualTo(Integer value) {
+            addCriterion("COLLECTIONS <=", value, "collections");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectionsIn(List<Integer> values) {
+            addCriterion("COLLECTIONS in", values, "collections");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectionsNotIn(List<Integer> values) {
+            addCriterion("COLLECTIONS not in", values, "collections");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectionsBetween(Integer value1, Integer value2) {
+            addCriterion("COLLECTIONS between", value1, value2, "collections");
+            return (Criteria) this;
+        }
+
+        public Criteria andCollectionsNotBetween(Integer value1, Integer value2) {
+            addCriterion("COLLECTIONS not between", value1, value2, "collections");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbsIsNull() {
+            addCriterion("THUMBS is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbsIsNotNull() {
+            addCriterion("THUMBS is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbsEqualTo(Integer value) {
+            addCriterion("THUMBS =", value, "thumbs");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbsNotEqualTo(Integer value) {
+            addCriterion("THUMBS <>", value, "thumbs");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbsGreaterThan(Integer value) {
+            addCriterion("THUMBS >", value, "thumbs");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbsGreaterThanOrEqualTo(Integer value) {
+            addCriterion("THUMBS >=", value, "thumbs");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbsLessThan(Integer value) {
+            addCriterion("THUMBS <", value, "thumbs");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbsLessThanOrEqualTo(Integer value) {
+            addCriterion("THUMBS <=", value, "thumbs");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbsIn(List<Integer> values) {
+            addCriterion("THUMBS in", values, "thumbs");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbsNotIn(List<Integer> values) {
+            addCriterion("THUMBS not in", values, "thumbs");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbsBetween(Integer value1, Integer value2) {
+            addCriterion("THUMBS between", value1, value2, "thumbs");
+            return (Criteria) this;
+        }
+
+        public Criteria andThumbsNotBetween(Integer value1, Integer value2) {
+            addCriterion("THUMBS not between", value1, value2, "thumbs");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

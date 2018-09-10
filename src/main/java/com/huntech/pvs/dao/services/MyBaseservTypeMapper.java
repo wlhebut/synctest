@@ -6,6 +6,7 @@ import com.huntech.pvs.model.services.MyBaseservTypeExample;
 import java.util.List;
 import java.util.Map;
 
+import com.huntech.pvs.model.services.MyServs;
 import com.huntech.pvs.view.services.MyServViews;
 import com.huntech.pvs.view.services.ServView;
 import org.apache.ibatis.annotations.Param;
@@ -22,7 +23,7 @@ public interface MyBaseservTypeMapper {
     int insertSelective(MyBaseservType record);
 
     List<MyBaseservType> selectByExample(MyBaseservTypeExample example);
-    List<MyServViews> selectMyServViews(Map<String, Object> params);
+    List<MyServs> selectMyServViews(Map<String, Object> params);
 
     MyBaseservType selectByPrimaryKey(Long id);
 

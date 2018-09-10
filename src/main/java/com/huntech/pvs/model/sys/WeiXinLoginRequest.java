@@ -5,6 +5,16 @@ public class WeiXinLoginRequest {
     private String iv;
     private String code;
 
+    private String openid;
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
+
     public String getEncryptedData() {
         return encryptedData;
     }

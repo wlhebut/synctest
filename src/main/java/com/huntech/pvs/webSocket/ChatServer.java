@@ -13,34 +13,34 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 @ServerEndpoint(value="/chatServer",configurator=HttpSessionConfigurator.class)
 public class ChatServer{
-	private static int onlineCount=0;	//Í³¼ÆÔÚÏßÈËÊı
-	private static CopyOnWriteArraySet<ChatServer> webSocket=new CopyOnWriteArraySet<ChatServer>();//´æ·ÅÃ¿¸öServerÉèÖÃÎªÏß³Ì°²È«
+	private static int onlineCount=0;	//ç»Ÿè®¡åœ¨çº¿äººæ•°
+	private static CopyOnWriteArraySet<ChatServer> webSocket= new CopyOnWriteArraySet<>();//å­˜æ”¾æ¯ä¸ªServerè®¾ç½®ä¸ºçº¿ç¨‹å®‰å…¨
 	private Session session;
-	private String openid;//ÓÃ»§Id
+	private String openid;//ç”¨æˆ·Id
 	private HttpSession httpSession;
-	private static List<UserFrontView> list= new ArrayList<>();//´æ·ÅÃ¿¸öÓÃ»§id(¿ÉÒÔÏÔÊ¾ÔÚÏß»òÕß²»ÔÚÏß)
-	private static Map<String,Session> routetab= new HashMap<>();//´æ·Åsession
+	private static List<UserFrontView> list= new ArrayList<>();//å­˜æ”¾æ¯ä¸ªç”¨æˆ·id(å¯ä»¥æ˜¾ç¤ºåœ¨çº¿æˆ–è€…ä¸åœ¨çº¿)
+	private static Map<String,Session> routetab= new HashMap<>();//å­˜æ”¾session
 	@OnOpen
-	public void onOpen(Session session,EndpointConfig config)//Á¬½ÓÊ±µ÷ÓÃ´Ëº¯Êı
+	public void onOpen(Session session,EndpointConfig config)//è¿æ¥æ—¶è°ƒç”¨æ­¤å‡½æ•°
 	{
 		this.session=session;
-		webSocket.add(this);         //Ìí¼Ó´ËServer      
-		addOnlineCount();	//ÔÚÏßÈËÊı¼Ó1£»
-		this.httpSession=(HttpSession) config.getUserProperties().get(HttpSession.class.getName());//»ñÈ¡´ËServerµÄhttpSession
-		this.openid =(String) httpSession.getAttribute("openid");//»ñÈ¡ÓÃ»§Id
+		webSocket.add(this);         //æ·»åŠ æ­¤Server      
+		addOnlineCount();	//åœ¨çº¿äººæ•°åŠ 1ï¼›
+		this.httpSession=(HttpSession) config.getUserProperties().get(HttpSession.class.getName());//è·å–æ­¤Serverçš„httpSession
+		this.openid =(String) httpSession.getAttribute("openid");//è·å–ç”¨æˆ·Id
 		System.out.println("openid:"+ openid);
 
 		insertList(list, openid);
-		routetab.put(openid, session);//°Ñsession°´ÓÃ»§Id´æ·Åµ½mapÖĞ
-		String message=getMessage("[" + openid + "]¼ÓÈëÁÄÌìÊÒ,µ±Ç°ÔÚÏßÈËÊıÎª"+getOnlineCount()+"Î»", "notice",  list);//»ñÈ¡¹ã²¥µÄÓï¾ä¸ñÊ½
-		broadcast(message);//¹ã²¥ÌáÊ¾Óï¾ä
+		routetab.put(openid, session);//æŠŠsessionæŒ‰ç”¨æˆ·Idå­˜æ”¾åˆ°mapä¸­
+		String message=getMessage("[" + openid + "]åŠ å…¥èŠå¤©å®¤,å½“å‰åœ¨çº¿äººæ•°ä¸º"+getOnlineCount()+"ä½", "notice",  list);//è·å–å¹¿æ’­çš„è¯­å¥æ ¼å¼
+		broadcast(message);//å¹¿æ’­æç¤ºè¯­å¥
 
 
-		//±éÀúÀëÏßµÄËùÓĞÏûÏ¢£¬·¢ËÍ¸øÔÙ´ÎµÇÂ¼µÄÓÃ»§¡£
+		//éå†ç¦»çº¿çš„æ‰€æœ‰æ¶ˆæ¯ï¼Œå‘é€ç»™å†æ¬¡ç™»å½•çš„ç”¨æˆ·ã€‚
 		Set<String> setByKey = VCache.getSetByKey(openid);
 		if(setByKey!=null&&setByKey.size()>0){
 			for (String s : setByKey) {
-				singleSend(s,(Session)routetab.get(openid));//·¢ËÍĞÅÏ¢¸øÖ¸¶¨ÓÃ»§
+				singleSend(s,(Session)routetab.get(openid));//å‘é€ä¿¡æ¯ç»™æŒ‡å®šç”¨æˆ·
 			}
 		}
 
@@ -51,29 +51,29 @@ public class ChatServer{
 		Boolean hsUser=false;
 		for (UserFrontView userFront : list) {
 			if(userFront.getOpenid().equals(openid)){
-				userFront.setOnLine("1");//ÔÚÏß
+				userFront.setOnLine("1");//åœ¨çº¿
 				hsUser=true;
 			}
 		}
 		if(!hsUser){
 			UserFrontView userFront = new UserFrontView();
-			userFront.setOnLine("1");//ÔÚÏß
+			userFront.setOnLine("1");//åœ¨çº¿
 			userFront.setOpenid(openid);
-			list.add(userFront);//Ìí¼Óµ½list
+			list.add(userFront);//æ·»åŠ åˆ°list
 		}
 
 	}
 
 	@OnClose
-	public void onClose(){//¹Ø±ÕÊ±µ÷ÓÃ
-		webSocket.remove(this);//ÒÆ³ı´ÎServer
-		subOnlineCount();     //ÈËÊı¼õÒ»
+	public void onClose(){//å…³é—­æ—¶è°ƒç”¨
+		webSocket.remove(this);//ç§»é™¤æ¬¡Server
+		subOnlineCount();     //äººæ•°å‡ä¸€
 		updateList(list, openid);
 
-//		list.update(openid);//ÒÆ³ı´ÎÓÃ»§id
-		routetab.remove(openid);//ÒÆ³ıMAPÖĞµÄ´ÎÓÃ»§
-		String message=getMessage("[" + openid +"]Àë¿ªÁËÁÄÌìÊÒ,µ±Ç°ÔÚÏßÈËÊıÎª"+getOnlineCount()+"Î»", "notice", list);
-		broadcast(message);//¹ã²¥
+//		list.update(openid);//ç§»é™¤æ¬¡ç”¨æˆ·id
+		routetab.remove(openid);//ç§»é™¤MAPä¸­çš„æ¬¡ç”¨æˆ·
+		String message=getMessage("[" + openid +"]ç¦»å¼€äº†èŠå¤©å®¤,å½“å‰åœ¨çº¿äººæ•°ä¸º"+getOnlineCount()+"ä½", "notice", list);
+		broadcast(message);//å¹¿æ’­
 	}
 
 	private void updateList(List<UserFrontView> list, String openid) {
@@ -86,21 +86,21 @@ public class ChatServer{
 	}
 
 	@OnMessage
-	public void onMessage(String _message)//½ÓÊÜµ½Êı¾İÊ±µ÷ÓÃ
+	public void onMessage(String _message)//æ¥å—åˆ°æ•°æ®æ—¶è°ƒç”¨
 	{
-		JSONObject chat= JSONObject.parseObject(_message);//½âÎö´ÎJSONÎª¶ÔÏó
-		JSONObject message= JSONObject.parseObject(chat.get("message").toString());//»ñÈ¡messageÖĞµÄÊı¾İ
-		if(message.get("to")==null||message.get("to").toString().equals("")){//Èç¹û·¢ËÍµÄÈËÎª¿Õ£¬Ôò½øĞĞ¹ã²¥
+		JSONObject chat= JSONObject.parseObject(_message);//è§£ææ¬¡JSONä¸ºå¯¹è±¡
+		JSONObject message= JSONObject.parseObject(chat.get("message").toString());//è·å–messageä¸­çš„æ•°æ®
+		if(message.get("to")==null||message.get("to").toString().equals("")){//å¦‚æœå‘é€çš„äººä¸ºç©ºï¼Œåˆ™è¿›è¡Œå¹¿æ’­
 			broadcast(_message);
 		}else
 		{
-			String [] userlist=message.get("to").toString().split(",");//»ñÈ¡Òª·¢ËÍµÄÃû³Æ
-			singleSend(_message,(Session)routetab.get(message.get("from")));//·¢ËÍ¸ø×Ô¼º
-			for(String user:userlist)//°´ÓÃ»§½øĞĞ·¢ËÍ
+			String [] userlist=message.get("to").toString().split(",");//è·å–è¦å‘é€çš„åç§°
+			singleSend(_message,(Session)routetab.get(message.get("from")));//å‘é€ç»™è‡ªå·±
+			for(String user:userlist)//æŒ‰ç”¨æˆ·è¿›è¡Œå‘é€
 			{
 				if(!user.equals(message.get("from")))
 				{
-					singleSend(_message,(Session)routetab.get(user));//·¢ËÍĞÅÏ¢¸øÖ¸¶¨ÓÃ»§
+					singleSend(_message,(Session)routetab.get(user));//å‘é€ä¿¡æ¯ç»™æŒ‡å®šç”¨æˆ·
 				}
 			}
 		}
@@ -110,7 +110,7 @@ public class ChatServer{
 		System.out.println(error);
 		error.printStackTrace();
 	}
-	public void broadcast(String message)//¹ã²¥ĞÅÏ¢
+	public void broadcast(String message)//å¹¿æ’­ä¿¡æ¯
 	{
 		for(ChatServer chat:webSocket){
 			try{
@@ -125,9 +125,9 @@ public class ChatServer{
 	        	if(session!=null){
 					session.getBasicRemote().sendText(message);
 				}else{
-	        		//±£´æµ½redis
-					JSONObject chat= JSONObject.parseObject(message);//½âÎö´ÎJSONÎª¶ÔÏó
-					JSONObject message2= JSONObject.parseObject(chat.get("message").toString());//»ñÈ¡messageÖĞµÄÊı¾İ
+	        		//ä¿å­˜åˆ°redis
+					JSONObject chat= JSONObject.parseObject(message);//è§£ææ¬¡JSONä¸ºå¯¹è±¡
+					JSONObject message2= JSONObject.parseObject(chat.get("message").toString());//è·å–messageä¸­çš„æ•°æ®
 					VCache.setVBySet((String)message2.get("to"),message);
 				}
 	        } catch (IOException e) {

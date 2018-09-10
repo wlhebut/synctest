@@ -7,6 +7,12 @@ public class Satis {
 
     private Integer erversatis;
 
+    private Integer transmits;
+
+    private Integer collections;
+
+    private Integer thumbs;
+
     public Integer getId() {
         return id;
     }
@@ -29,5 +35,29 @@ public class Satis {
 
     public void setErversatis(Integer erversatis) {
         this.erversatis = erversatis;
+    }
+
+    public Integer getTransmits() {
+        return transmits;
+    }
+
+    public void setTransmits(Integer transmits) {
+        this.transmits = transmits;
+    }
+
+    public Integer getCollections() {
+        return collections;
+    }
+
+    public void setCollections(Integer collections) {
+        this.collections = collections;
+    }
+
+    public Integer getThumbs() {
+        return thumbs;
+    }
+
+    public void setThumbs(Integer thumbs) {
+        this.thumbs = thumbs;
     }
 }

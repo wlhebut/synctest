@@ -3,6 +3,9 @@ package com.huntech.pvs.model.sys;
 import java.io.Serializable;
 
 public class WeiXinUser implements Serializable {
+
+
+    private static final long serialVersionUID = -8068533913829194251L;
     private Long id;
 
     private Long servManid;
@@ -161,5 +164,69 @@ public class WeiXinUser implements Serializable {
 
     public void setLatitude(String latitude) {
         this.latitude = latitude == null ? null : latitude.trim();
+    }
+
+    @Override
+    public String toString() {
+        return "WeiXinUser{" +
+                "id=" + id +
+                ", openId='" + openId + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", gender=" + gender +
+                ", city='" + city + '\'' +
+                ", province='" + province + '\'' +
+                ", country='" + country + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                ", userTel='" + userTel + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", latitude='" + latitude + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WeiXinUser that = (WeiXinUser) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (servManid != null ? !servManid.equals(that.servManid) : that.servManid != null) return false;
+        if (openId != null ? !openId.equals(that.openId) : that.openId != null) return false;
+        if (nickName != null ? !nickName.equals(that.nickName) : that.nickName != null) return false;
+        if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
+        if (city != null ? !city.equals(that.city) : that.city != null) return false;
+        if (province != null ? !province.equals(that.province) : that.province != null) return false;
+        if (country != null ? !country.equals(that.country) : that.country != null) return false;
+        if (avatarUrl != null ? !avatarUrl.equals(that.avatarUrl) : that.avatarUrl != null) return false;
+        if (unionId != null ? !unionId.equals(that.unionId) : that.unionId != null) return false;
+        if (userInfo != null ? !userInfo.equals(that.userInfo) : that.userInfo != null) return false;
+        if (homeAddress != null ? !homeAddress.equals(that.homeAddress) : that.homeAddress != null) return false;
+        if (companyAddress != null ? !companyAddress.equals(that.companyAddress) : that.companyAddress != null)
+            return false;
+        if (userTel != null ? !userTel.equals(that.userTel) : that.userTel != null) return false;
+        if (longitude != null ? !longitude.equals(that.longitude) : that.longitude != null) return false;
+        return latitude != null ? latitude.equals(that.latitude) : that.latitude == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (servManid != null ? servManid.hashCode() : 0);
+        result = 31 * result + (openId != null ? openId.hashCode() : 0);
+        result = 31 * result + (nickName != null ? nickName.hashCode() : 0);
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
+        result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + (province != null ? province.hashCode() : 0);
+        result = 31 * result + (country != null ? country.hashCode() : 0);
+        result = 31 * result + (avatarUrl != null ? avatarUrl.hashCode() : 0);
+        result = 31 * result + (unionId != null ? unionId.hashCode() : 0);
+        result = 31 * result + (userInfo != null ? userInfo.hashCode() : 0);
+        result = 31 * result + (homeAddress != null ? homeAddress.hashCode() : 0);
+        result = 31 * result + (companyAddress != null ? companyAddress.hashCode() : 0);
+        result = 31 * result + (userTel != null ? userTel.hashCode() : 0);
+        result = 31 * result + (longitude != null ? longitude.hashCode() : 0);
+        result = 31 * result + (latitude != null ? latitude.hashCode() : 0);
+        return result;
     }
 }

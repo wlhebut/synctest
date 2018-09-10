@@ -67,4 +67,16 @@ public class BaseServType {
     public void setServType(Byte servType) {
         this.servType = servType;
     }
+
+    @Override
+    public String toString() {
+        return "BaseServType{" +
+                "id=" + id +
+                ", pid=" + pid +
+                ", tname='" + tname + '\'' +
+                ", lawful=" + lawful +
+                ", state=" + state +
+                ", servType=" + servType +
+                '}';
+    }
 }

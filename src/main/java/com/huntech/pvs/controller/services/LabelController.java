@@ -42,7 +42,7 @@ public class LabelController extends BaseController{
         Long id = labelRequest.getId();
         String labelContent = labelRequest.getLabelContent();
         if(openid==null||id==null||labelContent==null||"".equals(labelContent)){
-            resultMap.put("dataDesc","参数不足");
+            resultMap.put("dataDesc","缺少openid|id|labelContent参数");
             resultMap.put("dataCode",-2);
         }
         try {

@@ -12,6 +12,16 @@ public class ServManRequest extends ServMan{
     private String longitude;
 
     private String latitude;
+    private String locationname;
+
+
+    public String getLocationname() {
+        return locationname;
+    }
+
+    public void setLocationname(String locationname) {
+        this.locationname = locationname;
+    }
 
     public String getLongitude() {
         return longitude;

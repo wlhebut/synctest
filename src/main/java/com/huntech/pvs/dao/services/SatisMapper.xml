@@ -5,6 +5,9 @@
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="SERID" property="serid" jdbcType="BIGINT" />
     <result column="ERVERSATIS" property="erversatis" jdbcType="INTEGER" />
+    <result column="TRANSMITS" property="transmits" jdbcType="INTEGER" />
+    <result column="COLLECTIONS" property="collections" jdbcType="INTEGER" />
+    <result column="THUMBS" property="thumbs" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -65,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    ID, SERID, ERVERSATIS
+    ID, SERID, ERVERSATIS, TRANSMITS, COLLECTIONS, THUMBS
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.huntech.pvs.model.services.SatisExample" >
     select
@@ -98,9 +101,11 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.huntech.pvs.model.services.Satis" >
-    insert into tbl_satis (ID, SERID, ERVERSATIS
+    insert into tbl_satis (ID, SERID, ERVERSATIS, 
+      TRANSMITS, COLLECTIONS, THUMBS
       )
-    values (#{id,jdbcType=INTEGER}, #{serid,jdbcType=BIGINT}, #{erversatis,jdbcType=INTEGER}
+    values (#{id,jdbcType=INTEGER}, #{serid,jdbcType=BIGINT}, #{erversatis,jdbcType=INTEGER}, 
+      #{transmits,jdbcType=INTEGER}, #{collections,jdbcType=INTEGER}, #{thumbs,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.huntech.pvs.model.services.Satis" >
@@ -115,6 +120,15 @@
       <if test="erversatis != null" >
         ERVERSATIS,
       </if>
+      <if test="transmits != null" >
+        TRANSMITS,
+      </if>
+      <if test="collections != null" >
+        COLLECTIONS,
+      </if>
+      <if test="thumbs != null" >
+        THUMBS,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -125,6 +139,15 @@
       </if>
       <if test="erversatis != null" >
         #{erversatis,jdbcType=INTEGER},
+      </if>
+      <if test="transmits != null" >
+        #{transmits,jdbcType=INTEGER},
+      </if>
+      <if test="collections != null" >
+        #{collections,jdbcType=INTEGER},
+      </if>
+      <if test="thumbs != null" >
+        #{thumbs,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -146,6 +169,15 @@
       <if test="record.erversatis != null" >
         ERVERSATIS = #{record.erversatis,jdbcType=INTEGER},
       </if>
+      <if test="record.transmits != null" >
+        TRANSMITS = #{record.transmits,jdbcType=INTEGER},
+      </if>
+      <if test="record.collections != null" >
+        COLLECTIONS = #{record.collections,jdbcType=INTEGER},
+      </if>
+      <if test="record.thumbs != null" >
+        THUMBS = #{record.thumbs,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -155,7 +187,10 @@
     update tbl_satis
     set ID = #{record.id,jdbcType=INTEGER},
       SERID = #{record.serid,jdbcType=BIGINT},
-      ERVERSATIS = #{record.erversatis,jdbcType=INTEGER}
+      ERVERSATIS = #{record.erversatis,jdbcType=INTEGER},
+      TRANSMITS = #{record.transmits,jdbcType=INTEGER},
+      COLLECTIONS = #{record.collections,jdbcType=INTEGER},
+      THUMBS = #{record.thumbs,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -169,13 +204,25 @@
       <if test="erversatis != null" >
         ERVERSATIS = #{erversatis,jdbcType=INTEGER},
       </if>
+      <if test="transmits != null" >
+        TRANSMITS = #{transmits,jdbcType=INTEGER},
+      </if>
+      <if test="collections != null" >
+        COLLECTIONS = #{collections,jdbcType=INTEGER},
+      </if>
+      <if test="thumbs != null" >
+        THUMBS = #{thumbs,jdbcType=INTEGER},
+      </if>
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.huntech.pvs.model.services.Satis" >
     update tbl_satis
     set SERID = #{serid,jdbcType=BIGINT},
-      ERVERSATIS = #{erversatis,jdbcType=INTEGER}
+      ERVERSATIS = #{erversatis,jdbcType=INTEGER},
+      TRANSMITS = #{transmits,jdbcType=INTEGER},
+      COLLECTIONS = #{collections,jdbcType=INTEGER},
+      THUMBS = #{thumbs,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

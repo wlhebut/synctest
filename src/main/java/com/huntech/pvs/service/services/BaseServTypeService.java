@@ -18,4 +18,6 @@ public interface BaseServTypeService {
 
     List<BaseServType> getOtherBaseServTypeByOpenId(BaseServTypeRequest baseServType);
 
+    List<BaseServType> getBaseServTypeAnon();
+
 }

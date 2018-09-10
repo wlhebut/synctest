@@ -3,16 +3,21 @@ package com.huntech.pvs.controller.services;
 import com.huntech.pvs.common.BaseController;
 import com.huntech.pvs.core.feature.orm.mybatis.Page;
 import com.huntech.pvs.dao.sys.WeiXinUserMapper;
+import com.huntech.pvs.model.address.Address;
 import com.huntech.pvs.model.services.SelfServ;
+import com.huntech.pvs.model.services.Serv;
 import com.huntech.pvs.model.services.ServMan;
+import com.huntech.pvs.model.services.ServManGps;
 import com.huntech.pvs.model.sys.WeiXinUser;
 import com.huntech.pvs.service.services.SelfServService;
+import com.huntech.pvs.service.services.ServManGpsService;
 import com.huntech.pvs.service.services.ServManService;
 import com.huntech.pvs.service.services.ServService;
 import com.huntech.pvs.service.sys.WeiXinUserService;
 import com.huntech.pvs.view.request.DetailServRequest;
 import com.huntech.pvs.view.request.OptServRequest;
 import com.huntech.pvs.view.services.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-
+@Slf4j
 @Controller
 @RequestMapping("serv")
 public class ServController extends BaseController {
@@ -45,44 +50,50 @@ public class ServController extends BaseController {
 
     @Autowired
     private WeiXinUserService weiXinUserService;
+
+    @Autowired
+    private ServManGpsService servManGpsService;
 /**
 * @Description: find serv
 * @Param: [servRequest]
 * @return: java.util.Map<java.lang.String,java.lang.Object>
 * @Author: Mr.Wang
 * @Date: 2018/5/25
+ *
+ * zoom;
+ * 1.默认为0,表示不根据位置查询服务
+ * 2.设置为1
+ *
 */
     @RequestMapping(value = "getBaseServ")
     @ResponseBody
     public Map<String, Object> getBaseServ(@RequestBody ServRequest servRequest) {
-
-        if(servRequest.getBaseservTypeid()==null||servRequest.getOpenid()==null||"".equals(servRequest.getOpenid())){
-            resultMap.put("dataCode","-2");
-            resultMap.put("dataDesc","缺少参数");
-            return resultMap;
-        }
-
-        if(servRequest.getLatitude()==null||servRequest.getLongitude()==null){
-            resultMap.put("dataCode","-3");
-            resultMap.put("dataDesc","为了更好的提供附近的私服，建议开启位置权限");
-            return resultMap;
-        }
-        Double latitude =  Double.valueOf(servRequest.getLatitude());//当前用户的（可能有缓存）
-        Double longitude =  Double.valueOf(servRequest.getLongitude());
-        System.out.println("controller:getBaseServ:api当前请求经纬度为:[longitude,latitude]---["+longitude+","+latitude+"]");
-        /*if(weiXinUserService.posChanged(servRequest)){//查询当前用户的经纬度是否发生了变化，若果变化了，就需要从新获取经纬度。
-            *//*resultMap.put("dataCode","0");
-            resultMap.put("dataDesc","当前位置发生了变化,请从新定位");
-            return resultMap;*//*
-            new WeiXinUser().
-            weiXinUserService.updateWeiXinUserByOpenId()
-        }*/
-        //是否可以开始实时定位 ？？？？、
-
-
-
         try {
             Page<ServView> list = servService.getBaseServ( servRequest);
+            resultMap.put("data",list);
+            resultMap.put("dataCode","1");
+            resultMap.put("dataDesc","ok");
+            return resultMap;
+        }catch (Exception e) {
+            resultMap.put("dataCode","-1");
+            resultMap.put("dataDesc","后台错误");
+            e.printStackTrace();
+            return resultMap;
+        }
+    }
+
+    /**
+    * @Description: baseservTypeid 是必须携带的参数
+    * @Param: [servRequest]
+    * @return: java.util.Map<java.lang.String,java.lang.Object>
+    * @Author: Mr.Wang
+    * @Date: 2018/7/6
+    */
+    @RequestMapping(value = "getBaseServAnon")
+    @ResponseBody
+    public Map<String, Object> getBaseServAnon(@RequestBody ServRequest servRequest) {
+        try {
+            Page<ServView> list = servService.getBaseServAnon(servRequest);
             resultMap.put("data",list);
             resultMap.put("dataCode","1");
             return resultMap;
@@ -127,15 +138,25 @@ public class ServController extends BaseController {
     public Map<String, Object> releaseServ(@RequestBody ReleaseServRequest releaseServRequest, HttpServletRequest request) {
 //        List<ServView> list = servService.getBaseServ( servRequest);
 
-        if(releaseServRequest.getLongitude()==null||releaseServRequest.getLatitude()==null){
+        if(releaseServRequest.getLongitude()==null||releaseServRequest.getLatitude()==null||"".equals(releaseServRequest.getOpenid())){
+            resultMap.clear();
             resultMap.put("dataCode","-2");
             resultMap.put("dataDesc","经纬度参数：[longitude,latitude]");
             return resultMap;
         }
-
-
         String longitude = releaseServRequest.getLongitude();
         String latitude = releaseServRequest.getLatitude();
+
+        //完善定位
+        String openid = releaseServRequest.getOpenid();
+        WeiXinUser weiXinUserByOpenId = weiXinUserService.getWeiXinUserByOpenId(openid);
+
+        weiXinUserByOpenId.setLongitude(longitude);
+        weiXinUserByOpenId.setLatitude(latitude);
+        if(!"".equals(openid)&&openid!=null){
+            weiXinUserService.updateWeiXinUserByOpenId(weiXinUserByOpenId);
+        }
+
 
         System.out.println("发布私服：releaseServ:api当前请求经纬度为的经纬度为:[longitude,latitude]---["+longitude+","+latitude+"]");
         try {
@@ -143,11 +164,11 @@ public class ServController extends BaseController {
             resultMap.put("dataCode",1);
             if(integer==0){
                 resultMap.put("dataCode",0);
-                resultMap.put("dataDesc","每个用户只可以发布3条私服");
-            }else if(integer==-3){
-                resultMap.put("dataCode",-3);
-                resultMap.put("dataDesc","需要获取微信登录权限");
+                resultMap.put("dataDesc","每个用户只可以发布5条私服");
+                log.info("微信用户：{}已经发布{}条以上私服！",releaseServRequest.getOpenid(),integer);
+                return resultMap;
             }
+
         } catch (Exception e) {
             resultMap.put("dataCode",-1);
             e.printStackTrace();
@@ -162,7 +183,7 @@ public class ServController extends BaseController {
 //        List<ServView> list = servService.getBaseServ( servRequest);
         if(releaseServRequest.getId()==null){
             resultMap.put("dataCode",-2);
-            resultMap.put("dataDesc","参数不足");
+            resultMap.put("dataDesc","缺少参数id");
             return resultMap;
         }
         try {
@@ -212,7 +233,7 @@ public class ServController extends BaseController {
         Long id = request.getId();
         if(id==null){
             resultMap.put("dataCode","-2");
-            resultMap.put("dataDesc","请求参数不足");
+            resultMap.put("dataDesc","缺少id参数");
             return resultMap;
         }
         try {
@@ -236,9 +257,18 @@ public class ServController extends BaseController {
 //        List<ServView> list = servService.getBaseServ( servRequest);
         try {
             Page<ServView> releaseServs = servService.getReleaseServs(servRequest,request);
-            resultMap.put("data",releaseServs);
-            resultMap.put("dataCode",1);
+            if(releaseServs!=null){
+                resultMap.clear();
+                resultMap.put("data",releaseServs);
+                resultMap.put("dataCode",1);
+            }else{
+                resultMap.clear();
+                resultMap.put("data",releaseServs);
+                resultMap.put("dataCode",-1);
+            }
+
         } catch (Exception e) {
+            resultMap.clear();
             resultMap.put("dataCode",-1);
             e.printStackTrace();
         }
@@ -252,7 +282,7 @@ public class ServController extends BaseController {
 //        List<ServView> list = servService.getBaseServ( servRequest);
         if(servRequest.getId()==null){
             resultMap.put("dataCode",-2);
-            resultMap.put("dataDesc","参数不足");
+            resultMap.put("dataDesc","缺少id参数");
             return resultMap;
         }
         try {
@@ -286,9 +316,10 @@ public class ServController extends BaseController {
                 e.printStackTrace();
                 return  resultMap;
             }
+        }else{
+            resultMap.put("dataCode","-2");//参数不全
+            resultMap.put("dataDesc","缺少id参数");//参数不全
         }
-        resultMap.put("dataCode","-2");//参数不全
-        resultMap.put("dataDesc","参数不全");//参数不全
         return resultMap;
     }
 
@@ -321,22 +352,59 @@ public class ServController extends BaseController {
         return resultMap;
     }
 
+/**
+* @Description: 转发
+* @Param: [optServRequest]
+* @return: java.util.Map<java.lang.String,java.lang.Object>
+* @Author: Mr.Wang
+* @Date: 2018/9/3
+*/
+    @RequestMapping(value = "transmits")
+    @ResponseBody
+    public Map<String, Object> transmits(@RequestBody OptServRequest optServRequest) {
+        try {
+            servService.transmits(optServRequest);
+            resultMap.put("dataCode","1");
+        } catch (Exception e) {
+            resultMap.put("dataCode","0");
+            e.printStackTrace();
+        }
+        return resultMap;
+    }
+
     //	用于获取发送信息时的头像，使用流
     @RequestMapping("/head/{servManid}")
     public void gethead(@PathVariable("servManid")Long servManid, HttpServletRequest request, HttpServletResponse response) throws IOException
     {
         String realurl=request.getServletContext().getRealPath("/");
-        ServMan man = servManService.getServManByPriKey(servManid);
-        if(man!=null){
-            String imageurl=man.getSpic();
-            String url=realurl+"images"+ File.separator+imageurl;
+        /*log.info("request.getServletContext().getRealPath{}",realurl);
+        Serv serv = servService.selectByPrimaryKey(servManid);
+        Long servManidReal = null;
+        WeiXinUser weiXinSerByServId =null;*/
+        WeiXinUser weiXinSerByServId =null;
+        if(servManid!=null){
+            weiXinSerByServId = weiXinUserService.getWeiXinSerByServId(servManid);
+        }
+
+        if(servManid!=null&&weiXinSerByServId.getOpenId()!=null){
+            String url=realurl+File.separator+"images"+File.separator+weiXinSerByServId.getOpenId();
+            logger.info("log:reuest-->url:{}"+url);
+            System.out.println(url);
+            String png=".png";
+            String jpg=".jpg";
+            String jpeg=".jpeg";
             InputStream inputStream;
-            if(new File(url).exists()){
-                inputStream=new FileInputStream(url);
+            if(new File(url+png).exists()){
+                inputStream=new FileInputStream(url+png);
+            }else if(new File(url+jpg).exists()){
+                inputStream=new FileInputStream(url+jpg);
+            }else if(new File(url+jpeg).exists()){
+                inputStream=new FileInputStream(url+jpeg);
             }else{
-                url=realurl+"images"+ File.separator+"default.png";
+                url=realurl+File.separator+"images"+File.separator+"default.png";
                 inputStream=new FileInputStream(url);
             }
+
 
             ServletOutputStream outputStream=response.getOutputStream();
             response.setContentType("image/jpeg; charset=UTF-8");

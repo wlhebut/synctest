@@ -21,6 +21,7 @@ public class DetailServView implements Serializable {
 
     private String longitude;//经度
     private String latitude;
+    private String servAddress;
 
     private Double distance;//距离
 
@@ -36,6 +37,15 @@ public class DetailServView implements Serializable {
 
     private Integer servTimeid;
     private Byte state;
+
+
+    public String getServAddress() {
+        return servAddress;
+    }
+
+    public void setServAddress(String servAddress) {
+        this.servAddress = servAddress;
+    }
 
     public String getServNote() {
         return servNote;

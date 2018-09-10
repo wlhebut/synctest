@@ -33,7 +33,11 @@ import java.util.Map.Entry;
  */
 public class BaseController {
 
-	
+
+	public static int MORE_PARAMETER_NEED=-2;//参数不全
+	public static int RESCODE =1;//
+	public static int SYS_ERROR_CODE =-1;//
+
 	protected int pageNo =1;
 	public static  int pageSize = 10;
 	protected final static Logger logger = Logger.getLogger(BaseController.class);
@@ -103,7 +107,7 @@ public class BaseController {
 			}
 		}
 		
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		params = BeanUtils.describe(obj);
 		params = handleParams(params);
 		// 回填值项

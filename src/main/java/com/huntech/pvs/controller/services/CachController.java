@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class CachController {
 
 
-//	展示用户信息
+	//	灞曠ず鐢ㄦ埛淇℃伅
 	@RequestMapping("insertCach")
 	@ResponseBody
 	public HashMap<String, Object>  information( @RequestBody MessageData messageData)
@@ -26,7 +26,7 @@ public class CachController {
 
 
 		VCache.setCache(0,messageData.getMessage().getTo(), JSONObject.toJSON(messageData).toString(),1000*60*60*24*20);
-		resMap.put("dataDesc","数据存储到了redis");
+		resMap.put("dataDesc","鏁版嵁瀛樺偍鍒颁簡redis");
 		System.out.println(messageData);
 		resMap.put("dataCode","1");
 		return resMap;

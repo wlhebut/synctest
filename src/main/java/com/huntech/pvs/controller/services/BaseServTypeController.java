@@ -1,10 +1,12 @@
 package com.huntech.pvs.controller.services;
 
 import com.huntech.pvs.common.BaseController;
-import com.huntech.pvs.model.address.AddressProvince;
 import com.huntech.pvs.model.services.BaseServType;
+import com.huntech.pvs.model.sys.WeiXinUser;
 import com.huntech.pvs.service.services.BaseServTypeService;
+import com.huntech.pvs.service.sys.WeiXinUserService;
 import com.huntech.pvs.view.request.BaseServTypeRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
+@Slf4j
 @Controller
 @RequestMapping("baseServType")
 public class BaseServTypeController extends BaseController {
@@ -22,6 +26,8 @@ public class BaseServTypeController extends BaseController {
     @Autowired
     private BaseServTypeService baseServTypeService;
 
+    @Autowired
+    private WeiXinUserService weiXinUserService;
     /**
     * @Description:
     * @Param: [baseServType]
@@ -61,10 +67,32 @@ public class BaseServTypeController extends BaseController {
     @RequestMapping(value = "getBaseServTypeByOpenId")
     @ResponseBody
     public Map<String, Object> getBaseServTypeByOpenId(@RequestBody  BaseServTypeRequest baseServType) {
+
+        String openid = baseServType.getOpenid();//用户的openid。
+        log.info("getBaseServTypeByOpenId():openid:{}",openid);
         try {
             List<BaseServType> list = baseServTypeService.getBaseServTypeByOpenId( baseServType);
             resultMap.put("data",list);
             resultMap.put("dataCode","1");
+            resultMap.put("dataDesc","返回了私人定制版私人服务！");
+            log.info("getBaseServTypeByOpenId():openid:返回数据 {}"+list.toString());
+        } catch (Exception e) {
+            resultMap.put("dataCode","-1");
+            resultMap.put("dataDesc","系统错误");
+            e.printStackTrace();
+        }
+        return resultMap;
+    }
+
+    @RequestMapping(value = "getBaseServTypeAnon")
+    @ResponseBody
+    public Map<String, Object> getBaseServTypeAnon() {
+
+        try {
+            List<BaseServType> list = baseServTypeService.getBaseServTypeAnon();
+            resultMap.put("data",list);
+            resultMap.put("dataCode","1");
+            resultMap.put("dataDesc","匿名访问");
         } catch (Exception e) {
             resultMap.put("dataCode","0");
             e.printStackTrace();
@@ -105,7 +133,7 @@ public class BaseServTypeController extends BaseController {
             Integer integer = baseServTypeService.updateByOpenId(baseServTypes);
             resultMap.put("dataCode","1");
         } catch (Exception e) {
-            resultMap.put("dataCode","0");
+            resultMap.put("dataCode","-1");
             e.printStackTrace();
         }
         return resultMap;

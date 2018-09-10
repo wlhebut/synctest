@@ -2,11 +2,13 @@ package com.huntech.pvs.service.services.impl;
 
 import com.huntech.pvs.dao.services.ServManGpsMapper;
 import com.huntech.pvs.dao.services.ServManMapper;
+import com.huntech.pvs.model.address.Address;
 import com.huntech.pvs.model.services.ServMan;
 import com.huntech.pvs.model.services.ServManExample;
 import com.huntech.pvs.model.services.ServManGps;
 import com.huntech.pvs.model.services.ServManGpsExample;
 import com.huntech.pvs.model.sys.WeiXinUser;
+import com.huntech.pvs.service.address.AddressService;
 import com.huntech.pvs.service.services.ServManGpsService;
 import com.huntech.pvs.service.services.ServManService;
 import com.huntech.pvs.service.sys.WeiXinUserService;
@@ -33,26 +35,68 @@ public class ServManServiceImpl implements ServManService {
     private ServManGpsMapper servManGpsMapper;
     @Autowired
     private ServManGpsService servManGpsService;
+    @Autowired
+    private AddressService addressService;
     @Override
     public ServManView getServMan(String openid) {
 
         WeiXinUser weiXinUserByOpenId = weiXinUserService.getWeiXinUserByOpenId(openid);
-        if(weiXinUserByOpenId!=null&&weiXinUserByOpenId.getServManid()!=null){
-            ServMan servMan= servManMapper.selectByPrimaryKey(weiXinUserByOpenId.getServManid());
-            ServManGps servManGps = servManGpsService.getServManGps(servMan.getId());
-            ServManView servManView = new ServManView();
-            servManView.setId(servMan.getId());
-            servManView.setSage(servMan.getSage());
-            servManView.setSname(servMan.getSname());
-            servManView.setSsex(servMan.getSsex());
-            servManView.setStel(servMan.getStel());
-            servManView.setLatitude(servManGps.getLatitude());
-            servManView.setLongitude(servManGps.getLongitude());
-            servManView.setServAddress(servMan.getServAddress());
-            servManView.setIdentityCard(servMan.getIdentityCard());
+        ServManView servManView = new ServManView();
+        List<Address> addressList=null;
+        addressList = addressService.getAddress(weiXinUserByOpenId.getOpenId());
+        Address address=null;
+        if(addressList!=null&&addressList.size()>0){
+            address=addressList.get(0);
+        }
+        if(weiXinUserByOpenId!=null){
+            if(weiXinUserByOpenId.getServManid()!=null){
+                ServMan servMan= servManMapper.selectByPrimaryKey(weiXinUserByOpenId.getServManid());
+                ServManGps servManGps=null;
+                if(servMan!=null){
+                    servManGps = servManGpsService.getServManGps(servMan.getId());
+                }
+                if(servMan!=null){
+                    servManView.setId(servMan.getId());
+                    servManView.setSage(servMan.getSage());
+                    servManView.setSname(servMan.getSname());
+                    servManView.setSsex(servMan.getSsex());
+                    servManView.setStel(servMan.getStel());
+                    servManView.setServAddress(servMan.getServAddress());
+                    servManView.setIdentityCard(servMan.getIdentityCard());
+                    insertGps(address,servManGps,servManView);
+                    servManView.setSpic(openid);
+                }
+            }else{
+                ServMan servMan = new ServMan();
+                servMan.setEnable("1");
+                servManMapper.insertSelective(servMan);
+                servManView.setId(servMan.getId());
+                servManView.setSname(weiXinUserByOpenId.getNickName());
+                Byte gender = weiXinUserByOpenId.getGender();
+                servManView.setSsex(String.valueOf(gender));
+                servManView.setStel(weiXinUserByOpenId.getUserTel()==null?"":weiXinUserByOpenId.getUserTel());
+                insertGps(address,null,servManView);
+                servManView.setSpic(openid);
+            }
             return servManView;
         }
         return null;
+
+    }
+
+    private void insertGps(Address address,ServManGps  servManGps ,ServManView servManView) {
+        if(servManGps!=null){
+            servManView.setLongitude(servManGps.getLongitude());
+            servManView.setLatitude(servManGps.getLatitude());
+        }else{
+            if(address!=null){
+                servManView.setLongitude(address.getLongitude());
+                servManView.setLatitude(address.getLatitude());
+            }else{
+                servManView.setLongitude("");
+                servManView.setLatitude("");
+            }
+        }
 
     }
 

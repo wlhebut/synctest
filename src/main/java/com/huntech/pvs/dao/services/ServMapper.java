@@ -12,6 +12,7 @@ import com.huntech.pvs.view.services.ServView;
 public interface ServMapper {
 
 
+    List<ServView> selectServsView(Map<String, Object> params);
     List<ServView> selectServsView(Page<ServView> servPage, Map<String, Object> params);
     List<ServView> selectReleaseServsView(Page<ServView> servPage, Map<String, Object> params);
 
@@ -22,6 +23,7 @@ public interface ServMapper {
     List<ServView> selectAttentionServsView(Page<ServView> servPage,Map<String, Object> params);
     Integer selectAttentionServsViewCount(Map<String, Object> params);
 
+    List<ServView> selectRecommendServsView(Map<String, Object> params);
     List<ServView> selectRecommendServsView(Page<ServView> servPage,Map<String, Object> params);
     Integer selectRecommendServsViewCount(Map<String, Object> params);
 

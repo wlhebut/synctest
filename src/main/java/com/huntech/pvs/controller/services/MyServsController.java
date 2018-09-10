@@ -25,8 +25,8 @@ public class MyServsController extends BaseController{
     @ResponseBody
     public Map<String, Object> insertMyServs(@RequestBody MyServsRequest myServs){
 
-        if(myServs.getId()==null||myServs.getOpenid()==null||"".equals(myServs.getOpenid())){
-            resultMap.put("dataDesc","参数不足");
+        if(myServs.getOpenid()==null||"".equals(myServs.getOpenid())){
+            resultMap.put("dataDesc","缺少id|openid参数");
             resultMap.put("dataCode",-2);
             return resultMap;
         }
@@ -44,8 +44,8 @@ public class MyServsController extends BaseController{
     @RequestMapping("deleteMyServs")
     @ResponseBody
     public Map<String, Object> deleteMyServs(@RequestBody MyServsDelRequest myServs){
-        if(myServs.getId()==null||myServs.getMyBaseservTypeid()==null){
-            resultMap.put("dataDesc","参数不足");
+        if(myServs.getId()==null){
+            resultMap.put("dataDesc","缺少id参数");
             resultMap.put("dataCode",-2);
             return resultMap;
         }
@@ -64,7 +64,7 @@ public class MyServsController extends BaseController{
     @ResponseBody
     public Map<String, Object> getMyServById(@RequestBody MyServsRequest myServs){
         if(myServs.getId()==null||myServs.getOpenid()==null||"".equals(myServs.getOpenid())){
-            resultMap.put("dataDesc","参数不足");
+            resultMap.put("dataDesc","缺少openid|id参数");
             resultMap.put("dataCode",-2);
             return resultMap;
         }
@@ -85,7 +85,7 @@ public class MyServsController extends BaseController{
     @ResponseBody
     public Map<String, Object> updateMyServById(@RequestBody MyServs myServs){
         if(myServs.getId()==null||myServs.getOpenid()==null||"".equals(myServs.getOpenid())){
-            resultMap.put("dataDesc","参数不足");
+            resultMap.put("dataDesc","缺少id|openid参数");
             resultMap.put("dataCode",-2);
             return resultMap;
         }

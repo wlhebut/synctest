@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface WeiXinLoginService {
     String HasUser(WeiXinLoginRequest weiXinLoginRequest, HttpServletRequest request);
-    int insertUser(WeiXinLoginRequest weiXinLoginRequest);
+    int insertUser(WeiXinUser weiXinLoginRequest);
 
     WeiXinUser getWeinXinUser(HttpServletRequest request);
 

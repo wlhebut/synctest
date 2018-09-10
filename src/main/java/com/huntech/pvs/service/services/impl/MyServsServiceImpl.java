@@ -10,6 +10,7 @@ import com.huntech.pvs.view.request.MyServsDelRequest;
 import com.huntech.pvs.view.request.MyServsRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class MyServsServiceImpl implements MyServsService {
@@ -22,13 +23,13 @@ public class MyServsServiceImpl implements MyServsService {
     public int insertMyServs(MyServsRequest myServsRequest) {
         String newMyServType = myServsRequest.getNewMyServType();
         Long id = myServsRequest.getId();
-        if(id.equals((long) -1)){//新增加的分类
+        /*if(id.equals((long) -1)){//新增加的分类
             MyBaseservType myBaseservType = new MyBaseservType();
             myBaseservType.setMyServType(newMyServType);
             myBaseservType.setOpenid(myServsRequest.getOpenid());
             myBaseservTypeMapper.insertSelective(myBaseservType);
              id = myBaseservType.getId();
-        }
+        }*/
         MyServs myServs = new MyServs();
         myServs.setMyBaseservTypeid(id);
         myServs.setLatitude(myServsRequest.getLatitude());

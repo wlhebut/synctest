@@ -43,6 +43,25 @@ public class WeinXinUserController extends BaseController{
             return  resultMap;
         }
     }
+    @RequestMapping("getOpenidUrl")
+    @ResponseBody
+    public Map<String, Object> getOpenidUrl(@RequestBody WeiXinUser weiXinUser){
+        if(weiXinUser.getOpenId()==null||"".equals(weiXinUser.getOpenId())){
+            resultMap.put("dataCode","-2");
+            resultMap.put("dataDesc","请上传openId参数");
+            return resultMap;
+        }
+
+        if(weiXinUser!=null&&weiXinUser.getOpenId()!=null){
+            WeiXinUser weiXinUserByOpenId = weiXinUserService.getWeiXinUserByOpenId(weiXinUser.getOpenId());
+            resultMap.put("dataCode","1");
+            resultMap.put("data",weiXinUserByOpenId);
+            return resultMap;
+        }else{
+            resultMap.put("dataCode",-1);
+            return  resultMap;
+        }
+    }
 
 
 

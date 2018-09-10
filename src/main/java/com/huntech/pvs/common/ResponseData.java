@@ -43,7 +43,17 @@ public class ResponseData {
     }
 
     public static ResponseData forbidden() {
-        return new ResponseData(403, "Forbidden");
+        return new ResponseData(403, "head中没有携带token");
+    }
+    public static ResponseData reLogin() {
+        return new ResponseData(-3, "登录用户信息过期,请从新登录！");
+    }
+    public static ResponseData login() {
+        return new ResponseData(-3, "需要获取您的信息！");
+    }
+
+    public static ResponseData position() {
+        return new ResponseData(-4, "需要获取您的位置信息！");
     }
 
     public static ResponseData unauthorized() {

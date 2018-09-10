@@ -65,7 +65,7 @@ public class LabelServiceImpl implements LabelService {
                     return 2;
                 }
             }else{
-                //需要获取用户信息。
+                //需要获取微信授权。
                 return -3;
             }
 
@@ -73,7 +73,7 @@ public class LabelServiceImpl implements LabelService {
             return -1;//系统错误
         }
         int labelNums = this.getLabelNums(labelRequest);
-        if(labelNums>3){
+        if(labelNums>10){
             return 0;
         }
         Label label = new Label();
@@ -113,8 +113,9 @@ public class LabelServiceImpl implements LabelService {
         LabelExample.Criteria criteria = example.createCriteria();
         Long servManid = labelRequest.getServManid();
         if(servManid!=null&&labelRequest.getOpenid()!=null){
-            criteria.andServManidEqualTo(labelRequest.getServManid());
+//            criteria.andServManidEqualTo(labelRequest.getServManid());
             criteria.andOpenidEqualTo(labelRequest.getOpenid());
+            criteria.andServIdEqualTo(labelRequest.getId());//对某个服务最多评价三次，以免恶意评价。
             return labelMapper.countByExample(example);
         }else{
             return 0;

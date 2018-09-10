@@ -14,9 +14,19 @@ public class ServRequest extends PageRequest {
 
     private String latitude;//纬度
 
-    private Integer zoom;//放大级别
+    private Integer zoom;//更改为用户距离：默认为
 
     private String  openid;
+
+    private String reLocation;//重新定位--如果客户重新选择了定位，那么就用客户的定位（设置为1），这个值默认为0.
+
+    public String getReLocation() {
+        return reLocation;
+    }
+
+    public void setReLocation(String reLocation) {
+        this.reLocation = reLocation;
+    }
 
     public String getOpenid() {
         return openid;

@@ -9,16 +9,11 @@ import com.huntech.pvs.model.services.SelfBaseServTypeExample;
 import com.huntech.pvs.service.services.BaseServTypeService;
 import com.huntech.pvs.service.services.SelfServTypeService;
 import com.huntech.pvs.view.request.BaseServTypeRequest;
-import com.huntech.pvs.view.services.BaseServTypeView;
-import org.apache.poi.util.SystemOutLogger;
-import org.apache.taglibs.standard.lang.jstl.NullLiteral;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class BaseServTypeImpl implements BaseServTypeService {
@@ -109,9 +104,13 @@ public class BaseServTypeImpl implements BaseServTypeService {
 
     @Override
     public List<BaseServType> getBaseServTypeByOpenId(BaseServTypeRequest baseServType) {
-        List<BaseServType> list;
+        List<BaseServType> list = new ArrayList<>();
         String openid = baseServType.getOpenid();
-        if(openid!=null&&!"".equals(openid)){
+        if(null==openid||"".equals(openid)){
+            BaseServTypeExample example = new BaseServTypeExample();
+            example.setOrderByClause(" ID ASC");
+            list =baseServTypeMapper.selectByExample(example);
+        }else{
             SelfBaseServTypeExample selfBaseServTypeExample = new SelfBaseServTypeExample();
             SelfBaseServTypeExample.Criteria criteria = selfBaseServTypeExample.createCriteria();
             criteria.andOpenidEqualTo(openid);
@@ -126,22 +125,13 @@ public class BaseServTypeImpl implements BaseServTypeService {
             }
             BaseServTypeExample example = new BaseServTypeExample();
             BaseServTypeExample.Criteria criteria1 = example.createCriteria();
+            example.setOrderByClause(" ID ASC");
             if(integers.size()>0){
                 criteria1.andIdIn(integers);
             }else{
                 selfServTypeService.insertAllType(openid);
             }
             list = baseServTypeMapper.selectByExample(example);
-            for (BaseServType servType : list) {
-
-                System.out.println("1查询的私服分类："+servType.getTname());
-            }
-        }else{
-            list = baseServTypeMapper.selectByExample(null);
-            for (BaseServType servType : list) {
-                System.out.println("22查询的私服分类："+servType.getTname());
-            }
-
         }
         return list;
     }
@@ -194,5 +184,11 @@ public class BaseServTypeImpl implements BaseServTypeService {
             return otherBaseServTypeByOpenId;
         }*/
 //        return null;
+    }
+
+    @Override
+    public List<BaseServType> getBaseServTypeAnon() {
+        System.out.println("匿名访问,展示最基本的共有私服！");
+        return baseServTypeMapper.selectByExample(null);
     }
 }
