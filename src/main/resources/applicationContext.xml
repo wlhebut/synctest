@@ -133,10 +133,10 @@
     </aop:config>
 
     <!-- 扩展 -->
-    <aop:config>
+   <!-- <aop:config>
         <aop:pointcut id="exServiceMethods" expression="execution(* com.huntech.web.service..*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="exServiceMethods"/>
-    </aop:config>
+    </aop:config>-->
 
     <!-- 配置使Spring采用CGLIB代理 --><!-- add in springMVC 2016-05-06 13:55-->
     <!--<aop:aspectj-autoproxy proxy-target-class="true"/>-->
