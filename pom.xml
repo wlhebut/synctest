@@ -256,19 +256,19 @@
 		<!-- log end -->
 
 		<!-- servlet api -->
-		<dependency>
+		<!--<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.0.1</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency>-->
 
 		<!-- jstl -->
-		<dependency>
+		<!--<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
-		</dependency>
+		</dependency>-->
 
 		<!-- start apache -->
 		<dependency>
@@ -492,7 +492,11 @@
 			<version>${json.version}</version>
 		</dependency>
 		<!-- /Spring 升级4+ 依赖的JSON包 -->
-
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.23</version>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
 
@@ -501,11 +505,7 @@
 			<artifactId>spring-websocket</artifactId>
 			<version>4.0.5.RELEASE</version>
 		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>1.2.23</version>
-		</dependency>
+
 		<!-- jwt -->
 		<!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
 		<dependency>
@@ -514,5 +514,55 @@
 			<version>2.2.0</version>
 		</dependency>
 
+
+		<!-- WebSocket配置开始-->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-messaging</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- WebSocket配置结束-->
+
+
+		<!-- servlet 配置开始 -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope> <!-- 编译时不需要发布,否则在集成maven的tomcat插件会出现错误 -->
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope> <!-- 编译时不需要发布,否则在集成maven的tomcat插件会出现错误 -->
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.2</version>
+			<scope>provided</scope> <!-- 编译时不需要发布,否则在集成maven的tomcat插件会出现错误 -->
+		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.16</version>
+		</dependency>
+		<!-- servlet 配置结束 -->
+		<!--<dependency>
+			<groupId>org.apache.coyote</groupId>
+			<artifactId>com.springsource.org.apache.coyote</artifactId>
+			<version>6.0.24</version>
+		</dependency>-->
 	</dependencies>
 </project>
