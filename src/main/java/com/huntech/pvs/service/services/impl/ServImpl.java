@@ -297,7 +297,7 @@ public class ServImpl implements ServService {
         List<ServView> result = baseServ.getResult();
         List<Object> servManid = ListUtils.findObject(result, "servManid");
         List<ServManGps> servMan = servManService.getServManGps(servManid);
-        HashMap<Long, ServManGps> servManMap = new HashMap<>();
+        HashMap<String, ServManGps> servManMap = new HashMap<>();
 
         for (ServManGps servManGps : servMan) {
             servManMap.put(servManGps.getServManid(),servManGps);
@@ -320,85 +320,43 @@ public class ServImpl implements ServService {
     @Override
     public Integer releaseServ(ReleaseServRequest releaseServRequest, HttpServletRequest request) {
         Integer releaseServCount = this.getReleaseServCount(releaseServRequest.getOpenid());
-
         String token = request.getHeader("token");
 //        String openid = JWT.unsign(token, String.class);
         String openid =releaseServRequest.getOpenid();
-        if(openid==null||openid.equals("")){
-            openid=releaseServRequest.getOpenid();
-        }
-        Long id = null;
 //        WeiXinUser weiXinUser = VCache.get(openid, WeiXinUser.class);
-        WeiXinUser weiXinUser = null;
-        String avatarUrl = null;
+        WeiXinUser weiXinUser;
         String maxPublishNum="5";
-        Long servManid =null;
-
         weiXinUser = weiXinUserService.getWeiXinUserByOpenId(openid);
         if(weiXinUser!=null){
-            id=weiXinUser.getId();//serv_manid
             if(weiXinUser.getUserInfo()!=null){
                 maxPublishNum = weiXinUser.getUserInfo();//可以发布的最大数量
             }
-
         }
-
         Integer maxReleaseCountValue=Integer.parseInt(maxPublishNum);
-        if(releaseServCount!=null){
-            if(releaseServCount>maxReleaseCountValue){
-                return 0;
-            }
-            if(releaseServCount==0){
-                if(weiXinUser!=null){
-                    servManid = weiXinUser.getServManid();
-                }
-                if(null==servManid){
-                    insertServMan(openid, weiXinUser);
-                }
-            }
-        }else{
-            //发布私服前，获取当前登录用户的信息，新增servman到服务器。
-            if(weiXinUser!=null){
-                servManid = weiXinUser.getServManid();
-            }
-            if(null==servManid){
-                insertServMan(openid, weiXinUser);
-            }
+        if(Objects.equals(releaseServCount, maxReleaseCountValue)){
+            return 0;
         }
-//        id = weiXinUser.getId();//serv_manid
-
-
-
-
+        //插入servman
+        if(releaseServCount==0){
+            insertServMan(openid, weiXinUser);
+        }
         //发布私服前下载用户头像到服务器
-        if(weiXinUser!=null){
-            avatarUrl = weiXinUser.getAvatarUrl();
-        }
-
-        if(avatarUrl!=null){
+        if(weiXinUser!=null&&weiXinUser.getAvatarUrl()!=null){
             String realurl=request.getServletContext().getRealPath("/");
             String path=realurl+"images"+ File.separator;
             log.info("上传文件的路径为：{}",path);
-            DownLoadUrl.getImageByUrl(avatarUrl,path,openid+".png");
-            ServMan servMan = new ServMan();
-            servMan.setSpic(openid);
-            servMan.setId(servManid);
-            servManMapper.updateByPrimaryKeySelective(servMan);
+            DownLoadUrl.getImageByUrl(weiXinUser.getAvatarUrl(),path,openid+".png");
         }
-
-        Serv serv = new Serv();
-        int insert = 0;
-        if(releaseServRequest.getServType()==0L){
+            Serv serv = new Serv();
             serv.setServName(releaseServRequest.getServName());
             serv.setBaseservTypeid(releaseServRequest.getBaseServTypeid());
-            serv.setServManid(id);
 //            serv.setSelfservTypeid(0L);//个性化私服为0L
             serv.setServType("0");
             serv.setState((byte)1);
             serv.setServNote(releaseServRequest.getServNote());
             serv.setServTimeid(releaseServRequest.getServTimeId().intValue());
-            serv.setServManid(weiXinUser.getServManid());
-             insert = servMapper.insert(serv);
+            serv.setServManid(openid);
+            int insert = servMapper.insert(serv);
             Long autoId = serv.getId();
             List<ServContent> servContents = releaseServRequest.getServContents();
             if(servContents!=null&&servContents.size()>0){
@@ -409,17 +367,12 @@ public class ServImpl implements ServService {
             }
             //insert 默认的满意度
             Satis satis = new Satis();
-//            satis.setId(autoId.intValue());
             satis.setErversatis(5);
             satis.setSerid(autoId);
             satis.setCollections(0);
             satis.setThumbs(0);
             satis.setTransmits(0);
             satisMapper.insert(satis);
-        }else {
-            //个性化私服
-        }
-
         return insert;
     }
     @Override
@@ -438,30 +391,19 @@ public class ServImpl implements ServService {
         servMan.setSname(nickName);
         servMan.setSsex(gender);
         servMan.setEnable("1");
-
-        ServManGps servManGps = new ServManGps();
-        servManGps.setLatitude(latitude);
-        servManGps.setLongitude(longitude);
-
-        servManGpsMapper.insertSelective(servManGps);
-        log.info("插入autoid");
-        Long autoId = servManGps.getId();
-        log.info("autoid",autoId);
-        servMan.setServManGpsid(autoId);
         servMan.setSpic(openid);
         servMan.setStel(weiXinUser==null?"":weiXinUser.getUserTel());
         servMan.setIdentityCard(weiXinUser==null?"":weiXinUser.getUnionId());
         servMan.setServAddress(weiXinUser==null?"":weiXinUser.getCompanyAddress());
         servManMapper.insertSelective(servMan);
 
-        Long servManIdOuto = servMan.getId();
-        servManGps.setServManid(servManIdOuto);
-        servManGpsMapper.updateByPrimaryKey(servManGps);
+        ServManGps servManGps = new ServManGps();
+        servManGps.setLatitude(latitude);
+        servManGps.setLongitude(longitude);
+        servManGps.setServManid(openid);
+        servManGpsMapper.insertSelective(servManGps);
+        log.info("insertServMan{}",openid);
 
-        WeiXinUser weiXinUser1 = new WeiXinUser();
-        weiXinUser1.setOpenId(openid);
-        weiXinUser1.setServManid(servManIdOuto);
-        weiXinUserService.updateWeiXinUserByOpenId(weiXinUser1);
     }
 
     @Override
@@ -511,19 +453,7 @@ public class ServImpl implements ServService {
     */
     public Integer getReleaseServCount(String openid){
         Map<String,Object> params=new HashMap<>();
-        /*WeiXinUser weiXinUser = VCache.get(openid, WeiXinUser.class);
-        if(weiXinUser==null){
-            weiXinUser=weiXinUserService.getWeiXinUserByOpenId(openid);
-            VCache.setCache(1,openid,weiXinUser,1000*60*60*24*30);
-        }*/
-        WeiXinUser weiXinUser=weiXinUserService.getWeiXinUserByOpenId(openid);
-        Long servManid = weiXinUser.getServManid();
-        if(null==servManid){
-            return null;
-        }
-        params.put("servManid",servManid);
-        log.info("getReleaseServCount:servManid:{}",servManid);
-//        params.put("state",1);
+        params.put("servManid",openid);
         Integer totalCount=servMapper.selectReleaseServsViewCount(params);
         log.info("getReleaseServCount:微信用户{}已经发布了{}条数据服务",openid,totalCount);
         return totalCount;

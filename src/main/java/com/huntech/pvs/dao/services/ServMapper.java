@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.huntech.pvs.view.services.DetailServView;
-import org.apache.ibatis.annotations.Param;
 import com.huntech.pvs.view.services.ServView;
-public interface ServMapper {
+import org.apache.ibatis.annotations.Param;
 
+public interface ServMapper {
 
     List<ServView> selectServsView(Map<String, Object> params);
     List<ServView> selectServsView(Page<ServView> servPage, Map<String, Object> params);
@@ -28,8 +28,6 @@ public interface ServMapper {
     Integer selectRecommendServsViewCount(Map<String, Object> params);
 
     DetailServView getDetailServsView(Map<String, Object> params);
-
-
     int countByExample(ServExample example);
 
     int deleteByExample(ServExample example);
@@ -51,7 +49,4 @@ public interface ServMapper {
     int updateByPrimaryKeySelective(Serv record);
 
     int updateByPrimaryKey(Serv record);
-
-
-
 }

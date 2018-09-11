@@ -1,10 +1,7 @@
 package com.huntech.pvs.controller.services;
 
-import com.alibaba.fastjson.JSON;
 import com.huntech.pvs.common.BaseController;
 import com.huntech.pvs.common.util.JWT;
-import com.huntech.pvs.dto.sys.User;
-import com.huntech.pvs.model.services.Serv;
 import com.huntech.pvs.model.services.ServMan;
 import com.huntech.pvs.model.services.ServManGps;
 import com.huntech.pvs.model.sys.WeiXinUser;
@@ -12,25 +9,24 @@ import com.huntech.pvs.service.services.ServManGpsService;
 import com.huntech.pvs.service.services.ServManService;
 import com.huntech.pvs.service.services.ServService;
 import com.huntech.pvs.service.sys.WeiXinUserService;
-import com.huntech.pvs.view.request.AddressRequest;
 import com.huntech.pvs.view.request.ServManRequest;
-import com.huntech.pvs.view.services.BaseServTypeView;
 import com.huntech.pvs.view.services.ServManView;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.util.HashMap;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -135,11 +131,9 @@ public class SerManController extends BaseController {
     public Map<String, Object> saveServMan(@RequestBody ServManRequest manRequest, HttpServletRequest request) throws IllegalStateException, IOException {
 
         String token = request.getHeader("token");
-        String openid = JWT.unsign(token, String.class);
+//        String openid = JWT.unsign(token, String.class);
+        String openid = manRequest.getOpenid();
 
-        if(openid==null||openid.equals("")){
-            openid=manRequest.getOpenid();
-        }
         if(openid==null){
             resultMap.clear();
             resultMap.put("dataCode",-1);
@@ -157,10 +151,8 @@ public class SerManController extends BaseController {
         weiXinUserService.updateWeiXinUserByOpenId(weiXinUser);
 
         if(weiXinUser!=null){
-            Long servManid = weiXinUser.getServManid();
-            if(servManid!=null){
                 ServMan man = new ServMan();
-                man.setId(servManid);
+                man.setServManid(openid);
                 if(manRequest.getSname()!=null&&manRequest.getSname().length()!=0){
                     man.setSname(manRequest.getSname());
                 }
@@ -179,29 +171,22 @@ public class SerManController extends BaseController {
 
                 man.setEnable("1");
                 int i = servManService.updateByPriKey(man);
-                Long servManGpsid = man.getServManGpsid();
+                ServManGps servManGps = servManGpsService.getServManGps(openid);
 
-                ServManGps servManGps ;
-
-                if(servManGpsid==null){
-                    servManGps = servManGpsService.getServManGps(servManid);
-                }else{
-                    servManGps =servManGpsService.getServManGps(servManGpsid);
-                }
                 if(servManGps!=null){
                     servManGps.setLongitude(manRequest.getLongitude());
                     servManGps.setLatitude(manRequest.getLatitude());
                     servManGpsService.saveServManGpa(servManGps);
+                }else{
+                    servManGps=new ServManGps();
+                    servManGps.setServManid(openid);
+                    servManGps.setLongitude(manRequest.getLongitude());
+                    servManGps.setLatitude(manRequest.getLatitude());
                 }
-                resultMap.clear();
-                resultMap.put("dataCode",i);
-                return resultMap;
-            }else{
-                servService.insertServMan(openid, weiXinUser);
                 resultMap.clear();
                 resultMap.put("dataCode",1);
                 return resultMap;
-            }
+
         }
         resultMap.clear();
         resultMap.put("dataCode",-1);

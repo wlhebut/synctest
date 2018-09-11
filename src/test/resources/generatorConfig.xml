@@ -40,9 +40,19 @@
         </javaClientGenerator>
 
         <!--对应数据库表名 --><!--schema="OMS_JHT"-->
-        <table  tableName="tbl_transmits" domainObjectName="Transmits" >
+
+        <table  tableName="tbl_serv_star" domainObjectName="ServStar" >
             <property name="ignoreQualifiersAtRuntime" value="true"></property>
         </table>
+        <!--<table  tableName="tbl_serv" domainObjectName="Serv" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_serv_man" domainObjectName="ServMan" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>
+        <table  tableName="tbl_serv_man_gps" domainObjectName="ServManGps" >
+            <property name="ignoreQualifiersAtRuntime" value="true"></property>
+        </table>-->
         <!--<table  tableName="tbl_my_baseserv_type" domainObjectName="MyBaseservType" >
             <property name="ignoreQualifiersAtRuntime" value="true"></property>
         </table>-->
@@ -55,9 +65,7 @@
         <table  tableName="tbl_baseserv_type" domainObjectName="BaseServType" >
             <property name="ignoreQualifiersAtRuntime" value="true"></property>
         </table>
-        <table  tableName="tbl_label" domainObjectName="Label" >
-            <property name="ignoreQualifiersAtRuntime" value="true"></property>
-        </table>
+
         <table  tableName="tbl_satis" domainObjectName="Satis" >
             <property name="ignoreQualifiersAtRuntime" value="true"></property>
         </table>

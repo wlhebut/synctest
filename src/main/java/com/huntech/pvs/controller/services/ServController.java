@@ -82,28 +82,7 @@ public class ServController extends BaseController {
         }
     }
 
-    /**
-    * @Description: baseservTypeid 是必须携带的参数
-    * @Param: [servRequest]
-    * @return: java.util.Map<java.lang.String,java.lang.Object>
-    * @Author: Mr.Wang
-    * @Date: 2018/7/6
-    */
-    @RequestMapping(value = "getBaseServAnon")
-    @ResponseBody
-    public Map<String, Object> getBaseServAnon(@RequestBody ServRequest servRequest) {
-        try {
-            Page<ServView> list = servService.getBaseServAnon(servRequest);
-            resultMap.put("data",list);
-            resultMap.put("dataCode","1");
-            return resultMap;
-        } catch (Exception e) {
-            resultMap.put("dataCode","-1");
-            resultMap.put("dataDesc","后台错误");
-            e.printStackTrace();
-            return resultMap;
-        }
-    }
+
     /**
     * @Description: get serv on map
     * @Param: [servRequest]
@@ -125,14 +104,7 @@ public class ServController extends BaseController {
         return resultMap;
     }
 
-    /*@RequestMapping(value = "getAllBaseServ")
-    @ResponseBody
-    public Map<String, Object> getAllBaseServ(ServRequest servRequest) {
-//        List<ServView> list = servService.getBaseServ( servRequest);
-        Page<Serv> list = servService.selectByExampleAndPage( servRequest);
-        resultMap.put("data",list);
-        return resultMap;
-    }*/
+
     @RequestMapping(value = "releaseServ")
     @ResponseBody
     public Map<String, Object> releaseServ(@RequestBody ReleaseServRequest releaseServRequest, HttpServletRequest request) {
@@ -165,7 +137,7 @@ public class ServController extends BaseController {
             if(integer==0){
                 resultMap.put("dataCode",0);
                 resultMap.put("dataDesc","每个用户只可以发布5条私服");
-                log.info("微信用户：{}已经发布{}条以上私服！",releaseServRequest.getOpenid(),integer);
+                log.info("微信用户：{}已经发布{}条私服！",releaseServRequest.getOpenid(),integer);
                 return resultMap;
             }
 

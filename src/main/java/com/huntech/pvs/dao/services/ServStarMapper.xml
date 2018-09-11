@@ -3,7 +3,7 @@
 <mapper namespace="com.huntech.pvs.dao.services.ServStarMapper" >
   <resultMap id="BaseResultMap" type="com.huntech.pvs.model.services.ServStar" >
     <id column="ID" property="id" jdbcType="BIGINT" />
-    <result column="SERV_MANID" property="servManid" jdbcType="BIGINT" />
+    <result column="SERV_MANID" property="servManid" jdbcType="VARCHAR" />
     <result column="SERV_STAR" property="servStar" jdbcType="INTEGER" />
     <result column="SERV_ID" property="servId" jdbcType="BIGINT" />
     <result column="GDATE" property="gdate" jdbcType="TIMESTAMP" />
@@ -104,7 +104,7 @@
     insert into tbl_serv_star (ID, SERV_MANID, SERV_STAR, 
       SERV_ID, GDATE, STATE
       )
-    values (#{id,jdbcType=BIGINT}, #{servManid,jdbcType=BIGINT}, #{servStar,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=BIGINT}, #{servManid,jdbcType=VARCHAR}, #{servStar,jdbcType=INTEGER}, 
       #{servId,jdbcType=BIGINT}, #{gdate,jdbcType=TIMESTAMP}, #{state,jdbcType=TINYINT}
       )
   </insert>
@@ -135,7 +135,7 @@
         #{id,jdbcType=BIGINT},
       </if>
       <if test="servManid != null" >
-        #{servManid,jdbcType=BIGINT},
+        #{servManid,jdbcType=VARCHAR},
       </if>
       <if test="servStar != null" >
         #{servStar,jdbcType=INTEGER},
@@ -164,7 +164,7 @@
         ID = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.servManid != null" >
-        SERV_MANID = #{record.servManid,jdbcType=BIGINT},
+        SERV_MANID = #{record.servManid,jdbcType=VARCHAR},
       </if>
       <if test="record.servStar != null" >
         SERV_STAR = #{record.servStar,jdbcType=INTEGER},
@@ -186,7 +186,7 @@
   <update id="updateByExample" parameterType="map" >
     update tbl_serv_star
     set ID = #{record.id,jdbcType=BIGINT},
-      SERV_MANID = #{record.servManid,jdbcType=BIGINT},
+      SERV_MANID = #{record.servManid,jdbcType=VARCHAR},
       SERV_STAR = #{record.servStar,jdbcType=INTEGER},
       SERV_ID = #{record.servId,jdbcType=BIGINT},
       GDATE = #{record.gdate,jdbcType=TIMESTAMP},
@@ -199,7 +199,7 @@
     update tbl_serv_star
     <set >
       <if test="servManid != null" >
-        SERV_MANID = #{servManid,jdbcType=BIGINT},
+        SERV_MANID = #{servManid,jdbcType=VARCHAR},
       </if>
       <if test="servStar != null" >
         SERV_STAR = #{servStar,jdbcType=INTEGER},
@@ -218,7 +218,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.huntech.pvs.model.services.ServStar" >
     update tbl_serv_star
-    set SERV_MANID = #{servManid,jdbcType=BIGINT},
+    set SERV_MANID = #{servManid,jdbcType=VARCHAR},
       SERV_STAR = #{servStar,jdbcType=INTEGER},
       SERV_ID = #{servId,jdbcType=BIGINT},
       GDATE = #{gdate,jdbcType=TIMESTAMP},

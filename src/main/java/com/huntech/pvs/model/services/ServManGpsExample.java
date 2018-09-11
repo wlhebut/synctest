@@ -1,6 +1,7 @@
 package com.huntech.pvs.model.services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ServManGpsExample {
@@ -174,52 +175,62 @@ public class ServManGpsExample {
             return (Criteria) this;
         }
 
-        public Criteria andServManidEqualTo(Long value) {
+        public Criteria andServManidEqualTo(String value) {
             addCriterion("SERV_MANID =", value, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidNotEqualTo(Long value) {
+        public Criteria andServManidNotEqualTo(String value) {
             addCriterion("SERV_MANID <>", value, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidGreaterThan(Long value) {
+        public Criteria andServManidGreaterThan(String value) {
             addCriterion("SERV_MANID >", value, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidGreaterThanOrEqualTo(Long value) {
+        public Criteria andServManidGreaterThanOrEqualTo(String value) {
             addCriterion("SERV_MANID >=", value, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidLessThan(Long value) {
+        public Criteria andServManidLessThan(String value) {
             addCriterion("SERV_MANID <", value, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidLessThanOrEqualTo(Long value) {
+        public Criteria andServManidLessThanOrEqualTo(String value) {
             addCriterion("SERV_MANID <=", value, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidIn(List<Long> values) {
+        public Criteria andServManidLike(String value) {
+            addCriterion("SERV_MANID like", value, "servManid");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidNotLike(String value) {
+            addCriterion("SERV_MANID not like", value, "servManid");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidIn(List<String> values) {
             addCriterion("SERV_MANID in", values, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidNotIn(List<Long> values) {
+        public Criteria andServManidNotIn(List<String> values) {
             addCriterion("SERV_MANID not in", values, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidBetween(Long value1, Long value2) {
+        public Criteria andServManidBetween(String value1, String value2) {
             addCriterion("SERV_MANID between", value1, value2, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidNotBetween(Long value1, Long value2) {
+        public Criteria andServManidNotBetween(String value1, String value2) {
             addCriterion("SERV_MANID not between", value1, value2, "servManid");
             return (Criteria) this;
         }
@@ -361,6 +372,66 @@ public class ServManGpsExample {
 
         public Criteria andLatitudeNotBetween(String value1, String value2) {
             addCriterion("LATITUDE not between", value1, value2, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andDdateIsNull() {
+            addCriterion("DDATE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDdateIsNotNull() {
+            addCriterion("DDATE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDdateEqualTo(Date value) {
+            addCriterion("DDATE =", value, "ddate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDdateNotEqualTo(Date value) {
+            addCriterion("DDATE <>", value, "ddate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDdateGreaterThan(Date value) {
+            addCriterion("DDATE >", value, "ddate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDdateGreaterThanOrEqualTo(Date value) {
+            addCriterion("DDATE >=", value, "ddate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDdateLessThan(Date value) {
+            addCriterion("DDATE <", value, "ddate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDdateLessThanOrEqualTo(Date value) {
+            addCriterion("DDATE <=", value, "ddate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDdateIn(List<Date> values) {
+            addCriterion("DDATE in", values, "ddate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDdateNotIn(List<Date> values) {
+            addCriterion("DDATE not in", values, "ddate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDdateBetween(Date value1, Date value2) {
+            addCriterion("DDATE between", value1, value2, "ddate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDdateNotBetween(Date value1, Date value2) {
+            addCriterion("DDATE not between", value1, value2, "ddate");
             return (Criteria) this;
         }
     }

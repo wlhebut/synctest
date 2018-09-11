@@ -175,52 +175,62 @@ public class ServStarExample {
             return (Criteria) this;
         }
 
-        public Criteria andServManidEqualTo(Long value) {
+        public Criteria andServManidEqualTo(String value) {
             addCriterion("SERV_MANID =", value, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidNotEqualTo(Long value) {
+        public Criteria andServManidNotEqualTo(String value) {
             addCriterion("SERV_MANID <>", value, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidGreaterThan(Long value) {
+        public Criteria andServManidGreaterThan(String value) {
             addCriterion("SERV_MANID >", value, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidGreaterThanOrEqualTo(Long value) {
+        public Criteria andServManidGreaterThanOrEqualTo(String value) {
             addCriterion("SERV_MANID >=", value, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidLessThan(Long value) {
+        public Criteria andServManidLessThan(String value) {
             addCriterion("SERV_MANID <", value, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidLessThanOrEqualTo(Long value) {
+        public Criteria andServManidLessThanOrEqualTo(String value) {
             addCriterion("SERV_MANID <=", value, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidIn(List<Long> values) {
+        public Criteria andServManidLike(String value) {
+            addCriterion("SERV_MANID like", value, "servManid");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidNotLike(String value) {
+            addCriterion("SERV_MANID not like", value, "servManid");
+            return (Criteria) this;
+        }
+
+        public Criteria andServManidIn(List<String> values) {
             addCriterion("SERV_MANID in", values, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidNotIn(List<Long> values) {
+        public Criteria andServManidNotIn(List<String> values) {
             addCriterion("SERV_MANID not in", values, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidBetween(Long value1, Long value2) {
+        public Criteria andServManidBetween(String value1, String value2) {
             addCriterion("SERV_MANID between", value1, value2, "servManid");
             return (Criteria) this;
         }
 
-        public Criteria andServManidNotBetween(Long value1, Long value2) {
+        public Criteria andServManidNotBetween(String value1, String value2) {
             addCriterion("SERV_MANID not between", value1, value2, "servManid");
             return (Criteria) this;
         }

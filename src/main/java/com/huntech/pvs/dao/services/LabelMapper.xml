@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.huntech.pvs.model.services.Label" >
     <id column="ID" property="id" jdbcType="BIGINT" />
     <result column="LABEL_CONTENT" property="labelContent" jdbcType="VARCHAR" />
-    <result column="SERV_MANID" property="servManid" jdbcType="BIGINT" />
+    <result column="SERV_MANID" property="servManid" jdbcType="VARCHAR" />
     <result column="SERV_ID" property="servId" jdbcType="BIGINT" />
     <result column="OPENID" property="openid" jdbcType="VARCHAR" />
     <result column="LDATE" property="ldate" jdbcType="TIMESTAMP" />
@@ -106,7 +106,7 @@
     insert into tbl_label (ID, LABEL_CONTENT, SERV_MANID, 
       SERV_ID, OPENID, LDATE, 
       STATE, CAN_SEE)
-    values (#{id,jdbcType=BIGINT}, #{labelContent,jdbcType=VARCHAR}, #{servManid,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{labelContent,jdbcType=VARCHAR}, #{servManid,jdbcType=VARCHAR}, 
       #{servId,jdbcType=BIGINT}, #{openid,jdbcType=VARCHAR}, #{ldate,jdbcType=TIMESTAMP}, 
       #{state,jdbcType=TINYINT}, #{canSee,jdbcType=TINYINT})
   </insert>
@@ -146,7 +146,7 @@
         #{labelContent,jdbcType=VARCHAR},
       </if>
       <if test="servManid != null" >
-        #{servManid,jdbcType=BIGINT},
+        #{servManid,jdbcType=VARCHAR},
       </if>
       <if test="servId != null" >
         #{servId,jdbcType=BIGINT},
@@ -181,7 +181,7 @@
         LABEL_CONTENT = #{record.labelContent,jdbcType=VARCHAR},
       </if>
       <if test="record.servManid != null" >
-        SERV_MANID = #{record.servManid,jdbcType=BIGINT},
+        SERV_MANID = #{record.servManid,jdbcType=VARCHAR},
       </if>
       <if test="record.servId != null" >
         SERV_ID = #{record.servId,jdbcType=BIGINT},
@@ -207,7 +207,7 @@
     update tbl_label
     set ID = #{record.id,jdbcType=BIGINT},
       LABEL_CONTENT = #{record.labelContent,jdbcType=VARCHAR},
-      SERV_MANID = #{record.servManid,jdbcType=BIGINT},
+      SERV_MANID = #{record.servManid,jdbcType=VARCHAR},
       SERV_ID = #{record.servId,jdbcType=BIGINT},
       OPENID = #{record.openid,jdbcType=VARCHAR},
       LDATE = #{record.ldate,jdbcType=TIMESTAMP},
@@ -224,7 +224,7 @@
         LABEL_CONTENT = #{labelContent,jdbcType=VARCHAR},
       </if>
       <if test="servManid != null" >
-        SERV_MANID = #{servManid,jdbcType=BIGINT},
+        SERV_MANID = #{servManid,jdbcType=VARCHAR},
       </if>
       <if test="servId != null" >
         SERV_ID = #{servId,jdbcType=BIGINT},
@@ -247,7 +247,7 @@
   <update id="updateByPrimaryKey" parameterType="com.huntech.pvs.model.services.Label" >
     update tbl_label
     set LABEL_CONTENT = #{labelContent,jdbcType=VARCHAR},
-      SERV_MANID = #{servManid,jdbcType=BIGINT},
+      SERV_MANID = #{servManid,jdbcType=VARCHAR},
       SERV_ID = #{servId,jdbcType=BIGINT},
       OPENID = #{openid,jdbcType=VARCHAR},
       LDATE = #{ldate,jdbcType=TIMESTAMP},

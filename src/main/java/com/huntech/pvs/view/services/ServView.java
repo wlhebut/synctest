@@ -7,7 +7,7 @@ public class ServView implements  Comparable ,Serializable {
     private static final long serialVersionUID = -2765147794959359589L;
     private Long id;
     private Long baseservTypeid;
-    private Long servManid;
+    private String servManid;
     private String sname;
     private String servName;
     private String tname;
@@ -116,11 +116,11 @@ public class ServView implements  Comparable ,Serializable {
         this.baseservTypeid = baseservTypeid;
     }
 
-    public Long getServManid() {
+    public String getServManid() {
         return servManid;
     }
 
-    public void setServManid(Long servManid) {
+    public void setServManid(String servManid) {
         this.servManid = servManid;
     }
 

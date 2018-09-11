@@ -4,15 +4,17 @@
   <resultMap id="BaseResultMap" type="com.huntech.pvs.model.services.Serv" >
     <id column="ID" property="id" jdbcType="BIGINT" />
     <result column="SERV_NAME" property="servName" jdbcType="VARCHAR" />
-    <result column="SERV_TIME" property="servTime" jdbcType="VARCHAR" />
     <result column="SERV_TYPE" property="servType" jdbcType="CHAR" />
     <result column="BASESERV_TYPEID" property="baseservTypeid" jdbcType="BIGINT" />
     <result column="SELFSERV_TYPEID" property="selfservTypeid" jdbcType="BIGINT" />
-    <result column="SERV_MANID" property="servManid" jdbcType="BIGINT" />
+    <result column="SERV_MANID" property="servManid" jdbcType="VARCHAR" />
     <result column="SERV_CONTENTID" property="servContentid" jdbcType="BIGINT" />
     <result column="SERV_TIMEID" property="servTimeid" jdbcType="INTEGER" />
     <result column="STATE" property="state" jdbcType="TINYINT" />
+    <result column="SERV_NOTE" property="servNote" jdbcType="VARCHAR" />
+    <result column="SDATE" property="sdate" jdbcType="TIMESTAMP" />
   </resultMap>
+
   <resultMap id="BaseResultMap2" type="com.huntech.pvs.view.services.ServView" >
     <id column="ID" property="id" jdbcType="BIGINT" />
     <result column="SERV_NAME" property="servName" jdbcType="VARCHAR" />
@@ -43,6 +45,7 @@
     <result column="LATITUDE" property="latitude" jdbcType="VARCHAR" />
     <result column="STEL" property="stel" jdbcType="VARCHAR" />
   </resultMap>
+
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -103,9 +106,235 @@
   </sql>
   <sql id="Base_Column_List" >
     ID, SERV_NAME, SERV_TYPE, BASESERV_TYPEID, SELFSERV_TYPEID, SERV_MANID, SERV_CONTENTID, 
-    SERV_TIMEID, STATE
+    SERV_TIMEID, STATE, SERV_NOTE, SDATE
   </sql>
-
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.huntech.pvs.model.services.ServExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tbl_serv
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_serv
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tbl_serv
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huntech.pvs.model.services.ServExample" >
+    delete from tbl_serv
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huntech.pvs.model.services.Serv" >
+    insert into tbl_serv (ID, SERV_NAME, SERV_TYPE, 
+      BASESERV_TYPEID, SELFSERV_TYPEID, SERV_MANID, 
+      SERV_CONTENTID, SERV_TIMEID, STATE, 
+      SERV_NOTE, SDATE)
+    values (#{id,jdbcType=BIGINT}, #{servName,jdbcType=VARCHAR}, #{servType,jdbcType=CHAR}, 
+      #{baseservTypeid,jdbcType=BIGINT}, #{selfservTypeid,jdbcType=BIGINT}, #{servManid,jdbcType=VARCHAR}, 
+      #{servContentid,jdbcType=BIGINT}, #{servTimeid,jdbcType=INTEGER}, #{state,jdbcType=TINYINT}, 
+      #{servNote,jdbcType=VARCHAR}, #{sdate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huntech.pvs.model.services.Serv" >
+    insert into tbl_serv
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="servName != null" >
+        SERV_NAME,
+      </if>
+      <if test="servType != null" >
+        SERV_TYPE,
+      </if>
+      <if test="baseservTypeid != null" >
+        BASESERV_TYPEID,
+      </if>
+      <if test="selfservTypeid != null" >
+        SELFSERV_TYPEID,
+      </if>
+      <if test="servManid != null" >
+        SERV_MANID,
+      </if>
+      <if test="servContentid != null" >
+        SERV_CONTENTID,
+      </if>
+      <if test="servTimeid != null" >
+        SERV_TIMEID,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="servNote != null" >
+        SERV_NOTE,
+      </if>
+      <if test="sdate != null" >
+        SDATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="servName != null" >
+        #{servName,jdbcType=VARCHAR},
+      </if>
+      <if test="servType != null" >
+        #{servType,jdbcType=CHAR},
+      </if>
+      <if test="baseservTypeid != null" >
+        #{baseservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="selfservTypeid != null" >
+        #{selfservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="servManid != null" >
+        #{servManid,jdbcType=VARCHAR},
+      </if>
+      <if test="servContentid != null" >
+        #{servContentid,jdbcType=BIGINT},
+      </if>
+      <if test="servTimeid != null" >
+        #{servTimeid,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="servNote != null" >
+        #{servNote,jdbcType=VARCHAR},
+      </if>
+      <if test="sdate != null" >
+        #{sdate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huntech.pvs.model.services.ServExample" resultType="java.lang.Integer" >
+    select count(*) from tbl_serv
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tbl_serv
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.servName != null" >
+        SERV_NAME = #{record.servName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.servType != null" >
+        SERV_TYPE = #{record.servType,jdbcType=CHAR},
+      </if>
+      <if test="record.baseservTypeid != null" >
+        BASESERV_TYPEID = #{record.baseservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="record.selfservTypeid != null" >
+        SELFSERV_TYPEID = #{record.selfservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="record.servManid != null" >
+        SERV_MANID = #{record.servManid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.servContentid != null" >
+        SERV_CONTENTID = #{record.servContentid,jdbcType=BIGINT},
+      </if>
+      <if test="record.servTimeid != null" >
+        SERV_TIMEID = #{record.servTimeid,jdbcType=INTEGER},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=TINYINT},
+      </if>
+      <if test="record.servNote != null" >
+        SERV_NOTE = #{record.servNote,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sdate != null" >
+        SDATE = #{record.sdate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tbl_serv
+    set ID = #{record.id,jdbcType=BIGINT},
+      SERV_NAME = #{record.servName,jdbcType=VARCHAR},
+      SERV_TYPE = #{record.servType,jdbcType=CHAR},
+      BASESERV_TYPEID = #{record.baseservTypeid,jdbcType=BIGINT},
+      SELFSERV_TYPEID = #{record.selfservTypeid,jdbcType=BIGINT},
+      SERV_MANID = #{record.servManid,jdbcType=VARCHAR},
+      SERV_CONTENTID = #{record.servContentid,jdbcType=BIGINT},
+      SERV_TIMEID = #{record.servTimeid,jdbcType=INTEGER},
+      STATE = #{record.state,jdbcType=TINYINT},
+      SERV_NOTE = #{record.servNote,jdbcType=VARCHAR},
+      SDATE = #{record.sdate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huntech.pvs.model.services.Serv" >
+    update tbl_serv
+    <set >
+      <if test="servName != null" >
+        SERV_NAME = #{servName,jdbcType=VARCHAR},
+      </if>
+      <if test="servType != null" >
+        SERV_TYPE = #{servType,jdbcType=CHAR},
+      </if>
+      <if test="baseservTypeid != null" >
+        BASESERV_TYPEID = #{baseservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="selfservTypeid != null" >
+        SELFSERV_TYPEID = #{selfservTypeid,jdbcType=BIGINT},
+      </if>
+      <if test="servManid != null" >
+        SERV_MANID = #{servManid,jdbcType=VARCHAR},
+      </if>
+      <if test="servContentid != null" >
+        SERV_CONTENTID = #{servContentid,jdbcType=BIGINT},
+      </if>
+      <if test="servTimeid != null" >
+        SERV_TIMEID = #{servTimeid,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="servNote != null" >
+        SERV_NOTE = #{servNote,jdbcType=VARCHAR},
+      </if>
+      <if test="sdate != null" >
+        SDATE = #{sdate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huntech.pvs.model.services.Serv" >
+    update tbl_serv
+    set SERV_NAME = #{servName,jdbcType=VARCHAR},
+      SERV_TYPE = #{servType,jdbcType=CHAR},
+      BASESERV_TYPEID = #{baseservTypeid,jdbcType=BIGINT},
+      SELFSERV_TYPEID = #{selfservTypeid,jdbcType=BIGINT},
+      SERV_MANID = #{servManid,jdbcType=VARCHAR},
+      SERV_CONTENTID = #{servContentid,jdbcType=BIGINT},
+      SERV_TIMEID = #{servTimeid,jdbcType=INTEGER},
+      STATE = #{state,jdbcType=TINYINT},
+      SERV_NOTE = #{servNote,jdbcType=VARCHAR},
+      SDATE = #{sdate,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
 
   <select id="selectServsView"   resultMap="BaseResultMap2">
     SELECT
@@ -170,7 +399,7 @@
     g.LATITUDE,
     t.ERVERSATIS,
     st.serv_time,
-      s.STATE,
+    s.STATE,
     m.SERV_ADDRESS,
     s.SERV_NOTE
     FROM
@@ -194,7 +423,6 @@
       </if>
     </where>
   </select>
-
 
   <select id="selectServsViewCount"   resultType="java.lang.Integer">
     SELECT
@@ -226,26 +454,17 @@
       </if>
     </where>
   </select>
-
   <select id="selectReleaseServsViewCount"   resultType="java.lang.Integer">
     SELECT
     COUNT(s.ID) AS  ID
     FROM
     TBL_SERV s
-    LEFT JOIN tbl_serv_man m ON m.ID = s.SERV_MANID
-    LEFT JOIN tbl_serv_man_gps g ON s.SERV_MANID = g.SERV_MANID
-    LEFT JOIN tbl_satis t ON s.ID = t.SERID
-    LEFT JOIN tbl_serv_time st ON s.SERV_TIMEID=st.ID
     <where>
-      <if test="servType!=null">
-        and s.SERV_TYPE=#{servType}
-      </if>
+
       <if test="state!=null">
         and s.STATE=#{state}
       </if>
-      <if test="baseservTypeid!=null">
-        and s.BASESERV_TYPEID=#{baseservTypeid}
-      </if>
+
       <if test="servManid!=null">
         and s.SERV_MANID=#{servManid}
       </if>
@@ -264,7 +483,7 @@
     g.LATITUDE,
     t.ERVERSATIS,
     st.serv_time,
-      s.STATE,
+    s.STATE,
     s.SERV_NOTE,
     m.SERV_ADDRESS
     FROM
@@ -273,13 +492,14 @@
     LEFT JOIN tbl_serv_man m ON m.ID = s.SERV_MANID
     LEFT JOIN tbl_serv_man_gps g ON s.SERV_MANID = g.SERV_MANID
     LEFT JOIN tbl_satis t ON s.ID = t.SERID
-      LEFT JOIN tbl_serv_time st ON s.SERV_TIMEID=st.ID
+    LEFT JOIN tbl_serv_time st ON s.SERV_TIMEID=st.ID
     <where>
       <if test="openid!=null">
         and a.OPENID=#{openid}
       </if>
     </where>
   </select>
+
   <select id="selectAttentionServsViewCount"   resultType="java.lang.Integer">
     SELECT
     COUNT(a.ID) AS  ID
@@ -307,28 +527,27 @@
     g.LONGITUDE,
     g.LATITUDE,
     t.ERVERSATIS,
-      st.serv_time,
-      s.STATE,
+    st.serv_time,
+    s.STATE,
     s.SERV_NOTE
     FROM
-     tbl_recommend r
+    tbl_recommend r
     LEFT JOIN TBL_SERV s ON s.ID=r.SERVID
     LEFT JOIN tbl_serv_man m ON m.ID = s.SERV_MANID
     LEFT JOIN tbl_serv_man_gps g ON s.SERV_MANID = g.SERV_MANID
     LEFT JOIN tbl_satis t ON s.ID = t.SERID
-      LEFT JOIN tbl_serv_time st ON s.SERV_TIMEID=st.ID
+    LEFT JOIN tbl_serv_time st ON s.SERV_TIMEID=st.ID
     <where>
       <if test="openid!=null">
         and r.OPENID=#{openid}
       </if>
     </where>
   </select>
-
   <select id="selectRecommendServsViewCount"   resultType="java.lang.Integer">
     SELECT
     COUNT(r.ID) AS  ID
     FROM
-     tbl_recommend r
+    tbl_recommend r
     LEFT JOIN TBL_SERV s ON s.ID=r.SERVID
     LEFT JOIN tbl_serv_man m ON m.ID = s.SERV_MANID
     LEFT JOIN tbl_serv_man_gps g ON s.SERV_MANID = g.SERV_MANID
@@ -353,16 +572,16 @@
     g.LATITUDE,
     t.ERVERSATIS,
     m.SERV_ADDRESS,
-      st.serv_time,
-      s.STATE,
-      s.SERV_CONTENTID,
+    st.serv_time,
+    s.STATE,
+    s.SERV_CONTENTID,
     s.SERV_NOTE
     FROM
     TBL_SERV s
     LEFT JOIN tbl_serv_man m ON m.ID = s.SERV_MANID
     LEFT JOIN tbl_serv_man_gps g ON s.SERV_MANID = g.SERV_MANID
     LEFT JOIN tbl_satis t ON s.ID = t.SERID
-      LEFT JOIN tbl_serv_time st ON s.SERV_TIMEID=st.ID
+    LEFT JOIN tbl_serv_time st ON s.SERV_TIMEID=st.ID
     <where>
       <if test="id!=null">
         and s.ID=#{id}
@@ -373,207 +592,6 @@
 
 
 
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.huntech.pvs.model.services.ServExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from tbl_serv
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from tbl_serv
-    where ID = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from tbl_serv
-    where ID = #{id,jdbcType=BIGINT}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.huntech.pvs.model.services.ServExample" >
-    delete from tbl_serv
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.huntech.pvs.model.services.Serv" >
-    insert into tbl_serv (ID, SERV_NAME, SERV_TYPE, 
-      BASESERV_TYPEID,SERV_MANID, SERV_TIMEID,STATE,SERV_NOTE
-      )
-    values (#{id,jdbcType=BIGINT}, #{servName,jdbcType=VARCHAR}, #{servType,jdbcType=CHAR}, 
-      #{baseservTypeid,jdbcType=BIGINT},#{servManid,jdbcType=BIGINT},#{servTimeid,jdbcType=INTEGER}, #{state,jdbcType=TINYINT},#{servNote,jdbcType=VARCHAR}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.huntech.pvs.model.services.Serv" >
-    insert into tbl_serv
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        ID,
-      </if>
-      <if test="servName != null" >
-        SERV_NAME,
-      </if>
-      <if test="servType != null" >
-        SERV_TYPE,
-      </if>
-      <if test="baseservTypeid != null" >
-        BASESERV_TYPEID,
-      </if>
-      <if test="selfservTypeid != null" >
-        SELFSERV_TYPEID,
-      </if>
-      <if test="servManid != null" >
-        SERV_MANID,
-      </if>
-      <if test="servContentid != null" >
-        SERV_CONTENTID,
-      </if>
-      <if test="servTimeid != null" >
-        SERV_TIMEID,
-      </if>
-      <if test="state != null" >
-        STATE,
-      </if>
-      <if test="servNote != null" >
-        SERV_NOTE,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="servName != null" >
-        #{servName,jdbcType=VARCHAR},
-      </if>
-      <if test="servType != null" >
-        #{servType,jdbcType=CHAR},
-      </if>
-      <if test="baseservTypeid != null" >
-        #{baseservTypeid,jdbcType=BIGINT},
-      </if>
-      <if test="selfservTypeid != null" >
-        #{selfservTypeid,jdbcType=BIGINT},
-      </if>
-      <if test="servManid != null" >
-        #{servManid,jdbcType=BIGINT},
-      </if>
-      <if test="servContentid != null" >
-        #{servContentid,jdbcType=BIGINT},
-      </if>
-      <if test="servTimeid != null" >
-        #{servTimeid,jdbcType=INTEGER},
-      </if>
-      <if test="state != null" >
-        #{state,jdbcType=TINYINT},
-      </if>
-      <if test="servNote != null" >
-        #{servNote,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.huntech.pvs.model.services.ServExample" resultType="java.lang.Integer" >
-    select count(*) from tbl_serv
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map" >
-    update tbl_serv
-    <set >
-      <if test="record.id != null" >
-        ID = #{record.id,jdbcType=BIGINT},
-      </if>
-      <if test="record.servName != null" >
-        SERV_NAME = #{record.servName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.servType != null" >
-        SERV_TYPE = #{record.servType,jdbcType=CHAR},
-      </if>
-      <if test="record.baseservTypeid != null" >
-        BASESERV_TYPEID = #{record.baseservTypeid,jdbcType=BIGINT},
-      </if>
-      <if test="record.selfservTypeid != null" >
-        SELFSERV_TYPEID = #{record.selfservTypeid,jdbcType=BIGINT},
-      </if>
-      <if test="record.servManid != null" >
-        SERV_MANID = #{record.servManid,jdbcType=BIGINT},
-      </if>
-      <if test="record.servContentid != null" >
-        SERV_CONTENTID = #{record.servContentid,jdbcType=BIGINT},
-      </if>
-      <if test="record.servTimeid != null" >
-        SERV_TIMEID = #{record.servTimeid,jdbcType=INTEGER},
-      </if>
-      <if test="record.state != null" >
-        STATE = #{record.state,jdbcType=TINYINT},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update tbl_serv
-    set ID = #{record.id,jdbcType=BIGINT},
-      SERV_NAME = #{record.servName,jdbcType=VARCHAR},
-      SERV_TYPE = #{record.servType,jdbcType=CHAR},
-      BASESERV_TYPEID = #{record.baseservTypeid,jdbcType=BIGINT},
-      SELFSERV_TYPEID = #{record.selfservTypeid,jdbcType=BIGINT},
-      SERV_MANID = #{record.servManid,jdbcType=BIGINT},
-      SERV_CONTENTID = #{record.servContentid,jdbcType=BIGINT},
-      SERV_TIMEID = #{record.servTimeid,jdbcType=INTEGER},
-      STATE = #{record.state,jdbcType=TINYINT}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.huntech.pvs.model.services.Serv" >
-    update tbl_serv
-    <set >
-      <if test="servName != null" >
-        SERV_NAME = #{servName,jdbcType=VARCHAR},
-      </if>
-      <if test="servType != null" >
-        SERV_TYPE = #{servType,jdbcType=CHAR},
-      </if>
-      <if test="baseservTypeid != null" >
-        BASESERV_TYPEID = #{baseservTypeid,jdbcType=BIGINT},
-      </if>
-      <if test="selfservTypeid != null" >
-        SELFSERV_TYPEID = #{selfservTypeid,jdbcType=BIGINT},
-      </if>
-      <if test="servManid != null" >
-        SERV_MANID = #{servManid,jdbcType=BIGINT},
-      </if>
-      <if test="servContentid != null" >
-        SERV_CONTENTID = #{servContentid,jdbcType=BIGINT},
-      </if>
-      <if test="servTimeid != null" >
-        SERV_TIMEID = #{servTimeid,jdbcType=INTEGER},
-      </if>
-      <if test="state != null" >
-        STATE = #{state,jdbcType=TINYINT},
-      </if>
-    </set>
-    where ID = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.huntech.pvs.model.services.Serv" >
-    update tbl_serv
-    set SERV_NAME = #{servName,jdbcType=VARCHAR},
-      SERV_TYPE = #{servType,jdbcType=CHAR},
-      BASESERV_TYPEID = #{baseservTypeid,jdbcType=BIGINT},
-      SELFSERV_TYPEID = #{selfservTypeid,jdbcType=BIGINT},
-      SERV_MANID = #{servManid,jdbcType=BIGINT},
-      SERV_CONTENTID = #{servContentid,jdbcType=BIGINT},
-      SERV_TIMEID = #{servTimeid,jdbcType=INTEGER},
-      STATE = #{state,jdbcType=TINYINT}
-    where ID = #{id,jdbcType=BIGINT}
-  </update>
+
+
 </mapper>

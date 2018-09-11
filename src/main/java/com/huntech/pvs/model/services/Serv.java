@@ -1,5 +1,7 @@
 package com.huntech.pvs.model.services;
 
+import java.util.Date;
+
 public class Serv {
     private Long id;
 
@@ -11,7 +13,7 @@ public class Serv {
 
     private Long selfservTypeid;
 
-    private Long servManid;
+    private String servManid;
 
     private Long servContentid;
 
@@ -21,13 +23,7 @@ public class Serv {
 
     private String servNote;
 
-    public String getServNote() {
-        return servNote;
-    }
-
-    public void setServNote(String servNote) {
-        this.servNote = servNote;
-    }
+    private Date sdate;
 
     public Long getId() {
         return id;
@@ -69,12 +65,12 @@ public class Serv {
         this.selfservTypeid = selfservTypeid;
     }
 
-    public Long getServManid() {
+    public String getServManid() {
         return servManid;
     }
 
-    public void setServManid(Long servManid) {
-        this.servManid = servManid;
+    public void setServManid(String servManid) {
+        this.servManid = servManid == null ? null : servManid.trim();
     }
 
     public Long getServContentid() {
@@ -99,5 +95,21 @@ public class Serv {
 
     public void setState(Byte state) {
         this.state = state;
+    }
+
+    public String getServNote() {
+        return servNote;
+    }
+
+    public void setServNote(String servNote) {
+        this.servNote = servNote == null ? null : servNote.trim();
+    }
+
+    public Date getSdate() {
+        return sdate;
+    }
+
+    public void setSdate(Date sdate) {
+        this.sdate = sdate;
     }
 }

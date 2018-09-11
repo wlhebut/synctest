@@ -3,6 +3,7 @@
 <mapper namespace="com.huntech.pvs.dao.services.ServManMapper" >
   <resultMap id="BaseResultMap" type="com.huntech.pvs.model.services.ServMan" >
     <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="SERV_MANID" property="servManid" jdbcType="VARCHAR" />
     <result column="SNAME" property="sname" jdbcType="VARCHAR" />
     <result column="SAGE" property="sage" jdbcType="INTEGER" />
     <result column="SSEX" property="ssex" jdbcType="CHAR" />
@@ -18,6 +19,7 @@
     <result column="SERV_ADDRESS" property="servAddress" jdbcType="VARCHAR" />
     <result column="SELFSERV_TYPEID" property="selfservTypeid" jdbcType="BIGINT" />
     <result column="ENABLE" property="enable" jdbcType="CHAR" />
+    <result column="DDATE" property="ddate" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -78,8 +80,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    ID, SNAME, SAGE, SSEX, STEL, IDENTITY_CARD, SPIC, S_LEVEL, PROVINCE_CODE, CITY_CODE, 
-    TOWN_CODE, SERV_MAN_GPSID, BASESERV_TYPEID, SERV_ADDRESS, SELFSERV_TYPEID, ENABLE
+    ID, SERV_MANID, SNAME, SAGE, SSEX, STEL, IDENTITY_CARD, SPIC, S_LEVEL, PROVINCE_CODE, 
+    CITY_CODE, TOWN_CODE, SERV_MAN_GPSID, BASESERV_TYPEID, SERV_ADDRESS, SELFSERV_TYPEID, 
+    ENABLE, DDATE
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.huntech.pvs.model.services.ServManExample" >
     select
@@ -112,24 +115,27 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.huntech.pvs.model.services.ServMan" >
-    insert into tbl_serv_man (ID, SNAME, SAGE, 
-      SSEX, STEL, IDENTITY_CARD, 
+    insert into tbl_serv_man (ID, SERV_MANID, SNAME, 
+      SAGE, SSEX, STEL, IDENTITY_CARD, 
       SPIC, S_LEVEL, PROVINCE_CODE, 
       CITY_CODE, TOWN_CODE, SERV_MAN_GPSID, 
       BASESERV_TYPEID, SERV_ADDRESS, SELFSERV_TYPEID, 
-      ENABLE)
-    values (#{id,jdbcType=BIGINT}, #{sname,jdbcType=VARCHAR}, #{sage,jdbcType=INTEGER}, 
-      #{ssex,jdbcType=CHAR}, #{stel,jdbcType=VARCHAR}, #{identityCard,jdbcType=VARCHAR}, 
+      ENABLE, DDATE)
+    values (#{id,jdbcType=BIGINT}, #{servManid,jdbcType=VARCHAR}, #{sname,jdbcType=VARCHAR}, 
+      #{sage,jdbcType=INTEGER}, #{ssex,jdbcType=CHAR}, #{stel,jdbcType=VARCHAR}, #{identityCard,jdbcType=VARCHAR}, 
       #{spic,jdbcType=VARCHAR}, #{sLevel,jdbcType=VARCHAR}, #{provinceCode,jdbcType=VARCHAR}, 
       #{cityCode,jdbcType=VARCHAR}, #{townCode,jdbcType=VARCHAR}, #{servManGpsid,jdbcType=BIGINT}, 
       #{baseservTypeid,jdbcType=BIGINT}, #{servAddress,jdbcType=VARCHAR}, #{selfservTypeid,jdbcType=BIGINT}, 
-      #{enable,jdbcType=CHAR})
+      #{enable,jdbcType=CHAR}, #{ddate,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true" parameterType="com.huntech.pvs.model.services.ServMan" >
+  <insert id="insertSelective" parameterType="com.huntech.pvs.model.services.ServMan" >
     insert into tbl_serv_man
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         ID,
+      </if>
+      <if test="servManid != null" >
+        SERV_MANID,
       </if>
       <if test="sname != null" >
         SNAME,
@@ -176,10 +182,16 @@
       <if test="enable != null" >
         ENABLE,
       </if>
+      <if test="ddate != null" >
+        DDATE,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=BIGINT},
+      </if>
+      <if test="servManid != null" >
+        #{servManid,jdbcType=VARCHAR},
       </if>
       <if test="sname != null" >
         #{sname,jdbcType=VARCHAR},
@@ -226,6 +238,9 @@
       <if test="enable != null" >
         #{enable,jdbcType=CHAR},
       </if>
+      <if test="ddate != null" >
+        #{ddate,jdbcType=TIMESTAMP},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.huntech.pvs.model.services.ServManExample" resultType="java.lang.Integer" >
@@ -239,6 +254,9 @@
     <set >
       <if test="record.id != null" >
         ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.servManid != null" >
+        SERV_MANID = #{record.servManid,jdbcType=VARCHAR},
       </if>
       <if test="record.sname != null" >
         SNAME = #{record.sname,jdbcType=VARCHAR},
@@ -285,6 +303,9 @@
       <if test="record.enable != null" >
         ENABLE = #{record.enable,jdbcType=CHAR},
       </if>
+      <if test="record.ddate != null" >
+        DDATE = #{record.ddate,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -293,6 +314,7 @@
   <update id="updateByExample" parameterType="map" >
     update tbl_serv_man
     set ID = #{record.id,jdbcType=BIGINT},
+      SERV_MANID = #{record.servManid,jdbcType=VARCHAR},
       SNAME = #{record.sname,jdbcType=VARCHAR},
       SAGE = #{record.sage,jdbcType=INTEGER},
       SSEX = #{record.ssex,jdbcType=CHAR},
@@ -307,7 +329,8 @@
       BASESERV_TYPEID = #{record.baseservTypeid,jdbcType=BIGINT},
       SERV_ADDRESS = #{record.servAddress,jdbcType=VARCHAR},
       SELFSERV_TYPEID = #{record.selfservTypeid,jdbcType=BIGINT},
-      ENABLE = #{record.enable,jdbcType=CHAR}
+      ENABLE = #{record.enable,jdbcType=CHAR},
+      DDATE = #{record.ddate,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -315,6 +338,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.huntech.pvs.model.services.ServMan" >
     update tbl_serv_man
     <set >
+      <if test="servManid != null" >
+        SERV_MANID = #{servManid,jdbcType=VARCHAR},
+      </if>
       <if test="sname != null" >
         SNAME = #{sname,jdbcType=VARCHAR},
       </if>
@@ -360,12 +386,16 @@
       <if test="enable != null" >
         ENABLE = #{enable,jdbcType=CHAR},
       </if>
+      <if test="ddate != null" >
+        DDATE = #{ddate,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where ID = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.huntech.pvs.model.services.ServMan" >
     update tbl_serv_man
-    set SNAME = #{sname,jdbcType=VARCHAR},
+    set SERV_MANID = #{servManid,jdbcType=VARCHAR},
+      SNAME = #{sname,jdbcType=VARCHAR},
       SAGE = #{sage,jdbcType=INTEGER},
       SSEX = #{ssex,jdbcType=CHAR},
       STEL = #{stel,jdbcType=VARCHAR},
@@ -379,7 +409,8 @@
       BASESERV_TYPEID = #{baseservTypeid,jdbcType=BIGINT},
       SERV_ADDRESS = #{servAddress,jdbcType=VARCHAR},
       SELFSERV_TYPEID = #{selfservTypeid,jdbcType=BIGINT},
-      ENABLE = #{enable,jdbcType=CHAR}
+      ENABLE = #{enable,jdbcType=CHAR},
+      DDATE = #{ddate,jdbcType=TIMESTAMP}
     where ID = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

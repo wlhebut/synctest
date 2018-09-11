@@ -7,7 +7,7 @@ public class Label {
 
     private String labelContent;
 
-    private Long servManid;
+    private String servManid;
 
     private Long servId;
 
@@ -35,12 +35,12 @@ public class Label {
         this.labelContent = labelContent == null ? null : labelContent.trim();
     }
 
-    public Long getServManid() {
+    public String getServManid() {
         return servManid;
     }
 
-    public void setServManid(Long servManid) {
-        this.servManid = servManid;
+    public void setServManid(String servManid) {
+        this.servManid = servManid == null ? null : servManid.trim();
     }
 
     public Long getServId() {

@@ -48,12 +48,12 @@ public class ServManServiceImpl implements ServManService {
         if(addressList!=null&&addressList.size()>0){
             address=addressList.get(0);
         }
-        if(weiXinUserByOpenId!=null){
+        if(openid!=null){
             if(weiXinUserByOpenId.getServManid()!=null){
                 ServMan servMan= servManMapper.selectByPrimaryKey(weiXinUserByOpenId.getServManid());
                 ServManGps servManGps=null;
                 if(servMan!=null){
-                    servManGps = servManGpsService.getServManGps(servMan.getId());
+                    servManGps = servManGpsService.getServManGps(openid);
                 }
                 if(servMan!=null){
                     servManView.setId(servMan.getId());

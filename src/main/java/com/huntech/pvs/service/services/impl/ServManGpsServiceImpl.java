@@ -15,10 +15,10 @@ public class ServManGpsServiceImpl implements ServManGpsService {
 
 
     @Override
-    public ServManGps getServManGps(Long serManId) {
+    public ServManGps getServManGps(String openid) {
         ServManGpsExample example = new ServManGpsExample();
         ServManGpsExample.Criteria criteria = example.createCriteria();
-        criteria.andServManidEqualTo(serManId);
+        criteria.andServManidEqualTo(openid);
         List<ServManGps> servManGps = servManGpsMapper.selectByExample(example);
         if(servManGps!=null&&servManGps.size()>0){
             return servManGps.get(0);
@@ -28,10 +28,10 @@ public class ServManGpsServiceImpl implements ServManGpsService {
 
     @Override
     public List<ServManGps> getServManGps(List<Object> ids) {
-        List<Long> longs=(List<Long>)(List) ids;
+        List<String> longs=(List<String>)(List) ids;
         ServManGpsExample example = new ServManGpsExample();
         ServManGpsExample.Criteria criteria = example.createCriteria();
-        criteria.andIdIn(longs);
+        criteria.andServManidIn(longs);
         List<ServManGps> servManGps = servManGpsMapper.selectByExample(example);
         return servManGps;
     }

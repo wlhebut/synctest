@@ -4,7 +4,7 @@ public class LabelRequest {
     private String openid;
     private Long id;//对应列表的私服id
 
-    private Long servManid;
+    private String servManid;
 
     private String labelContent;
 
@@ -26,11 +26,11 @@ public class LabelRequest {
         this.labelContent = labelContent;
     }
 
-    public Long getServManid() {
+    public String getServManid() {
         return servManid;
     }
 
-    public void setServManid(Long servManid) {
+    public void setServManid(String servManid) {
         this.servManid = servManid;
     }
 

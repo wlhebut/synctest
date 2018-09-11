@@ -5,7 +5,7 @@ import java.util.Date;
 public class ServStar {
     private Long id;
 
-    private Long servManid;
+    private String servManid;
 
     private Integer servStar;
 
@@ -23,12 +23,12 @@ public class ServStar {
         this.id = id;
     }
 
-    public Long getServManid() {
+    public String getServManid() {
         return servManid;
     }
 
-    public void setServManid(Long servManid) {
-        this.servManid = servManid;
+    public void setServManid(String servManid) {
+        this.servManid = servManid == null ? null : servManid.trim();
     }
 
     public Integer getServStar() {

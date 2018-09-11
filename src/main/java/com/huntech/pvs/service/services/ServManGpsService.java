@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ServManGpsService {
 
-    ServManGps getServManGps(Long serManId);
+    ServManGps getServManGps(String openid);
     List<ServManGps> getServManGps(List<Object> ids);
 
     int saveServManGpa(ServManGps servManGps);

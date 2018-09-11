@@ -48,7 +48,7 @@ public class LabelServiceImpl implements LabelService {
     public Integer insertLabel(LabelRequest labelRequest) {
         String openid = labelRequest.getOpenid();
         Long id = labelRequest.getId();
-        Long servManid = null;
+        String servManid = null;
         int servStar = labelRequest.getServStar();
         Serv serv = servService.selectByPrimaryKey(id);
         WeiXinUser weiXinUser1 = VCache.get(openid, WeiXinUser.class);
@@ -111,7 +111,7 @@ public class LabelServiceImpl implements LabelService {
 
         LabelExample example = new LabelExample();
         LabelExample.Criteria criteria = example.createCriteria();
-        Long servManid = labelRequest.getServManid();
+        String servManid = labelRequest.getServManid();
         if(servManid!=null&&labelRequest.getOpenid()!=null){
 //            criteria.andServManidEqualTo(labelRequest.getServManid());
             criteria.andOpenidEqualTo(labelRequest.getOpenid());

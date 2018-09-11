@@ -1,7 +1,11 @@
 package com.huntech.pvs.model.services;
 
+import java.util.Date;
+
 public class ServMan {
     private Long id;
+
+    private String servManid;
 
     private String sname;
 
@@ -33,12 +37,22 @@ public class ServMan {
 
     private String enable;
 
+    private Date ddate;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getServManid() {
+        return servManid;
+    }
+
+    public void setServManid(String servManid) {
+        this.servManid = servManid == null ? null : servManid.trim();
     }
 
     public String getSname() {
@@ -159,5 +173,13 @@ public class ServMan {
 
     public void setEnable(String enable) {
         this.enable = enable == null ? null : enable.trim();
+    }
+
+    public Date getDdate() {
+        return ddate;
+    }
+
+    public void setDdate(Date ddate) {
+        this.ddate = ddate;
     }
 }

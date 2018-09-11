@@ -3,9 +3,10 @@
 <mapper namespace="com.huntech.pvs.dao.services.ServManGpsMapper" >
   <resultMap id="BaseResultMap" type="com.huntech.pvs.model.services.ServManGps" >
     <id column="ID" property="id" jdbcType="BIGINT" />
-    <result column="SERV_MANID" property="servManid" jdbcType="BIGINT" />
+    <result column="SERV_MANID" property="servManid" jdbcType="VARCHAR" />
     <result column="LONGITUDE" property="longitude" jdbcType="VARCHAR" />
     <result column="LATITUDE" property="latitude" jdbcType="VARCHAR" />
+    <result column="DDATE" property="ddate" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    ID, SERV_MANID, LONGITUDE, LATITUDE
+    ID, SERV_MANID, LONGITUDE, LATITUDE, DDATE
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.huntech.pvs.model.services.ServManGpsExample" >
     select
@@ -100,11 +101,11 @@
   </delete>
   <insert id="insert" parameterType="com.huntech.pvs.model.services.ServManGps" >
     insert into tbl_serv_man_gps (ID, SERV_MANID, LONGITUDE, 
-      LATITUDE)
-    values (#{id,jdbcType=BIGINT}, #{servManid,jdbcType=BIGINT}, #{longitude,jdbcType=VARCHAR}, 
-      #{latitude,jdbcType=VARCHAR})
+      LATITUDE, DDATE)
+    values (#{id,jdbcType=BIGINT}, #{servManid,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, 
+      #{latitude,jdbcType=VARCHAR}, #{ddate,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true" parameterType="com.huntech.pvs.model.services.ServManGps" >
+  <insert id="insertSelective" parameterType="com.huntech.pvs.model.services.ServManGps" >
     insert into tbl_serv_man_gps
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -119,19 +120,25 @@
       <if test="latitude != null" >
         LATITUDE,
       </if>
+      <if test="ddate != null" >
+        DDATE,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=BIGINT},
       </if>
       <if test="servManid != null" >
-        #{servManid,jdbcType=BIGINT},
+        #{servManid,jdbcType=VARCHAR},
       </if>
       <if test="longitude != null" >
         #{longitude,jdbcType=VARCHAR},
       </if>
       <if test="latitude != null" >
         #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="ddate != null" >
+        #{ddate,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -148,13 +155,16 @@
         ID = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.servManid != null" >
-        SERV_MANID = #{record.servManid,jdbcType=BIGINT},
+        SERV_MANID = #{record.servManid,jdbcType=VARCHAR},
       </if>
       <if test="record.longitude != null" >
         LONGITUDE = #{record.longitude,jdbcType=VARCHAR},
       </if>
       <if test="record.latitude != null" >
         LATITUDE = #{record.latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ddate != null" >
+        DDATE = #{record.ddate,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -164,9 +174,10 @@
   <update id="updateByExample" parameterType="map" >
     update tbl_serv_man_gps
     set ID = #{record.id,jdbcType=BIGINT},
-      SERV_MANID = #{record.servManid,jdbcType=BIGINT},
+      SERV_MANID = #{record.servManid,jdbcType=VARCHAR},
       LONGITUDE = #{record.longitude,jdbcType=VARCHAR},
-      LATITUDE = #{record.latitude,jdbcType=VARCHAR}
+      LATITUDE = #{record.latitude,jdbcType=VARCHAR},
+      DDATE = #{record.ddate,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -175,7 +186,7 @@
     update tbl_serv_man_gps
     <set >
       <if test="servManid != null" >
-        SERV_MANID = #{servManid,jdbcType=BIGINT},
+        SERV_MANID = #{servManid,jdbcType=VARCHAR},
       </if>
       <if test="longitude != null" >
         LONGITUDE = #{longitude,jdbcType=VARCHAR},
@@ -183,14 +194,18 @@
       <if test="latitude != null" >
         LATITUDE = #{latitude,jdbcType=VARCHAR},
       </if>
+      <if test="ddate != null" >
+        DDATE = #{ddate,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where ID = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.huntech.pvs.model.services.ServManGps" >
     update tbl_serv_man_gps
-    set SERV_MANID = #{servManid,jdbcType=BIGINT},
+    set SERV_MANID = #{servManid,jdbcType=VARCHAR},
       LONGITUDE = #{longitude,jdbcType=VARCHAR},
-      LATITUDE = #{latitude,jdbcType=VARCHAR}
+      LATITUDE = #{latitude,jdbcType=VARCHAR},
+      DDATE = #{ddate,jdbcType=TIMESTAMP}
     where ID = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
